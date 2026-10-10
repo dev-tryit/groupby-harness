@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 하네스 규칙 보강과 README 초안</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>하네스 규칙 보강과 README 초안</h1>
+<div class="meta">보고서 작성: 2026-10-10 21:41</div>
+
+<h2>무엇을</h2>
+<p>하네스에 검증, 브랜치 전략, 테스트 시나리오와 골든셋, 인프라 분리 규칙을 더했다. 루트에 <code>README.md</code> 초안을 만들고, 듀데이트를 2026-10-11 20:00으로 확정했다.</p>
+
+<h2>왜</h2>
+<p><code>01_problem</code>으로 넘어가기 전에 하네스에서 정해지지 않은 것을 정리했다. README는 제출물이고 사용자의 생각을 담아야 하므로, 결정이 나올 때마다 바로 반영하도록 지금 틀을 만들었다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li><b>검증</b>: 만든 에이전트가 검증하지 않는다. 단계 폴더마다 전문가 역할의 서브에이전트가 검증하고, 결과는 <code>15_report</code>에 쓴다.</li>
+  <li><b>테스트 시나리오</b>: <code>13_e2e</code>를 <code>13_test-scenario</code>로 바꿨다. 목업 이력서는 골든셋으로 보고 <code>golden-set/</code>에 둔다. 코드보다 먼저 확정하고 코드에 맞춰 고치지 않는다.</li>
+  <li><b>인프라</b>: 코드 폴더에 <code>infra/</code>를 더하고 <code>local/</code>(Docker Compose)과 <code>server/</code>(Pulumi)로 나눴다. 이번 과제는 로컬만 만들고, <code>server/</code>에는 비운 이유만 적었다.</li>
+  <li><b>브랜치</b>: 전략은 Git Flow이고 이유는 GitHub Actions CI/CD다. 이번 과제는 배포할 곳이 없어 CI/CD를 구성하지 않는다. 지금 개발 중인 버전이 <code>v1.0.0</code>이므로 <code>v1.0.0</code> 브랜치에 커밋한다.</li>
+  <li><b>일하는 방식</b>: 시간 배분과 우선순위는 사용자가 정한다. 하위 폴더가 있는 단계는 하위 폴더마다 설계 문서가 하나다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>README.md</code></td><td>새로 작성. 초점, 하네스 설명, 하지 않은 것 표. 나머지는 "작성 예정"</td></tr>
+  <tr><td><code>AGENTS.md</code></td><td>README 규칙, 시간과 우선순위는 사용자가 정한다는 원칙</td></tr>
+  <tr><td><code>docs/AGENTS.md</code></td><td>검증 장 추가, 하위 폴더의 문서 규칙, 단계 이름 변경</td></tr>
+  <tr><td><code>commit-reports/AGENTS.md</code></td><td>브랜치 전략(Git Flow)과 이번 과제에서 구성하지 않는 이유</td></tr>
+  <tr><td><code>docs/13_e2e</code> → <code>docs/13_test-scenario</code></td><td>폴더 이름 변경. <code>AGENTS.md</code>, <code>golden-set/</code> 추가, <code>DECISIONS.md</code> 기록 3건</td></tr>
+  <tr><td><code>docs/14_code/AGENTS.md</code>, <code>docs/14_code/infra/</code></td><td>인프라 분리. <code>local/</code>, <code>server/README.md</code></td></tr>
+  <tr><td><code>docs/09_infra/AGENTS.md</code></td><td>CI/CD는 GitHub Actions</td></tr>
+  <tr><td><code>docs/08_algorithm/AGENTS.md</code>, <code>docs/11_security/AGENTS.md</code></td><td>단계 이름 참조 수정</td></tr>
+  <tr><td><code>docs/00_background/background.md</code>, <code>DECISIONS.md</code></td><td>듀데이트 2026-10-11 20:00, 기록 2건</td></tr>
+  <tr><td><code>commit-reports/TRACKER.md</code></td><td>지난 커밋 <code>a2718f2</code> 반영 표시, 이 보고서 줄 추가</td></tr>
+</table>
+</body>
+</html>
