@@ -8,4 +8,5 @@
 | `2026-10-10-2055-harness-init.html` | 하네스 초기 구성 | 폐기 | - |
 | `2026-10-10-2105-harness-init.html` | 하네스 초기 구성 | 반영 | `2d5ce8f` |
 | `2026-10-10-2116-background.html` | 배경 자료 정리 | 반영 | `a2718f2` |
-| `2026-10-10-2141-harness-rules-readme.html` | 하네스 규칙 보강과 README 초안 | 미반영 | - |
+| `2026-10-10-2141-harness-rules-readme.html` | 하네스 규칙 보강과 README 초안 | 반영 | `620d8f1` |
+| `2026-10-10-2201-code-submodules.html` | 코드 폴더를 서브모듈로 분리 | 미반영 | - |

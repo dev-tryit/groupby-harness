@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 코드 폴더를 서브모듈로 분리</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>코드 폴더를 서브모듈로 분리</h1>
+<div class="meta">보고서 작성: 2026-10-10 22:01 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p><code>docs/14_code</code>의 <code>frontend/</code>, <code>backend/</code>, <code>infra/</code>를 각각 별도 public 레포로 만들고 서브모듈로 연결했다. 제출 시점에 <code>main</code>에 병합하는 규칙과 README의 폴더 구성 설명을 더했다.</p>
+
+<h2>왜</h2>
+<p>코드 레포를 각각 관리하기 위해서이고, GitHub Actions를 환경마다 다르게 설정할 일이 많기 때문이다. 워크플로는 레포 단위로 설정된다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>레포 3개(<code>dev-tryit/groupby-frontend</code>, <code>groupby-backend</code>, <code>groupby-infra</code>)를 만들고, 서브모듈이 <code>v1.0.0</code> 브랜치를 따르게 했다.</li>
+  <li><code>infra/local/</code>과 <code>infra/server/README.md</code>는 <code>groupby-infra</code> 레포로 옮겼다.</li>
+  <li>코드를 고치면 서브모듈에 먼저 커밋·푸시하고, 그다음 이 레포에서 가리키는 커밋을 갱신한다.</li>
+  <li>제출 시점에 <code>v1.0.0</code>을 <code>main</code>에 병합한다. 평가자가 여는 기본 브랜치가 <code>main</code>이기 때문이다.</li>
+  <li>README에 <code>git clone --recursive</code> 명령과, 폴더 구성과 그렇게 짠 이유를 적었다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>.gitmodules</code></td><td>새로 작성. 서브모듈 3개</td></tr>
+  <tr><td><code>docs/14_code/frontend</code>, <code>backend</code>, <code>infra</code></td><td>폴더를 서브모듈로 바꿈. <code>.gitkeep</code>과 <code>infra/server/README.md</code>는 이 레포에서 삭제</td></tr>
+  <tr><td><code>docs/14_code/AGENTS.md</code></td><td>"서브모듈" 장 추가</td></tr>
+  <tr><td><code>docs/14_code/DECISIONS.md</code></td><td>서브모듈로 바꾼 이유 기록</td></tr>
+  <tr><td><code>commit-reports/AGENTS.md</code></td><td>"제출" 장 추가 (<code>main</code> 병합, 클론 확인)</td></tr>
+  <tr><td><code>README.md</code></td><td>클론 명령, 폴더 구성과 이유, 서브모듈 설명</td></tr>
+  <tr><td><code>commit-reports/TRACKER.md</code></td><td>지난 커밋 <code>620d8f1</code> 반영 표시, 이 보고서 줄 추가</td></tr>
+</table>
+</body>
+</html>

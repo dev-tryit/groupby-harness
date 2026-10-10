@@ -6,11 +6,58 @@
 
 ## 실행 방법
 
-작성 예정. 코드는 `docs/14_code/`에 있습니다.
+코드는 서브모듈로 나뉘어 있어서, 아래처럼 받아야 합니다. 그냥 받으면 코드 폴더가 비어 있습니다.
+
+```bash
+git clone --recursive -b v1.0.0 https://github.com/dev-tryit/groupby-harness.git
+```
+
+실행 명령은 작성 예정입니다. 코드는 `docs/14_code/`에 있습니다.
 
 ## 결과
 
 작성 예정. 두 공고의 매칭 랭킹과 점수 근거를 보여줍니다.
+
+## 폴더 구성
+
+어디에 무엇이 있는지입니다.
+
+```
+README.md              이 문서
+AGENTS.md              에이전트가 매 세션 읽는 지침 (전체에 항상 적용되는 것만)
+commit-reports/        커밋 전 보고서와 커밋 반영 추적
+docs/
+  00_background ~ 12_log   설계 문서. 단계마다 설계 문서 하나와 수정 기록(DECISIONS.md) 하나
+  13_test-scenario/        테스트 시나리오 (코드 완성 조건)
+    golden-set/            목업 이력서 데이터셋
+  14_code/                 코드
+    frontend/              서브모듈 → dev-tryit/groupby-frontend
+    backend/               서브모듈 → dev-tryit/groupby-backend
+    infra/                 서브모듈 → dev-tryit/groupby-infra
+  15_report/               리포트 (검증 결과와 분석 내용)
+```
+
+보시려는 것에 따라 이렇게 찾으시면 됩니다.
+
+| 보시려는 것 | 위치 |
+| :- | :- |
+| 코드 | `docs/14_code/` (GitHub에서는 폴더를 누르면 해당 레포로 이동합니다) |
+| 목업 이력서 데이터셋 | `docs/13_test-scenario/golden-set/` |
+| 설계 결정의 이유 | 각 단계 폴더의 `DECISIONS.md` |
+| 에이전트에게 준 규칙 | 각 폴더의 `AGENTS.md` |
+
+왜 이렇게 짰는지입니다. 자세한 설명은 아래 "하네스"에 있습니다.
+
+| 구성 | 이유 |
+| :- | :- |
+| `docs/`를 번호 단계로 나눔 | 앞 단계의 산출물이 뒤 단계의 입력이 되도록, 번호가 곧 진행 순서입니다. |
+| 코드가 `docs/14_code/`에 있음 | 코드도 루프의 한 단계입니다. 코드를 고치면 리포트를 쓰고 `00`부터 다시 내려오므로, 설계 단계와 같은 줄에 번호를 붙여 두었습니다. |
+| 단계마다 설계 문서 하나와 `DECISIONS.md` 하나 | 문서는 최신 내용만 담고, 무엇이 왜 바뀌었는지는 수정 기록에서 파악합니다. |
+| 폴더마다 `AGENTS.md` | 에이전트가 그 폴더에서 작업할 때만 읽게 해서 불필요한 토큰을 쓰지 않습니다. |
+| 목업 이력서가 `13_test-scenario/golden-set/`에 있음 | 이력서는 정답지입니다. 코드보다 앞 단계에 두어 코드에 맞춰 고치지 못하게 했습니다. |
+| `frontend/`, `backend/`, `infra/`를 폴더로 나눔 | 서로 얽혀 스파게티 코드가 되는 것을 막습니다. |
+| 세 폴더를 서브모듈(별도 레포)로 나눔 | 코드 레포를 각각 관리하고, GitHub Actions를 환경마다 다르게 설정하기 위해서입니다. |
+| `commit-reports/`가 `docs/`와 나란히 있음 | 커밋 보고서는 설계 단계가 아니라 커밋 절차에 속합니다. |
 
 ## 이 과제에서 초점을 둔 것
 
@@ -77,6 +124,7 @@
 
 - 헥사고날 아키텍처로 씁니다. 테스트가 쉽기 때문입니다.
 - 프론트엔드, 백엔드, 인프라를 처음부터 폴더로 나눕니다(`frontend/`, `backend/`, `infra/`). 서로 얽혀 스파게티 코드가 되면 나중에 리팩토링할 때 서로에게 미치는 영향을 파악할 수 없기 때문입니다.
+- 세 폴더는 각각 별도 레포이고 서브모듈로 연결했습니다([frontend](https://github.com/dev-tryit/groupby-frontend), [backend](https://github.com/dev-tryit/groupby-backend), [infra](https://github.com/dev-tryit/groupby-infra)). 코드 레포를 각각 관리하기 위해서이고, GitHub Actions를 환경마다 다르게 설정할 일이 많기 때문입니다.
 - 인프라는 `infra/local/`(Docker Compose)과 `infra/server/`(Pulumi)로 나눕니다. 이번 과제는 로컬 구성만 만들기로 했고(아직 만들지 않았습니다), `infra/server/`는 비워 두고 이유만 적었습니다. 평가하는 분이 자기 컴퓨터에서 명령 하나로 실행할 수 있어야 하는데, 클라우드에 의존하면 계정과 키가 필요해지기 때문입니다.
 - 로그는 형태를 한 번 정하고 프론트엔드와 백엔드가 같이 씁니다. 모든 로그에 trace id를 넣습니다. 메시지의 형태가 일관되어야 흐름을 파악하기 쉽기 때문입니다.
 

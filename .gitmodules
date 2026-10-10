@@ -1,0 +1,12 @@
+[submodule "docs/14_code/frontend"]
+	path = docs/14_code/frontend
+	url = https://github.com/dev-tryit/groupby-frontend.git
+	branch = v1.0.0
+[submodule "docs/14_code/backend"]
+	path = docs/14_code/backend
+	url = https://github.com/dev-tryit/groupby-backend.git
+	branch = v1.0.0
+[submodule "docs/14_code/infra"]
+	path = docs/14_code/infra
+	url = https://github.com/dev-tryit/groupby-infra.git
+	branch = v1.0.0
