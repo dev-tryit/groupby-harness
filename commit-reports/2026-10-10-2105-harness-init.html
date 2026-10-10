@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하네스 초기 구성</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --line:#e2e2e2; --code:#f4f4f4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#16181c; --fg:#e8e8e8; --muted:#9a9a9a; --line:#33363c; --code:#24272d; }
+  }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:16px/1.65 -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:40px 16px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .meta { color:var(--muted); font-size:14px; margin:0 0 28px; }
+  h2 { font-size:15px; color:var(--muted); margin:28px 0 6px; font-weight:600; }
+  p, ul { margin:0; }
+  ul { padding-left:20px; }
+  li { margin:4px 0; }
+  code { background:var(--code); padding:1px 5px; border-radius:4px; font-size:14px; }
+  table { width:100%; border-collapse:collapse; font-size:15px; }
+  td { padding:7px 0; border-top:1px solid var(--line); vertical-align:top; }
+  td:first-child { white-space:nowrap; padding-right:16px; }
+  .flow { font-size:14px; line-height:2; }
+</style>
+</head>
+<body>
+<main>
+  <h1>하네스 초기 구성</h1>
+  <p class="meta">2026-10-10 21:05 · 첫 커밋 · 파일 44개</p>
+
+  <h2>무엇을</h2>
+  <p>에이전트가 따를 지침 파일과 개발 단계 폴더 16개를 만들었습니다. 기능 코드와 설계 문서는 아직 없습니다.</p>
+
+  <h2>왜</h2>
+  <p>코드를 쓰기 전에 작업 규칙과 개발 루프를 먼저 정해, 불필요한 코드가 커밋되는 것을 처음부터 막기 위해서입니다.</p>
+
+  <h2>어떻게</h2>
+  <ul>
+    <li>지침은 폴더마다 <code>AGENTS.md</code>로 나눴습니다. 루트는 항상 읽고, 폴더 파일은 그 폴더를 다룰 때만 읽어 토큰을 아낍니다.</li>
+    <li><code>docs/</code>에 단계 폴더를 번호 순서로 두었습니다. 앞 단계의 산출물이 뒤 단계의 입력이 됩니다.</li>
+    <li>코드를 고치거나 뒤 단계가 앞 단계를 고쳐야 하면, <code>15_report</code>에 리포트를 쓰고 <code>00</code>부터 다시 내려옵니다. 리포트가 모두 해결된 뒤에만 커밋합니다.</li>
+    <li>문서를 왜 수정했는지는 각 단계 폴더의 <code>DECISIONS.md</code>에 기록합니다.</li>
+    <li>커밋은 기능 단위로 하고, 추천 → 허용 → 이 보고서 → 허용 → 커밋 순서로 허용을 두 번 받습니다. 반영 여부는 <code>TRACKER.md</code>로 추적합니다.</li>
+  </ul>
+
+  <h2>단계 순서</h2>
+  <p class="flow"><code>00_background</code> → <code>01_problem</code> → <code>02_research</code> → <code>03_branding</code> → <code>04_prd</code> → <code>05_wireframe</code> → <code>06_data-model</code> → <code>07_api</code> → <code>08_algorithm</code> → <code>09_infra</code> → <code>10_screen-design</code> → <code>11_security</code> → <code>12_log</code> → <code>13_e2e</code> → <code>14_code</code> → <code>15_report</code></p>
+
+  <h2>변경 파일</h2>
+  <table>
+    <tr><td><code>AGENTS.md</code></td><td>폴더 구조, 파일 이름, 대답 방식, 개발 루프, 커밋 원칙, 지침 파일 운영 원칙</td></tr>
+    <tr><td><code>docs/AGENTS.md</code></td><td>단계 구조, 번호 규칙, 진행 원칙, 수정 기록 형식</td></tr>
+    <tr><td><code>docs/*/AGENTS.md</code> (12개)</td><td>단계마다의 목적과 고유 규칙. 데이터 모델과 API의 하위 폴더 구분, 코드의 아키텍처 규칙이 여기에 있습니다.</td></tr>
+    <tr><td><code>docs/*/DECISIONS.md</code> (16개)</td><td>단계 폴더마다 둔 수정 기록 파일. 아직 기록은 없습니다.</td></tr>
+    <tr><td><code>.gitkeep</code> (10개)</td><td>아직 비어 있는 하위 폴더를 저장소에 남기기 위한 빈 파일</td></tr>
+    <tr><td><code>commit-reports/AGENTS.md</code></td><td>커밋 규칙, 커밋 절차, 보고서 형식, 추적 규칙</td></tr>
+    <tr><td><code>commit-reports/TRACKER.md</code></td><td>보고서의 커밋 반영 추적 표</td></tr>
+    <tr><td><code>.gitignore</code></td><td><code>.openchrome/</code>, <code>.DS_Store</code> 제외</td></tr>
+    <tr><td>이 보고서</td><td>첫 커밋의 보고서</td></tr>
+  </table>
+</main>
+</body>
+</html>
