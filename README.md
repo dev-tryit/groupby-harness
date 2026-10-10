@@ -25,6 +25,7 @@ git clone --recursive -b v1.0.0 https://github.com/dev-tryit/groupby-harness.git
 ```
 README.md              이 문서
 AGENTS.md              에이전트가 매 세션 읽는 지침 (전체에 항상 적용되는 것만)
+CHECKLIST.md           지금 정하지 않고 뒤 단계에서 정하기로 한 것
 commit-reports/        커밋 전 보고서와 커밋 반영 추적
 docs/
   00_context ~ 12_log      설계 문서. 단계마다 설계 문서 하나와 수정 기록(DECISIONS.md) 하나
