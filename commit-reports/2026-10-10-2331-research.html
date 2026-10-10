@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 조사 문서 작성 (법, 직군, 수집, 읽기, 조건, 판정, 점수, 근거·검증·피드백)</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>조사 문서 작성 (법, 직군, 수집, 읽기, 조건, 판정, 점수, 근거·검증·피드백)</h1>
+<div class="meta">보고서 작성: 2026-10-10 23:31 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p><code>docs/02_research/</code>에 조사 문서 여덟 개를 썼다. 주제마다 하위 폴더 하나에 문서 하나다.</p>
+
+<h2>왜</h2>
+<p>문제 정의의 5장 "아직 정하지 않은 것"을 정하려면 근거가 필요하다. 사용자가 문제를 기준으로 조사할 것을 나누고, 에이전트 팀으로 조사해 폴더마다 파일로 쓰라고 했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>법 조사는 직접 썼고, 나머지 일곱 개는 에이전트 하나가 폴더 하나를 맡아 썼다.</li>
+  <li>조사 문서는 방법을 확정하지 않는다. 선택지와 장단점, 추천 후보와 그 이유까지만 썼다. 결정은 사용자가 한다.</li>
+  <li>확인한 사실과 추측을 구분했고, 문서마다 "확인하지 못한 것"을 적었다.</li>
+  <li>OpenAI 키는 쓰지 않았다. 읽기의 비용은 공식 가격표로 계산만 했다.</li>
+  <li>표본을 뽑아 원 출처와 대조했다. OpenAI 가격과 이미지 토큰 규칙, 사람인 약관, 그룹바이의 공고 분석, 한국어 OCR 오류율이 출처와 일치했다. 모든 인용을 확인한 것은 아니다.</li>
+  <li>사람인의 공고 원문과 이미지는 저장소에 넣지 않았다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/02_research/law/law.md</code></td><td>크롤링과 관련된 법, 판례 두 건, 구조별 판단, 약관</td></tr>
+  <tr><td><code>docs/02_research/market/market.md</code></td><td>구인구직 시장에서 유의미한 직군</td></tr>
+  <tr><td><code>docs/02_research/crawling/crawling.md</code></td><td>공고 상세 페이지에서 이미지를 가져오는 방법, 약관, 후보 공고</td></tr>
+  <tr><td><code>docs/02_research/ocr/ocr.md</code></td><td>이미지를 읽는 방법과 성능·비용</td></tr>
+  <tr><td><code>docs/02_research/condition/condition.md</code></td><td>조건의 종류와 구조, 일반화된 조건 추출</td></tr>
+  <tr><td><code>docs/02_research/matching/matching.md</code></td><td>조건과 이력서를 비교해 판정하는 방식</td></tr>
+  <tr><td><code>docs/02_research/scoring/scoring.md</code></td><td>판정을 0~100점으로 만드는 방식</td></tr>
+  <tr><td><code>docs/02_research/evaluation/evaluation.md</code></td><td>근거, 검증, 피드백</td></tr>
+  <tr><td><code>docs/02_research/DECISIONS.md</code></td><td>쓴 이유와 고친 이유 기록</td></tr>
+</table>
+</body>
+</html>
