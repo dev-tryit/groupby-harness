@@ -10,6 +10,9 @@
 | `2026-10-10-2116-background.html` | 배경 자료 정리 | 반영 | `a2718f2` |
 | `2026-10-10-2141-harness-rules-readme.html` | 하네스 규칙 보강과 README 초안 | 반영 | `620d8f1` |
 | `2026-10-10-2201-code-submodules.html` | 코드 폴더를 서브모듈로 분리 | 반영 | `a02de9a` |
-| `2026-10-10-2242-rename-context.html` | 00_background를 00_context로 이름 변경 | 미반영 | - |
-| `2026-10-10-2242-checklist.html` | 체크리스트 추가 | 미반영 | - |
-| `2026-10-10-2242-problem.html` | 문제 정의 작성 | 미반영 | - |
+| `2026-10-10-2242-rename-context.html` | 00_background를 00_context로 이름 변경 | 반영 | `1f9b351` |
+| `2026-10-10-2242-checklist.html` | 체크리스트 추가 | 반영 | `0a85730` |
+| `2026-10-10-2242-problem.html` | 문제 정의 작성 | 반영 | `b055c8b` |
+| `2026-10-10-2331-harness-roles.html` | AGENTS.md와 CHECKLIST.md의 역할 분리 | 미반영 | - |
+| `2026-10-10-2331-problem-service.html` | 문제 정의에 만들 서비스와 힘을 싣는 곳 추가 | 미반영 | - |
+| `2026-10-10-2331-research.html` | 조사 문서 작성 | 미반영 | - |

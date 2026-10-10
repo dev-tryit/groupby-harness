@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: AGENTS.md와 CHECKLIST.md의 역할 분리</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>AGENTS.md와 CHECKLIST.md의 역할 분리</h1>
+<div class="meta">보고서 작성: 2026-10-10 23:31 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p><code>AGENTS.md</code>에는 개발 방법론(하네스)만 두고, 지금 하는 과제의 내용은 <code>CHECKLIST.md</code>로 옮겼다. 일하는 방식의 원칙 두 가지와 조사 단계의 규칙을 더했다.</p>
+
+<h2>왜</h2>
+<p>사용자가 두 파일의 역할이 크게 다르다고 했다. <code>AGENTS.md</code>는 여러 프로젝트에서 다시 쓰는 것이 목적이고, <code>CHECKLIST.md</code>는 지금 주어진 과제에 대해 기억해야 하는 것을 적는 곳이다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>어느 쪽에 쓸지는 "다른 프로젝트에서도 그대로 쓸 수 있는가"로 가른다. 이 기준을 루트 <code>AGENTS.md</code>에 적었다.</li>
+  <li><code>AGENTS.md</code>들에서 과제에만 해당하는 내용(초점, OpenAI 키와 예산, 과제의 조건, 개발 중인 버전, 서브모듈 레포 이름, 로컬 인프라만 만든다는 것)을 빼서 <code>CHECKLIST.md</code>의 "이 과제에서 기억할 것"으로 옮겼다.</li>
+  <li>루트 <code>AGENTS.md</code>에 "결정은 사용자가 한다. 에이전트는 추천 후보와 그 이유를 준다"와 "논의 중에는 실행하지 않는다"를 더했다.</li>
+  <li><code>docs/02_research/AGENTS.md</code>를 새로 만들었다. 조사를 주제별 하위 폴더로 나누고, 에이전트 팀으로 조사하고, 사실과 추측을 구분해 쓴다는 규칙이다.</li>
+  <li><code>CHECKLIST.md</code>에는 조사 단계에서 정한 것(크롤러의 자리와 범위, 힘을 싣는 곳)과 조사 주제 목록도 들어 있다.</li>
+  <li><code>TRACKER.md</code>에 지난 세 커밋의 반영 표시가 함께 들어간다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>AGENTS.md</code></td><td>역할 구분 장 추가, 원칙 두 가지 추가, 과제에만 해당하는 내용 제거</td></tr>
+  <tr><td><code>CHECKLIST.md</code></td><td>역할을 다시 쓰고 "이 과제에서 기억할 것"을 추가</td></tr>
+  <tr><td><code>commit-reports/AGENTS.md</code></td><td>과제에만 해당하는 내용을 <code>CHECKLIST.md</code>를 가리키도록 수정</td></tr>
+  <tr><td><code>docs/02_research/AGENTS.md</code></td><td>새로 작성</td></tr>
+  <tr><td><code>docs/08_algorithm/AGENTS.md</code></td><td>LLM에 대한 과제의 원칙 두 줄 제거 (<code>CHECKLIST.md</code>로 이동)</td></tr>
+  <tr><td><code>docs/13_test-scenario/AGENTS.md</code></td><td>예시를 일반적인 표현으로 수정</td></tr>
+  <tr><td><code>docs/14_code/AGENTS.md</code></td><td>서브모듈 레포 이름과 과제의 인프라 범위 제거 (<code>CHECKLIST.md</code>로 이동)</td></tr>
+  <tr><td><code>commit-reports/TRACKER.md</code></td><td>지난 세 커밋을 반영으로 표시, 이번 보고서 세 줄 추가</td></tr>
+</table>
+</body>
+</html>
