@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 배경 자료 정리</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>배경 자료 정리</h1>
+<div class="meta">보고서 작성: 2026-10-10 21:16</div>
+
+<h2>무엇을</h2>
+<p><code>docs/00_background</code>에 설계 문서 <code>background.md</code>를 작성했다. 지원 상황과 기한, 이 과제에서 초점을 두는 것, 과제 안내 메일, 과제 안내, 채용 공고를 담았다.</p>
+
+<h2>왜</h2>
+<p>이 프로젝트는 채용 과제다. 무엇을 만들어야 하고 무엇으로 평가받는지가 <code>01_problem</code>부터 모든 단계의 출발점이므로, 가장 앞 단계에 먼저 두었다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>과제 안내는 요약하지 않고 조건을 빠짐없이 옮겼다. 어기면 안 되는 제약이 많기 때문이다.</li>
+  <li>자료를 파일 여러 개로 나누지 않고 문서 하나에 장으로 나눴다. "단계 폴더당 설계 문서 하나" 규칙을 <code>docs/AGENTS.md</code>에 적었다.</li>
+  <li>OpenAI API 키의 값과 박상민 CSO의 연락처는 옮기지 않았다. 레포가 public이기 때문이다. <code>.gitignore</code>에 <code>.env</code>를 추가했다.</li>
+  <li>루트 <code>AGENTS.md</code>에 "일하는 방식"(사용자가 리드, 초점 두 가지)을 적었다.</li>
+  <li>"월요일 자정"이 0시인지 24시인지는 확인하지 않았고, 그 사실을 문서에 적었다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/00_background/background.md</code></td><td>새로 작성. 배경 설계 문서</td></tr>
+  <tr><td><code>docs/00_background/DECISIONS.md</code></td><td>수정 기록 3건 추가</td></tr>
+  <tr><td><code>docs/AGENTS.md</code></td><td>"문서 규칙" 추가 (폴더당 문서 하나, 이름, 최신 유지)</td></tr>
+  <tr><td><code>AGENTS.md</code></td><td>"일하는 방식" 추가</td></tr>
+  <tr><td><code>.gitignore</code></td><td><code>.env</code>, <code>.env.*</code> 추가</td></tr>
+  <tr><td><code>commit-reports/TRACKER.md</code></td><td>지난 커밋 <code>2d5ce8f</code> 반영 표시, 이 보고서 줄 추가</td></tr>
+  <tr><td><code>commit-reports/2026-10-10-2116-background.html</code></td><td>이 보고서</td></tr>
+</table>
+</body>
+</html>
