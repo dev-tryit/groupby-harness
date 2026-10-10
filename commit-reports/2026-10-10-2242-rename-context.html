@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 00_background를 00_context로 이름 변경</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>00_background를 00_context로 이름 변경</h1>
+<div class="meta">보고서 작성: 2026-10-10 22:42 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p>단계 폴더 <code>00_background</code>를 <code>00_context</code>로, 설계 문서 <code>background.md</code>를 <code>context.md</code>로 바꿨다. 내용은 그대로다.</p>
+
+<h2>왜</h2>
+<p>사용자가 "백그라운드"보다 "컨텍스트"가 폴더 이름으로 더 좋다고 판단했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li><code>git mv</code>로 폴더와 문서 이름을 바꾸고, 문서의 제목을 "컨텍스트"로 고쳤다.</li>
+  <li>이 이름을 가리키는 곳(단계 표, 문서 규칙의 예시, README)을 함께 고쳤다.</li>
+  <li>지난 수정 기록과 지난 커밋 보고서에 적힌 옛 이름은 고치지 않았다. 지난 기록은 고치지 않는 것이 규칙이다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/00_context/context.md</code></td><td>이름 변경, 제목 수정</td></tr>
+  <tr><td><code>docs/00_context/DECISIONS.md</code></td><td>이름 변경, 바꾼 이유 기록</td></tr>
+  <tr><td><code>docs/AGENTS.md</code></td><td>단계 표와 예시의 이름</td></tr>
+  <tr><td><code>README.md</code></td><td>폴더 트리와 단계 표의 이름</td></tr>
+</table>
+</body>
+</html>
