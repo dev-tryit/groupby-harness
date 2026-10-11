@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>리포트: 화면을 보고 사용자가 짚은 것</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 860px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 8px; }
+  .status { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #fff1e5; color: #9a3412; font-weight: 600; font-size: 13px; }
+  h2 { font-size: 16px; margin-top: 28px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>화면을 보고 사용자가 짚은 것</h1>
+<div class="meta">리포트 작성: 2026-10-11 21:21 · 브랜치 <code>v1.0.0</code></div>
+<span class="status" style="background:#dcfce7;color:#166534">상태: 해결</span>
+
+<h2>1. 무엇을 검증했는지</h2>
+<p>사용자가 실행한 화면을 직접 보면서 검증했다. 에이전트는 사용자가 짚은 것을 받아 적었다. 대상은 <code>result/</code>에서 띄운 화면(8000번)과 화면설계도의 미리보기(8012번)다.</p>
+
+<h2>2. 무엇이 문제인지</h2>
+<table>
+  <tr><th>번호</th><th>사용자가 짚은 것</th><th>지금의 상태</th></tr>
+  <tr><td>P1</td><td>조건과 지원자의 판정이 동시에 보이지 않는다. 왼쪽 목록에서 이력서를 고르게 하자</td><td>화면설계도만 고쳤다. <code>frontend/</code>와 <code>result/</code>는 앞의 화면이다</td></tr>
+  <tr><td>P2</td><td>"자격요건 3개"와 식의 "6/6"이 모순처럼 보인다</td><td>화면설계도만 고쳤다</td></tr>
+  <tr><td>P3</td><td>회계 공고를 기본값으로 먼저 보여 주자</td><td><code>07_api</code>, 백엔드, 화면설계도를 고쳤다. 띄워 둔 컨테이너(8000번)는 다시 빌드하지 않았다</td></tr>
+  <tr><td>P4</td><td>배치가 난잡하고 스크롤하면 잘 보이지 않는다</td><td>화면설계도만 고쳤다</td></tr>
+  <tr><td>P5</td><td>이력서 번호가 아니라 지원자의 이름으로, 개인정보에 문제가 없는 선에서. 이름과 이력서 이름 정도</td><td><code>07_api</code>, 백엔드, 화면설계도를 고쳤다</td></tr>
+  <tr><td>P6</td><td>채용 공고의 원문을 보여 주어야 한다. 없으면 사람들이 무엇과 비교한 것인지 인지하지 못한다</td><td>고치지 않았다</td></tr>
+  <tr><td>P7</td><td>읽은 내용(텍스트)은 저장소에 넣어도 된다. 이미지는 넣지 않는다</td><td>고치지 않았다. 지금은 조건과 판정만 넣는다(<code>08_infra/infra.md</code> 6.1)</td></tr>
+  <tr><td>P8</td><td>항상 설계부터 고치고 코드를 고친다. 순서대로 한다. 사용자가 말한 것은 리포트로 쓰고, 계획을 세우고, 그것으로 고친다</td><td>이 리포트를 쓰면서 <code>docs/AGENTS.md</code>와 <code>14_report/AGENTS.md</code>에 기록했다</td></tr>
+</table>
+<p>확인한 것:</p>
+<ul>
+  <li>P1~P5는 리포트 없이 바로 고쳤다. P3과 P5는 설계 문서와 백엔드를 같은 작업에서 함께 고쳤다. 순서를 지키지 않은 것이다.</li>
+  <li>P1~P5에서 앞 단계(<code>03_prd</code>, <code>04_wireframe</code>, <code>10_security</code>, <code>12_test-scenario</code>)를 보지 않았다. 와이어프레임은 아직 "지원자의 줄을 누르면 그 아래에 펼쳐진다"로 적혀 있다.</li>
+  <li>P7과 관련해, 회계 공고를 읽은 내용의 마지막 줄에 회사 채용 문의처의 메일 주소가 하나 있다. 마케팅 공고에는 없다. <code>CHECKLIST.md</code>는 푸시 전에 타인의 연락처가 없는지 확인하라고 정한다.</li>
+  <li>서비스 제공사 프로그램은 공고의 이미지를 갖고 있지 않다. 그래서 P6에서 보여 줄 수 있는 원문은 이미지가 아니라 읽은 내용(글자)이다.</li>
+</ul>
+
+<h2>3. 영향받는 단계</h2>
+<table>
+  <tr><th>단계</th><th>고칠 것</th><th>관련</th></tr>
+  <tr><td><code>02_research</code></td><td>고치지 않는다. 읽은 내용을 저장소에 넣지 않기로 한 조사의 판단이 P7로 바뀌었다는 것은 <code>08_infra</code>의 수정 기록에 적는다</td><td>P7</td></tr>
+  <tr><td><code>03_prd</code></td><td>기능에 "공고를 읽은 내용을 보여 주고 조건의 자리를 표시한다"를 더한다. F8을 고친 화면에 맞게 고친다(지원자를 목록에서 고른다, 가린 이름). 8.3에 연락처를 가리는 것을 더한다(4장의 후보에 따라)</td><td>P1, P5, P6, P7</td></tr>
+  <tr><td><code>04_wireframe</code></td><td>구역을 고친 배치에 맞춘다. 지원자 목록, 조건별 판정, 원문(이력서와 공고를 바꿔 본다)</td><td>P1, P4, P6</td></tr>
+  <tr><td><code>06_data-model</code></td><td>구조는 그대로다. 넘긴 것의 글자에서 연락처를 가린다는 것만 더한다</td><td>P7</td></tr>
+  <tr><td><code>07_api</code></td><td>공고의 응답에 읽은 내용(<code>text</code>)을 더한다. 없으면 <code>null</code>이다</td><td>P6</td></tr>
+  <tr><td><code>08_infra</code></td><td>6.1을 고친다. 저장소에 넣는 것에 넘긴 것(제목, 읽은 내용)을 더한다. 이미지는 넣지 않는다</td><td>P7</td></tr>
+  <tr><td><code>09_screen-design</code></td><td>"공고 원문 보기"를 더한다. 오른쪽 칸이 이력서 원문과 공고를 읽은 내용을 바꿔 보여 주고, 조건을 누르면 그 자리를 표시한다</td><td>P6</td></tr>
+  <tr><td><code>10_security</code></td><td>이름을 가리는 것, 읽은 내용을 저장소에 넣는 것과 연락처, 읽은 내용을 화면에 글자로만 넣는 것을 더한다</td><td>P5, P6, P7</td></tr>
+  <tr><td><code>12_test-scenario</code></td><td>시나리오를 더한다. 공고 원문에서 조건의 자리가 표시된다, 수집이 실패해도 제목과 원문이 나온다, 목록에 이름 전체가 나가지 않는다, 저장소에 연락처가 없다</td><td>P5, P6, P7</td></tr>
+  <tr><td><code>13_code</code></td><td>고객사 프로그램(연락처 가리기), 백엔드(응답에 읽은 내용), 프론트엔드(화면설계도를 복사), 인프라(<code>.gitignore</code>, 넘긴 것), <code>result/</code>에 다시 복사하고 다시 빌드, README의 화면 캡처</td><td>P1~P7</td></tr>
+</table>
+
+<h2>4. 반영 방법의 후보</h2>
+<p><strong>P7: 읽은 내용에 든 메일 주소</strong></p>
+<table>
+  <tr><th>후보</th><th>얻는 것</th><th>잃는 것</th></tr>
+  <tr><td>A. 고객사 프로그램이 넘기기 전에 메일 주소와 전화번호를 가린다 (추천)</td><td>서비스 제공사 쪽과 저장소에 연락처가 들어오지 않는다. 규칙으로 지켜진다</td><td>넘긴 글자가 읽은 글자와 그 자리만 다르다. 조건에 연락처가 들어 있는 경우 대조가 어긋날 수 있다(지금 두 공고에는 없다)</td></tr>
+  <tr><td>B. 그대로 넣는다</td><td>고칠 것이 없다</td><td>public 저장소에 타인의 메일 주소가 들어간다. <code>CHECKLIST.md</code>의 규칙과 어긋난다</td></tr>
+  <tr><td>C. 저장소에 넣을 때만 손으로 지운다</td><td>코드를 고치지 않는다</td><td>다시 실행하면 되살아난다. 규칙이 아니라 사람이 지켜야 한다</td></tr>
+</table>
+<p>A를 추천한다. 넘긴 것은 서비스 제공사가 갖게 되는 데이터이므로, 비교에 쓰지 않는 연락처는 넘어오기 전에 가리는 것이 맞다. 이미 넘긴 두 공고는 읽은 결과가 저장되어 있어서 LLM을 다시 부르지 않고 넘긴 것만 다시 만든다.</p>
+
+<p><strong>P6: 공고 원문을 어디에 보여 주는가</strong></p>
+<table>
+  <tr><th>후보</th><th>얻는 것</th><th>잃는 것</th></tr>
+  <tr><td>A. 오른쪽 칸에서 이력서 원문과 공고를 읽은 내용을 바꿔 본다. 조건을 누르면 자리를 표시한다 (추천)</td><td>칸이 늘지 않는다. 근거를 이력서에서 보는 것과 같은 방식이라 배울 것이 없다</td><td>이력서와 공고를 동시에 보지 못한다</td></tr>
+  <tr><td>B. 공고를 읽은 내용을 누르면 뜨는 창으로 보여 준다</td><td>세 칸이 그대로다</td><td>조건과 나란히 보이지 않는다</td></tr>
+</table>
+<p>사람인의 원래 공고로 가는 링크를 함께 둘지도 정해야 한다. 두면 이미지를 볼 수 있지만, 화면에 바깥으로 나가는 주소가 생긴다(불러오는 것이 아니라 누르면 이동하는 것이다).</p>
+
+<p><strong>반영하는 순서</strong>: 정해 주시면 <code>03</code> → <code>04</code> → <code>06</code> → <code>07</code> → <code>08</code> → <code>09</code> → <code>10</code> → <code>12</code>의 순서로 설계 문서를 고치고, 그 뒤에 <code>13_code</code>와 <code>result/</code>를 고친다.</p>
+<h2>5. 사용자가 지시한 반영 방법 (2026-10-11 21:35)</h2>
+<ul>
+  <li><strong>P7</strong>: 읽은 내용을 저장소에 넣지 않는다. 처음에는 넣자고 했다가, 올리지 않아야 할 내용이면 올리지 않는다고 다시 정했다. 서비스 제공사가 채용 정보를 쌓아 두지 않는다는 구조와 같은 이유다. 평가자가 <code>result/</code>에서 실행하면 고객사 프로그램이 자동으로 읽어 넘기므로 화면에는 나온다. 연락처를 가리는 것은 하지 않는다(저장소에 들어가지 않으므로).</li>
+  <li><strong>P6</strong>: 추천한 A로 한다. 오른쪽 칸에서 이력서 원문과 공고를 읽은 내용을 바꿔 보고, 조건을 누르면 그 자리를 표시한다. 읽은 내용이 없는 실행에서는 없다고 보여 준다.</li>
+  <li>사람인의 공고로 가는 링크는 사용자가 정하지 않아 넣지 않는다.</li>
+  <li><strong>P1~P5</strong>: 이미 고친 화면설계도를 그대로 두고, 보지 않은 앞 단계를 순서대로 맞춘다.</li>
+  <li>고치는 순서: <code>03</code> → <code>04</code> → <code>07</code> → <code>08</code> → <code>09</code> → <code>10</code> → <code>12</code> → <code>13_code</code> → <code>result/</code>. <code>06_data-model</code>은 고칠 것이 없다.</li>
+</ul>
+<h2>6. 고친 순서와 결과 (2026-10-11 22:10)</h2>
+<table>
+  <tr><th>단계</th><th>고친 것</th></tr>
+  <tr><td><code>03_prd</code></td><td>F8을 고치고 F11(가린 이름), F12(공고를 읽은 내용), F13(공고 목록의 순서)을 더했다</td></tr>
+  <tr><td><code>04_wireframe</code></td><td>기능 설명을 고쳤다. 그림은 고치지 않았다</td></tr>
+  <tr><td><code>07_api</code></td><td>공고의 응답에 <code>text</code>를 더했다</td></tr>
+  <tr><td><code>08_infra</code></td><td>넘긴 것을 저장소에 넣지 않는다는 것과 이유를 6.1에 적었다. 기술 스택 표를 더했다(사용자가 따로 말한 것)</td></tr>
+  <tr><td><code>09_screen-design</code></td><td>공고 원문 보기를 더했다</td></tr>
+  <tr><td><code>10_security</code></td><td>S28~S30, T14, T15를 더했다</td></tr>
+  <tr><td><code>12_test-scenario</code></td><td>E10~E12, U8, U9, T14, T15를 더했다. 코드보다 먼저 썼다</td></tr>
+  <tr><td><code>13_code</code>, <code>result/</code></td><td>백엔드, 프론트엔드를 고치고 다시 복사해 빌드했다</td></tr>
+</table>
+<p>새 시나리오는 모두 통과했다. 자동 테스트 42개가 통과한다. 남은 것: 와이어프레임의 그림은 앞의 배치 그대로다. 사람인의 공고로 가는 링크는 넣지 않았다.</p>
+</body>
+</html>

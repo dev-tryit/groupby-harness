@@ -16,7 +16,7 @@
 
 ## 2. `GET /api/postings`
 
-**하는 일**: 넘겨받은 공고의 목록을 준다.
+**하는 일**: 넘겨받은 공고의 목록을 준다. 공고 번호가 큰 것(최근에 올라온 공고)이 먼저다. 화면은 목록의 첫 공고를 먼저 보여 준다.
 
 **입력**
 
@@ -41,7 +41,7 @@ class PostingSummary {
 
 ## 3. `GET /api/postings/{posting_id}`
 
-**하는 일**: 공고 하나에서 뽑은 것(직무, 담당업무, 조건)과, 그 공고 지원자들의 랭킹을 준다. 점수와 순위, 조건이 읽은 내용 안에 있는지는 저장하지 않고 이때 계산한다(`06_data-model/persistent/persistent.md` 3장).
+**하는 일**: 공고 하나에서 뽑은 것(직무, 담당업무, 조건)과, 그 공고 지원자들의 랭킹을 준다. 점수와 순위는 저장하지 않고 이때 계산한다. 조건이 읽은 내용 안에 있는지(`in_reading`)는 넘겨받은 읽은 내용이 있으면 이때 다시 계산하고, 없으면 뽑을 때 저장한 값을 준다(`06_data-model/persistent/persistent.md` 3장). `item_id`와 `resume_id`는 저장된 번호 앞에 공고 번호를 붙여 이때 만든다(`{공고 번호}-C1`, `{공고 번호}-resume-1`).
 
 **입력**
 
@@ -58,6 +58,7 @@ class GetPostingResResult {
     posting_id: string
     title: string
     job: string
+    text: string | null             // 고객사가 넘긴, 공고를 읽은 내용 전체. 넘긴 것이 없는 실행에서는 null
     duties: Duty[]                  // 담당업무
     conditions: ConditionGroups
     ranking: RankedResume[]         // 점수가 높은 순서. 같은 순위 안에서는 이력서 번호 순서
@@ -85,6 +86,7 @@ class Condition {
 class RankedResume {
     rank: number            // 점수가 같으면 같은 순위
     resume_id: string       // 전체에서 고유하다
+    name: string | null     // 가운데를 가린 지원자의 이름. 예: 강*재. 이력서의 제목에서 얻지 못하면 null이고 화면은 이력서 번호를 보여 준다
     score: number           // 0~100. 반올림한 정수. 순서는 반올림하기 전의 값으로 정한다
     required: GroupScore | null     // 자격요건이 없는 공고는 null
     preferred: GroupScore | null    // 우대사항이 없는 공고는 null
@@ -106,7 +108,7 @@ class GroupScore {
 
 ## 4. `GET /api/resumes/{resume_id}`
 
-**하는 일**: 지원자 한 명의 점수가 어떤 숫자에서 나왔는지, 조건마다 판정과 근거가 무엇인지, 이력서 원문이 무엇인지를 준다. 근거가 이력서 안에 있는지와 화면의 표시(`mark`)는 저장하지 않고 이때 계산한다.
+**하는 일**: 지원자 한 명의 점수가 어떤 숫자에서 나왔는지, 조건마다 판정과 근거가 무엇인지, 이력서 원문이 무엇인지를 준다. 화면의 표시(`mark`)는 저장하지 않고 이때 계산한다. 근거가 이력서 안에 있는지(`quotes_in_resume`)는 비교할 때 저장한 값을 준다.
 
 **입력**
 
@@ -122,6 +124,7 @@ class GetResumeMatchReqParam {
 class GetResumeMatchResResult {
     posting_id: string
     resume_id: string
+    name: string | null     // RankedResume의 name과 같다
     score: number
     required: GroupScore | null
     preferred: GroupScore | null

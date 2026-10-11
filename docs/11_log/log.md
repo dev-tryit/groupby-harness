@@ -50,7 +50,8 @@
 
 - 바깥 서비스에는 trace id를 넘길 수 없다. 대신 OpenAI가 응답에 준 요청 번호를 `openai_request_id` 필드로 함께 남긴다.
 - 서버가 `X-Trace-Id`가 없는 요청을 받으면 하나 만든다. 받은 값이 16진수 8자가 아니면 버리고 새로 만든다.
-- 넘긴 것에 `trace_id`가 없으면(이미 저장되어 있던 것) 서비스 제공사 프로그램이 그 공고에 하나 만든다.
+- 넘긴 것에 `trace_id`가 없으면(앞의 실행에서 넘긴 것) 서비스 제공사 프로그램이 그 공고에 하나 만든다.
+- `item_id`는 API와 같은 값이다(`{공고 번호}-C1`).
 
 공고 하나를 trace id로 따라간 모습이다.
 
@@ -70,7 +71,7 @@ server  3f9a1c2e  resume.matched      resume_id=resume-1
 | `event` | 수준 | 쓰는 쪽 | 함께 남기는 것 |
 | :- | :- | :- | :- |
 | `run.started` | INFO | client, server | 공고의 수 |
-| `run.finished` | INFO | client, server | 성공한 수, 실패한 수, LLM 호출 수, 비용의 합, 걸린 시간 |
+| `run.finished` | INFO | client, server | 성공한 수(`succeeded`), 실패한 수(`failed`), LLM 호출 수(`llm_calls`), 비용의 합(`cost_usd`), 걸린 시간(`ms`). client는 공고를, server는 이력서를 센다 |
 | `http.requested` | INFO | client | 대상의 호스트, 무엇을 가져왔는지(`purpose`: `page`, `image`), 상태, `Content-Type`, 걸린 시간 |
 | `posting.collected` | INFO | client | 이미지의 수 |
 | `posting.collect_failed` | ERROR | client | 실패한 이유 |
@@ -79,10 +80,10 @@ server  3f9a1c2e  resume.matched      resume_id=resume-1
 | `stage.skipped` | INFO | client, server | 건너뛴 단계(`stage`: `collect`, `read`, `extract`, `match`). 저장된 결과가 있다 |
 | `llm.called` | INFO | client, server | 무엇을 위한 호출인지(`purpose`: `read`, `extract`, `match`), 모델, 토큰 수, 비용, 걸린 시간, `openai_request_id` |
 | `llm.failed` | ERROR | client, server | `purpose`, 실패한 이유 |
-| `features.extracted` | INFO | server | 그룹마다 항목의 수 |
-| `item.not_in_reading` | WARN | server | `item_id` |
-| `resume.matched` | INFO | server | 판정마다 개수(일치, 비슷, 다름) |
-| `quote.not_in_resume` | WARN | server | `item_id`, LLM이 낸 판정 |
+| `features.extracted` | INFO | server | 그룹마다 항목의 수(`groups`). 새로 뽑았을 때만 남긴다 |
+| `item.not_in_reading` | WARN | server | `item_id`. 실행할 때마다 넘겨받은 읽은 내용으로 다시 견준다 |
+| `resume.matched` | INFO | server | 판정마다 개수(`verdicts`). 점수에 쓰는 판정으로 센다. 저장된 결과를 쓴 경우에도 남긴다 |
+| `quote.not_in_resume` | WARN | server | `item_id`, LLM이 낸 판정(`verdict`). 저장된 결과를 쓴 경우에도 남긴다 |
 | `api.requested` | INFO | server | 메서드, 경로, 상태, 걸린 시간 |
 | `api.rejected` | WARN | server | 메서드, 경로, 상태(400, 404) |
 | `api.failed` | ERROR | server, frontend | 경로, 실패한 이유 |
@@ -111,6 +112,6 @@ server  3f9a1c2e  resume.matched      resume_id=resume-1
 ## 6. 내보내는 곳
 
 - 백엔드의 두 프로그램은 표준 출력으로 낸다. `docker compose logs`로 본다(`08_infra/infra.md` 4장).
-- 표준 출력에는 로그만 낸다. 사람이 읽는 결과(랭킹과 근거)는 화면이 보여 준다.
+- 두 컨테이너의 표준 출력에는 로그만 나온다. 사람이 읽는 결과(랭킹과 근거)는 화면이 보여 준다. 서비스 제공사 프로그램의 `extract`, `rank` 명령은 컨테이너가 쓰지 않는 명령이고 사람이 읽는 글을 출력한다.
 - 화면은 브라우저의 콘솔로 낸다. 서버로 보내지 않는다.
 - 로그를 모으는 저장소는 두지 않는다. 평가자 한 명이 자기 컴퓨터에서 실행한다(`03_prd/prd.md` 5장).

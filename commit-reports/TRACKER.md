@@ -35,4 +35,6 @@
 | `2026-10-11-2020-screen-design.html` | 화면설계도를 실제 프론트엔드 화면으로 만듦 | 반영 | `24ce74c` |
 | `2026-10-11-2020-security-log.html` | 보안과 로그 설계 문서 작성 | 반영 | `09941a5` |
 | `2026-10-11-2020-harness-rules.html` | 하네스 규칙 보강과 README, 체크리스트 반영 | 반영 | `8716528` |
-| `2026-10-11-2052-runnable-result.html` | 명령 하나로 실행되는 결과물 (API, Docker Compose, 화면, result, README) | 미반영 | |
+| `2026-10-11-2052-runnable-result.html` | 명령 하나로 실행되는 결과물 (API, Docker Compose, 화면, result, README) | 반영 | `41cda05` |
+| `2026-10-11-2103-test-scenario.html` | 테스트 시나리오 작성과 체크리스트 정리 | 폐기 | `2026-10-11-2138-scenario-and-screen-review.html`로 바꿨다 |
+| `2026-10-11-2138-scenario-and-screen-review.html` | 테스트 시나리오와 화면 검토의 반영 | 미반영 | |

@@ -26,6 +26,24 @@
 
 ## 3. 고른 기술
 
+### 3.1 기술 스택
+
+| 자리 | 쓰는 것 | 버전 |
+| :- | :- | :- |
+| 언어 (고객사 프로그램, 서비스 제공사 프로그램) | Python | 3.13 |
+| 수집 | 표준 라이브러리의 `urllib` (HTTP 요청) | |
+| 이미지를 자르는 것 | Pillow, NumPy | 11 이상, 2 이상 |
+| 이미지를 읽는 것, 조건 추출, 비교 | OpenAI `gpt-4.1-mini` (온도 0). 표준 라이브러리로 HTTP를 부른다. SDK를 쓰지 않는다 | |
+| HTTP 서버와 API | 표준 라이브러리의 `http.server` | |
+| 화면 | HTML 파일 하나. 프레임워크와 빌드가 없다. 바깥의 자원을 불러오지 않는다 | |
+| 저장 | 로컬 디스크의 JSON 파일과 이미지 파일 | |
+| 실행 | Docker Compose. 컨테이너 둘(`client`, `server`), 이미지 하나(`python:3.13-slim`) | |
+| 테스트 | 표준 라이브러리의 `unittest` | |
+
+바깥에서 받는 의존성은 Pillow와 NumPy 둘뿐이다.
+
+### 3.2 고른 이유
+
 | 필요한 것 | 고른 것 | 이유 | 버린 것 |
 | :- | :- | :- | :- |
 | 영속 데이터를 담을 곳 | 로컬 디스크의 파일(JSON, 이미지) | 양이 적고 동시에 쓰는 일이 없다. 관계는 공고 번호와 이력서 번호로 된 경로로 충분히 나타난다. 평가자가 결과를 파일로 열어 볼 수 있다 | 관계형 DB. 컨테이너와 스키마 관리가 늘어나는데 이 양에서는 얻는 것이 없다 |
@@ -79,27 +97,29 @@ flowchart LR
 - 두 컨테이너는 백엔드의 같은 이미지를 쓰고 실행하는 명령만 다르다.
 - 컨테이너는 root가 아닌 사용자로 실행한다. 쓸 일이 없는 폴더(그림의 "읽기만")는 읽기 전용으로 붙인다.
 - OpenAI 키는 실행할 때 `.env`에서 환경 변수로 넣는다. 이미지를 만들 때 넣지 않는다. `.env`는 이미지를 만드는 재료에서도 뺀다.
-- 로그는 표준 출력으로 낸다. `docker compose logs`로 본다(`11_log`).
+- 두 프로그램 모두 표준 출력으로 낸다. `docker compose logs`로 본다. 두 컨테이너 모두 한 줄에 JSON 하나인 로그만 낸다(`11_log`).
+- 평가자가 실행하는 곳은 저장소 루트의 `result/`다. 백엔드, 화면, 이력서, 저장해 둔 특징과 비교를 한 폴더에 복사해 두었고 `result/docker-compose.yml`로 띄운다. 서브모듈을 받지 않아도 실행된다. `13_code/infra/local/docker-compose.yml`은 같은 구성을 서브모듈의 자리에서 띄우는 것이다.
 
 ## 5. 저장 구조
 
-`data/`는 인프라의 로컬 구성(`13_code/infra/local/`) 아래에 있다.
+`data/`는 실행하는 곳 아래에 있다. 평가자가 실행하는 `result/`에서는 `result/data/`이고, 인프라의 로컬 구성에서는 `13_code/infra/local/data/`다.
 
 | 경로 | 데이터 (`06_data-model/persistent`) | 쓰는 쪽 |
 | :- | :- | :- |
 | `data/client/postings/{공고 번호}/posting.json` | 공고: `posting_id`, `title` | client |
-| `data/client/postings/{공고 번호}/{image_id}.{jpg,png}` | 본문 이미지. 순서는 `posting.json`의 `images[]`(`image_id`, `order`)에 둔다 | client |
-| `data/client/readings/{공고 번호}/reading.json` | 읽은 결과: `posting_id`, `model`(`POSTING`의 읽은 모델), `slices[]`(`slice_id`, `image_id`, `order`, `text`, `input_tokens`, `output_tokens`) | client |
+| `data/client/postings/{공고 번호}/01.jpg`, `02.jpg`, … | 본문 이미지. 순서가 파일 이름이다 | client |
+| `data/client/readings/{공고 번호}/reading.json` | 읽은 결과: `posting_id`, `model`, `slices[]`(`image`, `index`, `top`, `bottom`, `text`, `input_tokens`, `output_tokens`) | client |
+| `data/client/readings/{공고 번호}/reading.txt` | 읽은 내용 전체를 글자로 둔 것. 사람이 열어 보기 위한 것이다 | client |
 | `data/submissions/{공고 번호}.json` | 넘긴 것: `posting_id`, `title`, `text`, `trace_id` | client |
-| `data/server/features/{공고 번호}.json` | 특징: `posting_id`, `model`, `job`, `items[]`(`item_id`, `no`, `group`, `text`), `input_tokens`, `output_tokens` | server |
-| `data/server/matches/{공고 번호}/{이력서 번호}.json` | 비교: `resume_id`, `model`, `judgments[]`(`item_id`, `thinking`, `quotes[]`, `verdict`), `input_tokens`, `output_tokens` | server |
-| `12_test-scenario/golden-set/{공고 번호}/{이력서 번호}.md` | 이력서. 폴더가 `posting_id`(FK)이고 파일 이름이 `resume_id`다 | 사람 |
+| `data/server/features/{공고 번호}.json` | 특징: `posting_id`, `model`, `job`, `job_basis`, `sections[]`, `items[]`(`id`, `kind`, `group`, `text`, `reason`, `in_reading`), `input_tokens`, `output_tokens` | server |
+| `data/server/matches/{공고 번호}/{이력서 번호}.json` | 비교: `posting_id`, `resume_id`, `model`, `judgments[]`(`condition_id`, `thinking`, `quotes[]`, `verdict`, `quotes_in_resume`), `input_tokens`, `output_tokens` | server |
+| `resumes/{공고 번호}/{이력서 번호}.md` | 이력서. 폴더가 `posting_id`이고 파일 이름이 `resume_id`다. 원본은 `12_test-scenario/golden-set/`이다 | 사람 |
 
-- 경로의 폴더는 FK의 역할을 한다. 공고 하나의 것(이력서, 비교)을 폴더 하나로 집어낸다. 판정과 조건은 `item_id`로 잇는다(`06_data-model/persistent/persistent.md` 2.1).
-- 키의 값은 전체에서 겹치지 않는 문자열이다. `image_id`, `slice_id`, `item_id`는 만들 때 프로그램이 정한다. `resume_id`는 이력서의 파일 이름이다. 그래서 이력서의 파일 이름은 공고가 달라도 겹치면 안 된다.
-- 키의 값에는 뜻이 없다. 읽는 쪽은 키를 쪼개서 쓰지 않는다. 화면에 보여 줄 번호는 `no`에 따로 있다.
+- 경로의 폴더가 공고 번호의 자리를 맡는다. 공고 하나의 것(이력서, 비교)을 폴더 하나로 집어낸다. 판정과 조건은 `condition_id`와 항목의 `id`로 잇는다.
+- 항목의 번호(`id`)와 이력서의 번호(파일 이름)는 공고 안에서만 고유하다. 이력서의 파일 이름은 공고마다 `resume-1`부터다. 화면에 내보낼 때 API가 앞에 공고 번호를 붙인다.
 - 파일이 있으면 그 단계를 건너뛴다. 처음부터 다시 만들려면 그 파일을 지운다.
-- 항목의 `no`는 담당업무가 `D1`부터, 조건이 `C1`부터다.
+- 항목의 `id`는 담당업무가 `D1`부터, 조건이 `C1`부터다.
+- 서비스 제공사 프로그램의 `rank` 명령은 결과를 `data/server/results/`에도 쓴다. `serve`와 화면은 이 폴더를 쓰지 않는다. 저장소에 넣지 않는다.
 
 ## 6. 크롤링의 재현과 예산
 
@@ -114,6 +134,7 @@ flowchart LR
 | C. 이미지와 읽은 결과까지 다 넣는다 | 수집이 실패해도 읽기부터 다시 돌릴 수 있다 | 공고의 이미지와 글자 전체가 public 저장소에 들어간다. 조사에서 넣지 않기로 한 것이다(`02_research/crawling/crawling.md`) |
 
 - **사용자가 B로 정했다(2026-10-11).** 수집이 실패해도 화면이 나와야 하기 때문이다. 조건의 글자가 public 저장소에 들어가는 것은 알고 골랐다. 이미지와 읽은 내용 전체, 넘긴 것은 넣지 않는다.
+- 2026-10-11에 넘긴 것(제목, 읽은 내용)도 저장소에 넣자는 안이 나왔으나 넣지 않기로 했다(사용자). 공고를 읽은 글자 전체를 public 저장소에 두면 서비스 제공사가 채용 정보를 쌓아 두는 모습이 되고, 회계 공고에는 채용 문의처의 메일 주소도 들어 있다. 화면의 공고 원문은 평가자가 실행할 때 고객사 프로그램이 읽어 넘긴 것으로 보여 준다. 수집이 실패한 실행에서는 조건과 랭킹은 나오고 제목과 원문은 나오지 않는다.
 - 저장소에 넣는 것은 `data/server/features/`와 `data/server/matches/`다. 인프라 서브모듈의 `.gitignore`가 `data/` 가운데 이 둘만 남긴다.
 - 넣기 전에 두 폴더에서 키, 전화번호, 메일 주소의 모양을 검색했고 나오지 않았다.
 - 평가자가 특징 추출과 비교가 실제로 도는 것을 보려면 두 폴더의 파일을 지우고 실행한다. README의 "실행 방법"에 적는다.

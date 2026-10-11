@@ -35,11 +35,14 @@
   .rank tbody tr.row { cursor: pointer; }
   .rank tbody tr.row:hover { background: #f3f3f3; }
   .rank tbody tr.row.open { background: #ddd; }
-  .detail > td { padding: 0; }
-  .detail-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
-  @media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
-  .detail-grid > div { padding: 10px; }
-  .detail-grid > div + div { border-left: 1px dashed #666; }
+  .cols { display: grid; grid-template-columns: 180px minmax(0, 3fr) minmax(0, 2fr); }
+  .cols > .zone { border-bottom: 0; }
+  .cols > .zone + .zone { border-left: 2px solid #111; }
+  @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } .cols > .zone + .zone { border-left: 0; border-top: 2px solid #111; } }
+  #midtabs { margin-bottom: 10px; }
+  .posting div { padding: 1px 4px; }
+  .posting .got { border: 1px solid #111; display: inline-block; padding: 0 6px; }
+  .posting .got.weak { border-style: dashed; }
   .calc { border: 1px dashed #666; padding: 6px 8px; margin-bottom: 8px; }
   .ev tr.pick { cursor: pointer; }
   .ev tr.pick:hover { background: #f3f3f3; }
@@ -83,7 +86,7 @@
 </div>
 
 <h2>2. 화면</h2>
-<p class="muted">공고를 고르고, 지원자의 줄을 누르고, 근거의 줄을 눌러 본다.</p>
+<p class="muted">공고를 고르고, 왼쪽에서 지원자를 고르고, 근거의 줄을 눌러 본다. 가운데 칸은 "조건별 판정"과 "공고 원문"을 바꿔 본다.</p>
 
 <div class="layout">
   <div class="screen" id="screen">
@@ -91,17 +94,21 @@
       <div class="name"><span class="mark">1</span>공고 고르기</div>
       <div id="tabs" role="tablist" aria-label="공고"></div>
     </div>
-    <div class="zone">
-      <div class="name"><span class="mark">2</span>공고에서 뽑은 것</div>
-      <div id="features"></div>
-    </div>
-    <div class="zone">
-      <div class="name"><span class="mark">3</span>랭킹</div>
-      <div class="scroll">
+    <div class="cols">
+      <div class="zone">
+        <div class="name"><span class="mark">3</span>랭킹</div>
         <table class="rank">
-          <thead><tr><th>순위</th><th>지원자</th><th>점수</th><th>자격요건</th><th>우대사항</th></tr></thead>
+          <thead><tr><th>순위</th><th>지원자</th><th>점수</th></tr></thead>
           <tbody id="ranking"></tbody>
         </table>
+      </div>
+      <div class="zone">
+        <div id="midtabs" role="tablist" aria-label="가운데 칸"></div>
+        <div id="middle"></div>
+      </div>
+      <div class="zone">
+        <div class="name"><span class="mark">6</span>이력서 원문</div>
+        <div class="resume" id="resume"></div>
       </div>
     </div>
   </div>
@@ -110,17 +117,17 @@
     <h3>기능</h3>
     <dl>
       <dt><span class="mark">1</span>공고 고르기</dt>
-      <dd>공고를 누르면 ②와 ③이 그 공고의 것으로 바뀐다. 펼친 지원자는 닫힌다. 점수는 공고 하나 안에서만 비교한다.</dd>
+      <dd>공고를 누르면 ②~⑥이 그 공고의 것으로 바뀐다. 공고 번호가 큰 공고가 먼저 열려 있다. 점수는 공고 하나 안에서만 비교한다.</dd>
       <dt><span class="mark">2</span>공고에서 뽑은 것</dt>
-      <dd>직무와, 그룹마다 뽑은 조건을 보여 준다. 누를 것이 없다. 우대사항이 없는 공고는 "없음"으로 보인다.</dd>
+      <dd>가운데 칸의 두 탭에 나뉘어 있다. "조건별 판정"에는 그룹마다 뽑은 조건이 있고, 조건 옆에 고른 지원자의 판정이 붙는다(⑤와 한 자리다). "공고 원문"에는 공고를 읽은 내용 전체가 있고, 뽑은 담당업무와 조건이 있는 자리를 번호와 함께 모두 표시한다. 읽은 내용이 없는 실행에서는 없다고 보여 준다.</dd>
       <dt><span class="mark">3</span>랭킹</dt>
-      <dd>점수가 높은 순서다. 점수가 같으면 같은 순위다. 지원자의 줄을 누르면 그 줄 아래에 ④ ⑤ ⑥이 펼쳐진다. 다시 누르면 닫힌다. 한 번에 한 명만 펼친다.</dd>
+      <dd>왼쪽의 목록이다. 점수가 높은 순서이고 점수가 같으면 같은 순위다. 지원자를 누르면 ④ ⑤ ⑥이 그 지원자의 것으로 바뀐다. 한 번에 한 명만 고른다. 공고를 열면 1위가 골라져 있다. 지원자는 가운데를 가린 이름과 이력서 번호로 보여 준다.</dd>
       <dt><span class="mark">4</span>점수의 계산</dt>
-      <dd>그 지원자의 점수가 어떤 숫자에서 나왔는지를 식으로 보여 준다. 우대사항이 없는 공고는 식이 다르다.</dd>
+      <dd>그 지원자의 점수가 어떤 숫자에서 나왔는지를 그룹마다 한 줄로 보여 준다(받은 점수 / 만점, 조건의 수 × 2점). 우대사항이 없는 공고는 식이 다르다.</dd>
       <dt><span class="mark">5</span>조건마다 판정과 근거</dt>
       <dd>그룹마다 조건, 판정, 근거(이력서의 구절)를 보여 준다. 근거가 있는 줄을 누르면 ⑥에서 그 구절이 표시된다. 근거가 없는 줄은 눌러도 바뀌지 않는다.</dd>
       <dt><span class="mark">6</span>이력서 원문</dt>
-      <dd>이력서의 글자를 그대로 보여 준다. ⑤에서 고른 근거의 구절이 있는 자리를 표시한다.</dd>
+      <dd>오른쪽 칸이다. 이력서의 글자를 그대로 보여 준다. ⑤에서 고른 근거의 구절이 있는 자리를 표시한다.</dd>
     </dl>
     <div class="log" id="log" aria-live="polite">방금 한 일이 여기에 적힌다.</div>
   </aside>
@@ -144,8 +151,10 @@
 <table>
   <tr><th>판단</th><th>이유</th></tr>
   <tr><td>화면을 하나로 한다</td><td>과제가 요구한 것은 매칭 결과와 근거를 보여 주는 간단한 화면이다. 화면을 나누면 이동하는 구조가 더 생긴다</td></tr>
-  <tr><td>공고에서 뽑은 조건을 맨 위에 둔다</td><td>조건이 점수의 기준이다. 무엇을 기준으로 매겼는지가 먼저 보여야 점수를 읽을 수 있다. 과제의 요구사항 2의 결과이기도 하다</td></tr>
-  <tr><td>근거는 지원자를 눌렀을 때 펼친다</td><td>지원자 6명의 근거를 한꺼번에 펼치면 랭킹이 한눈에 들어오지 않는다</td></tr>
+  <tr><td>공고에서 뽑은 조건과 지원자의 판정을 한 자리에 둔다</td><td>사용자가 정했다. 조건이 위에 있고 판정이 아래에 있으면 둘이 동시에 보이지 않는다. 조건 옆에 판정이 붙어야 무엇을 기준으로 매겼는지와 결과를 함께 읽는다</td></tr>
+  <tr><td>공고를 읽은 내용을 가운데 칸의 탭으로 둔다</td><td>사용자가 정했다. "이 공고가 이런 조건으로 추출되었다"를 보여 주려는 것이다. 공고에 대한 것이므로 이력서 원문과 같은 자리에 두지 않는다</td></tr>
+  <tr><td>지원자는 왼쪽 목록에서 한 명을 고른다</td><td>사용자가 정했다. 지원자 6명의 근거를 한꺼번에 보이면 랭킹이 한눈에 들어오지 않는다. 목록이 왼쪽에 늘 있으면 근거를 보면서도 다른 지원자로 바로 옮겨 간다</td></tr>
+  <tr><td>세 칸이 화면 높이를 채우고 칸마다 따로 스크롤한다</td><td>사용자가 짚었다. 페이지 전체가 스크롤되면 누구의 무엇을 보는지가 사라진다</td></tr>
   <tr><td>점수의 계산을 숫자로 보인다</td><td>점수가 근거에서 나왔다는 것을 사람이 직접 계산해 확인할 수 있다</td></tr>
   <tr><td>이력서 원문을 근거와 나란히 둔다</td><td>사용자가 정했다. 근거의 구절이 판정을 뒷받침하는지는 사람이 원문과 나란히 보고 잡는다(<code>03_prd/prd.md</code> 10.1)</td></tr>
   <tr><td>자격요건과 우대사항에서 일치한 수를 점수와 따로 둔다</td><td>사용자가 정했다(<code>03_prd/prd.md</code> 10.2)</td></tr>
@@ -177,7 +186,7 @@ const VALUE = { M: 2, S: 1, D: 0, N: 0, U: 0 };
 const GROUPS = [['required', '자격요건'], ['preferred', '우대사항'], ['reference', '참고사항']];
 const RESUME_LINES = 12;
 
-let current = 0, opened = null, picked = null;
+let current = 0, opened = null, picked = null, mid = 'verdicts';
 const $ = id => document.getElementById(id);
 const log = text => { $('log').textContent = text; };
 
@@ -204,16 +213,6 @@ function renderTabs() {
     `<button role="tab" aria-selected="${i === current}" data-i="${i}">${p.name}</button>`).join(' ');
 }
 
-function renderFeatures() {
-  const p = POSTINGS[current];
-  const chips = (n, word) => n ? Array.from({ length: n }, (_, i) => `<span>${word} ${i + 1}</span>`).join('') : '<span class="muted">없음</span>';
-  $('features').innerHTML = `
-    <div>직무 &nbsp;<span class="chips"><span>직무의 이름</span></span></div>
-    <div class="chips">자격요건 &nbsp;${chips(p.required, '조건')}</div>
-    <div class="chips">우대사항 &nbsp;${chips(p.preferred, '조건')}</div>
-    <div class="chips">참고사항 &nbsp;${chips(p.reference, '조건')} <span class="muted" style="border:0">점수에 넣지 않는다</span></div>`;
-}
-
 function evidenceRows(group, title, verdicts, offset) {
   if (!verdicts) return '';
   const rows = [...verdicts].map((v, i) => {
@@ -228,38 +227,41 @@ function evidenceRows(group, title, verdicts, offset) {
   return `<tr><th colspan="3">${title}${note}</th></tr>${rows}`;
 }
 
-function detailRow(r) {
+function renderMiddle() {
+  const p = POSTINGS[current];
+  $('midtabs').innerHTML = [['verdicts', '조건별 판정'], ['posting', '공고 원문']].map(([key, label]) =>
+    `<button role="tab" aria-selected="${mid === key}" data-mid="${key}">${label}</button>`).join(' ');
+  if (mid === 'posting') {
+    const got = (word, n, weak) => Array.from({ length: n }, (_, i) => `<div><span class="got ${weak ? 'weak' : ''}">${word} ${i + 1}</span> 공고를 읽은 글자</div>`).join('');
+    $('middle').innerHTML = `<div class="name"><span class="mark">2</span>공고에서 뽑은 것 <span class="muted">공고를 읽은 내용에서 뽑은 자리를 모두 표시한다</span></div>
+      <div class="posting"><div>공고를 읽은 글자 (뽑지 않은 줄)</div>${got('담당업무', 2, true)}${got('자격요건', p.required)}
+      <div>공고를 읽은 글자 (뽑지 않은 줄)</div>${got('우대사항', p.preferred)}${got('참고사항', p.reference, true)}<div>공고를 읽은 글자 (뽑지 않은 줄)</div></div>`;
+    return;
+  }
+  const r = ranked(p).find(x => x.name === opened);
+  const line = (name, sum, max, n, share) => `${name} ${sum}점 / ${max}점 <span class="muted">조건 ${n}개 × 2점</span> → ${share} × ${sum}/${max}`;
   const calc = r.pre
-    ? `70 × (${r.reqSum}/${r.reqMax}) + 30 × (${r.preSum}/${r.preMax}) = ${r.score}`
-    : `100 × (${r.reqSum}/${r.reqMax}) = ${r.score} <span class="muted">우대사항이 없는 공고</span>`;
-  const resume = Array.from({ length: RESUME_LINES }, (_, i) => `<div data-line="${i}">이력서의 ${i + 1}번째 줄</div>`).join('');
-  return `<tr class="detail"><td colspan="5"><div class="detail-grid">
-    <div>
-      <div class="name"><span class="mark">4</span>점수의 계산</div>
-      <div class="calc">${calc}<br><span class="muted">일치 2, 비슷 1, 다름 0</span></div>
-      <div class="name"><span class="mark">5</span>조건마다 판정과 근거</div>
-      <table class="ev"><thead><tr><th>조건</th><th>판정</th><th>근거</th></tr></thead><tbody>
-        ${evidenceRows('required', '자격요건', r.req, 0)}
-        ${evidenceRows('preferred', '우대사항', r.pre, 1)}
-        ${evidenceRows('reference', '참고사항', r.ref, 5)}
-      </tbody></table>
-    </div>
-    <div>
-      <div class="name"><span class="mark">6</span>이력서 원문</div>
-      <div class="resume">${resume}</div>
-    </div>
-  </div></td></tr>`;
+    ? `${line('자격요건', r.reqSum, r.reqMax, r.req.length, 70)}<br>${line('우대사항', r.preSum, r.preMax, r.pre.length, 30)}<br>점수 ${r.score}`
+    : `${line('자격요건', r.reqSum, r.reqMax, r.req.length, 100)} <span class="muted">우대사항이 없는 공고</span><br>점수 ${r.score}`;
+  $('middle').innerHTML = `
+    <div class="name"><span class="mark">4</span>점수의 계산 <span class="muted">${r.name}</span></div>
+    <div class="calc">${calc}<br><span class="muted">일치 2, 비슷 1, 다름 0</span></div>
+    <div class="name"><span class="mark">2</span><span class="mark">5</span>조건마다 판정과 근거</div>
+    <table class="ev"><thead><tr><th>조건</th><th>판정</th><th>근거</th></tr></thead><tbody>
+      ${evidenceRows('required', '자격요건', r.req, 0)}
+      ${evidenceRows('preferred', '우대사항', r.pre, 1)}
+      ${evidenceRows('reference', '참고사항', r.ref, 5)}
+    </tbody></table>`;
 }
 
 function renderRanking() {
-  const p = POSTINGS[current];
-  $('ranking').innerHTML = ranked(p).map(r => {
-    const open = opened === r.name;
-    const pre = p.preferred ? `${r.preMatched}/${r.pre.length}` : '<span class="muted">없음</span>';
-    return `<tr class="row ${open ? 'open' : ''}" tabindex="0" aria-expanded="${open}" data-name="${r.name}">
-      <td>${open ? '▼' : '▶'} ${r.rank}</td><td>${r.name}</td><td>${r.score}</td>
-      <td>${r.reqMatched}/${r.req.length}</td><td>${pre}</td></tr>${open ? detailRow(r) : ''}`;
-  }).join('');
+  const list = ranked(POSTINGS[current]);
+  if (!opened) opened = list[0].name;
+  $('ranking').innerHTML = list.map(r =>
+    `<tr class="row ${opened === r.name ? 'open' : ''}" tabindex="0" aria-current="${opened === r.name}" data-name="${r.name}">
+      <td>${r.rank}</td><td>${r.name}</td><td>${r.score}</td></tr>`).join('');
+  $('resume').innerHTML = Array.from({ length: RESUME_LINES }, (_, i) => `<div data-line="${i}">이력서의 ${i + 1}번째 줄</div>`).join('');
+  renderMiddle();
   if (picked) pick(picked.key, picked.line, false);
 }
 
@@ -273,22 +275,26 @@ function pick(key, line, say = true) {
   if (say) log(`⑤에서 근거를 골랐다 → ⑥에서 이력서의 ${Number(line) + 1}번째 줄이 표시된다.`);
 }
 
-function render() { renderTabs(); renderFeatures(); renderRanking(); }
+function render() { renderTabs(); renderRanking(); }
 
 function act(target) {
   const tab = target.closest('#tabs button');
   if (tab) {
-    current = Number(tab.dataset.i); opened = null; picked = null; render();
-    return log(`①에서 ${POSTINGS[current].name}을 골랐다 → ②와 ③이 바뀌고, 펼친 지원자가 닫힌다.`);
+    current = Number(tab.dataset.i); opened = null; picked = null; mid = 'verdicts'; render();
+    return log(`①에서 ${POSTINGS[current].name}을 골랐다 → ②~⑥이 바뀌고, 1위 지원자가 골라진다.`);
+  }
+  const midTab = target.closest('#midtabs button');
+  if (midTab) {
+    mid = midTab.dataset.mid; renderRanking();
+    return log(mid === 'posting' ? '가운데 칸에서 "공고 원문"을 골랐다 → 공고를 읽은 내용과 뽑은 자리가 보인다. ⑥은 그대로다.' : '가운데 칸에서 "조건별 판정"을 골랐다 → ④와 ⑤가 보인다.');
   }
   const ev = target.closest('.ev tr.pick');
   if (ev) return pick(ev.dataset.key, ev.dataset.line);
   if (target.closest('.ev tr')) return log('⑤에서 근거가 없는 줄을 눌렀다 → 바뀌는 것이 없다.');
   const row = target.closest('#ranking tr.row');
   if (row) {
-    const name = row.dataset.name;
-    opened = opened === name ? null : name; picked = null; renderRanking();
-    return log(opened ? `③에서 ${name}의 줄을 눌렀다 → 그 아래에 ④ ⑤ ⑥이 펼쳐진다.` : `③에서 ${name}의 줄을 다시 눌렀다 → 닫힌다.`);
+    opened = row.dataset.name; picked = null; mid = 'verdicts'; renderRanking();
+    return log(`③에서 ${opened}를 골랐다 → ④ ⑤ ⑥이 그 지원자의 것으로 바뀐다.`);
   }
 }
 
