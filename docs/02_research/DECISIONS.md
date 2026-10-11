@@ -301,3 +301,17 @@
 
 - `08_algorithm`, `09_infra`: 읽기에 LLM 호출이 들어간다. 읽은 결과를 저장해 다시 읽지 않게 하는 것을 함께 봐야 한다.
 - `law/law.md` 4장: 읽기의 자리를 고객사 쪽으로 보고 있었는데, OpenAI의 모델로 읽으면 서버에서 읽게 된다. 다시 정해야 한다.
+
+## 2026-10-11 19:00 — 조사 문서가 가리키는 폴더 이름을 고침
+
+**무엇을 바꿨는지**
+
+- `matching/matching.md`, `resume/resume.md`, `ocr/ocr.md`, `branding/branding.md`에서 `CHECKLIST.md`의 `08_algorithm`을 가리키던 곳을 `CHECKLIST.md`의 "`03_prd`의 핵심 알고리즘"으로 고쳤다. 조사의 내용은 고치지 않았다.
+
+**왜 바꿨는지**
+
+- 핵심 알고리즘 단계를 `03_prd`에 합치면서 `08_algorithm`이 없어졌다(`03_prd/DECISIONS.md`).
+
+**영향을 받는 다른 단계**
+
+- 없다.
