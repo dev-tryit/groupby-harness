@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 문제 정의에 용어와 가설 추가</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>문제 정의에 용어와 가설 추가</h1>
+<div class="meta">보고서 작성: 2026-10-11 13:46 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p>문제 정의에 용어 정의(1.3)와 사용자의 가설(4.8, 4.9, 4.10)을 더했다. 방법에 대한 사용자의 지시를 <code>CHECKLIST.md</code>와 <code>README.md</code>에 기록했다.</p>
+
+<h2>왜</h2>
+<p>사용자가 문제와 가설을 함께 논의하며 가설을 세웠고, 용어의 정의부터 하는 것이 문제 정의라고 했다. 점수 방식과 LLM을 쓰는 방식은 지시로 정했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>1.3 용어: 이력서, 경력기술서, 자기소개서, 포트폴리오가 통념으로 무엇을 담고 무엇을 보여 주려는 것인지 정의했다.</li>
+  <li>4.8: 결국 고객사가 만족해야 한다. 고객사가 만족하려면 지원자가 만족하는 것도 중요하다(비유로 7:3). 회사가 원하는 것은 채용 공고에 배어 있다.</li>
+  <li>4.9: 서류전형은 서류로 적합도를 판단하는 것이다. 면접 때 보는 것은 매칭 여부만 보여 주고 점수로 계산하지 않는다. 인재상은 안내 사항으로 보여 준다.</li>
+  <li>4.10: 공고 전체를 읽은 값은 버리지 않고, 그 전체에서 원하는 형태로 조건을 뽑는다. 일반화의 관점에서 본다.</li>
+  <li>지시: 조건 추출은 공고마다 한 번, 비교는 이력서마다 한 번 LLM을 부른다. LLM은 점수를 내지 않는다. 매칭의 유형으로 가점을 주고 개수에 따라 가중 합으로 점수를 낸다. "비슷하다"의 조건은 do, don't 프롬프트로 관리하며 튜닝한다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/01_problem/problem.md</code></td><td>1.3, 4.8, 4.9, 4.10 추가. 5장의 표 정리</td></tr>
+  <tr><td><code>docs/01_problem/DECISIONS.md</code></td><td>수정마다의 이유 기록</td></tr>
+  <tr><td><code>README.md</code></td><td>문제 정의, 설계 결정, 하지 않은 것, 든 생각에 반영</td></tr>
+  <tr><td><code>CHECKLIST.md</code></td><td>조사 주제에 <code>screening</code> 추가, <code>08_algorithm</code> 항목 추가, 정한 것 추가</td></tr>
+  <tr><td><code>commit-reports/2026-10-11-1346-problem-hypothesis.html</code></td><td>이 보고서</td></tr>
+</table>
+</body>
+</html>
