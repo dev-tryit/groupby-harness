@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>와이어프레임</title>
+<style>
+  /* 로우파이: 색을 쓰지 않는다. 검정, 회색, 흰색과 선만 쓴다. */
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 64px; background: #fff; color: #111;
+         font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace; }
+  main { max-width: 1180px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  h2 { font-size: 16px; margin: 40px 0 8px; border-bottom: 2px solid #111; padding-bottom: 4px; }
+  p, li { max-width: 80ch; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #999; padding: 4px 8px; text-align: left; vertical-align: top; }
+  th { background: #eee; font-weight: 700; }
+  .scroll { overflow-x: auto; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+  /* 화면 */
+  .screen { border: 2px solid #111; }
+  .zone { border-bottom: 2px solid #111; padding: 12px; position: relative; }
+  .zone:last-child { border-bottom: 0; }
+  .zone > .name { font-weight: 700; margin-bottom: 6px; }
+  .mark { display: inline-block; min-width: 22px; height: 22px; line-height: 20px; text-align: center;
+          border: 1px solid #111; border-radius: 50%; background: #111; color: #fff; font-size: 12px; margin-right: 6px; }
+  button { font: inherit; color: #111; background: #fff; border: 1px solid #111; padding: 4px 12px; cursor: pointer; }
+  button[aria-pressed="true"], button[aria-selected="true"] { background: #111; color: #fff; }
+  button:focus-visible, tr:focus-visible { outline: 3px solid #666; outline-offset: 1px; }
+  .chips span { display: inline-block; border: 1px dashed #666; padding: 0 8px; margin: 2px 4px 2px 0; }
+  .muted { color: #666; }
+  .rank tbody tr.row { cursor: pointer; }
+  .rank tbody tr.row:hover { background: #f3f3f3; }
+  .rank tbody tr.row.open { background: #ddd; }
+  .detail > td { padding: 0; }
+  .detail-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+  @media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
+  .detail-grid > div { padding: 10px; }
+  .detail-grid > div + div { border-left: 1px dashed #666; }
+  .calc { border: 1px dashed #666; padding: 6px 8px; margin-bottom: 8px; }
+  .ev tr.pick { cursor: pointer; }
+  .ev tr.pick:hover { background: #f3f3f3; }
+  .ev tr.on { background: #ddd; }
+  .ev tr.unverified td { border-style: dashed; }
+  .resume div { padding: 1px 4px; border: 1px solid transparent; }
+  .resume div.hit { background: #111; color: #fff; }
+  .tag { border: 1px solid #111; padding: 0 6px; white-space: nowrap; }
+  .tag.none, .tag.unverified { border-style: dashed; }
+
+  /* 기능 설명 */
+  .notes { border: 1px solid #111; padding: 10px; position: sticky; top: 12px; }
+  .notes h3 { margin: 0 0 6px; font-size: 14px; }
+  .notes dl { margin: 0; }
+  .notes dt { font-weight: 700; margin-top: 10px; }
+  .notes dd { margin: 0 0 0 28px; }
+  .log { border: 1px dashed #666; padding: 6px 8px; margin-top: 12px; min-height: 3.2em; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>와이어프레임</h1>
+<p>서비스 전체의 화면 구성과 흐름을 로우파이로 그린 문서. 근거는 과제의 요구사항(<code>00_context/context.md</code>)과 <code>03_prd/prd.md</code>의 F8, F9다.</p>
+<ul>
+  <li>이 문서의 화면은 실제로 누를 수 있다. 무엇을 누르면 무엇이 일어나는지를 기능의 관점으로 적는다.</li>
+  <li>색, 글꼴, 실제 문구는 넣지 않았다. 화면의 세부는 <code>09_screen-design</code>에서 그린다.</li>
+  <li>화면은 하나다. 그래서 페이지 이동이 없고, 이동 대신 한 화면 안에서 고르고 펼친다.</li>
+  <li>화면의 글자와 숫자는 자리를 채운 것이다. 점수만 실제 식(<code>03_prd/prd.md</code> 10.2)으로 계산해, 판정에서 점수와 순위가 나오는 것을 보인다.</li>
+</ul>
+
+<h2>1. 과제가 화면에 요구하는 것</h2>
+<div class="scroll">
+<table>
+  <tr><th>과제의 요구사항</th><th>화면에서 보여 줄 것</th><th>구역</th></tr>
+  <tr><td>2. 공고 이미지를 파싱해서 조건을 구조화된 데이터로 추출한다</td><td>공고에서 뽑은 직무와 조건</td><td>②</td></tr>
+  <tr><td>3. 지원자별 매칭 점수(0~100점)를 산정하고 랭킹으로 정렬한다</td><td>랭킹과 점수</td><td>③</td></tr>
+  <tr><td>4. 점수의 근거를 사람이 읽을 수 있는 형태로 함께 제공한다</td><td>점수의 계산, 조건마다 판정과 근거</td><td>④ ⑤ ⑥</td></tr>
+  <tr><td>7. 결과를 확인할 수 있는 간단한 UI. 매칭 결과와 근거를 보여주는 정도면 충분하다</td><td>화면 하나</td><td>전체</td></tr>
+</table>
+</div>
+
+<h2>2. 화면</h2>
+<p class="muted">공고를 고르고, 지원자의 줄을 누르고, 근거의 줄을 눌러 본다.</p>
+
+<div class="layout">
+  <div class="screen" id="screen">
+    <div class="zone">
+      <div class="name"><span class="mark">1</span>공고 고르기</div>
+      <div id="tabs" role="tablist" aria-label="공고"></div>
+    </div>
+    <div class="zone">
+      <div class="name"><span class="mark">2</span>공고에서 뽑은 것</div>
+      <div id="features"></div>
+    </div>
+    <div class="zone">
+      <div class="name"><span class="mark">3</span>랭킹</div>
+      <div class="scroll">
+        <table class="rank">
+          <thead><tr><th>순위</th><th>지원자</th><th>점수</th><th>자격요건</th><th>우대사항</th></tr></thead>
+          <tbody id="ranking"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes" aria-label="기능 설명">
+    <h3>기능</h3>
+    <dl>
+      <dt><span class="mark">1</span>공고 고르기</dt>
+      <dd>공고를 누르면 ②와 ③이 그 공고의 것으로 바뀐다. 펼친 지원자는 닫힌다. 점수는 공고 하나 안에서만 비교한다.</dd>
+      <dt><span class="mark">2</span>공고에서 뽑은 것</dt>
+      <dd>직무와, 그룹마다 뽑은 조건을 보여 준다. 누를 것이 없다. 우대사항이 없는 공고는 "없음"으로 보인다.</dd>
+      <dt><span class="mark">3</span>랭킹</dt>
+      <dd>점수가 높은 순서다. 점수가 같으면 같은 순위다. 지원자의 줄을 누르면 그 줄 아래에 ④ ⑤ ⑥이 펼쳐진다. 다시 누르면 닫힌다. 한 번에 한 명만 펼친다.</dd>
+      <dt><span class="mark">4</span>점수의 계산</dt>
+      <dd>그 지원자의 점수가 어떤 숫자에서 나왔는지를 식으로 보여 준다. 우대사항이 없는 공고는 식이 다르다.</dd>
+      <dt><span class="mark">5</span>조건마다 판정과 근거</dt>
+      <dd>그룹마다 조건, 판정, 근거(이력서의 구절)를 보여 준다. 근거가 있는 줄을 누르면 ⑥에서 그 구절이 표시된다. 근거가 없는 줄은 눌러도 바뀌지 않는다.</dd>
+      <dt><span class="mark">6</span>이력서 원문</dt>
+      <dd>이력서의 글자를 그대로 보여 준다. ⑤에서 고른 근거의 구절이 있는 자리를 표시한다.</dd>
+    </dl>
+    <div class="log" id="log" aria-live="polite">방금 한 일이 여기에 적힌다.</div>
+  </aside>
+</div>
+
+<h2>3. 판정 칸에 나오는 표시</h2>
+<div class="scroll">
+<table>
+  <tr><th>표시</th><th>뜻</th><th>점수에서의 값</th><th>근거를 눌렀을 때</th></tr>
+  <tr><td><span class="tag">일치</span></td><td>조건을 그대로 채웠다</td><td>2</td><td>원문에서 구절을 표시한다</td></tr>
+  <tr><td><span class="tag">비슷</span></td><td>가깝지만 그대로는 아니다</td><td>1</td><td>원문에서 구절을 표시한다</td></tr>
+  <tr><td><span class="tag">다름</span></td><td>채우지 못했다</td><td>0</td><td>원문에서 구절을 표시한다</td></tr>
+  <tr><td><span class="tag none">이력서에 적혀 있지 않음</span></td><td>판정은 다름이다. 근거로 낼 구절이 없다</td><td>0</td><td>누를 수 없다</td></tr>
+  <tr><td><span class="tag unverified">근거를 확인하지 못함</span></td><td>근거로 낸 구절이 이력서에 없다. 판정은 다름으로 친다</td><td>0</td><td>누를 수 없다. 표시할 자리가 원문에 없다</td></tr>
+</table>
+</div>
+
+<h2>4. 그렇게 판단한 이유</h2>
+<p>화면 구성은 사용자가 에이전트에게 판단을 맡겼다. 기준은 과제를 충족시키는 최소한의 구조이고, 목표는 보고 싶은 것을 보여 주는 것이다(사용자).</p>
+<div class="scroll">
+<table>
+  <tr><th>판단</th><th>이유</th></tr>
+  <tr><td>화면을 하나로 한다</td><td>과제가 요구한 것은 매칭 결과와 근거를 보여 주는 간단한 화면이다. 화면을 나누면 이동하는 구조가 더 생긴다</td></tr>
+  <tr><td>공고에서 뽑은 조건을 맨 위에 둔다</td><td>조건이 점수의 기준이다. 무엇을 기준으로 매겼는지가 먼저 보여야 점수를 읽을 수 있다. 과제의 요구사항 2의 결과이기도 하다</td></tr>
+  <tr><td>근거는 지원자를 눌렀을 때 펼친다</td><td>지원자 6명의 근거를 한꺼번에 펼치면 랭킹이 한눈에 들어오지 않는다</td></tr>
+  <tr><td>점수의 계산을 숫자로 보인다</td><td>점수가 근거에서 나왔다는 것을 사람이 직접 계산해 확인할 수 있다</td></tr>
+  <tr><td>이력서 원문을 근거와 나란히 둔다</td><td>사용자가 정했다. 근거의 구절이 판정을 뒷받침하는지는 사람이 원문과 나란히 보고 잡는다(<code>03_prd/prd.md</code> 10.1)</td></tr>
+  <tr><td>자격요건과 우대사항에서 일치한 수를 점수와 따로 둔다</td><td>사용자가 정했다(<code>03_prd/prd.md</code> 10.2)</td></tr>
+</table>
+</div>
+
+<h2>5. 화면에 넣지 않는 것</h2>
+<ul>
+  <li>채용 담당자의 동의와 수정(피드백). 과제의 요구사항에 없어서 넣지 않는다(사용자가 정함). 피드백으로 가설을 확인한다는 방침은 <code>03_prd/prd.md</code> 11장에 글로 남긴다.</li>
+  <li>로그인. 인증은 없다(<code>03_prd/prd.md</code> 2장).</li>
+  <li>공고 주소를 넣는 자리. 수집과 읽기는 고객사 프로그램이 한다.</li>
+</ul>
+
+</main>
+
+<script>
+// 자리를 채운 데이터. 조건의 수만 두 공고의 실제 구성과 같다(03_prd/prd.md 9.4).
+// 판정: M 일치, S 비슷, D 다름, N 이력서에 적혀 있지 않음, U 근거를 확인하지 못함
+const POSTINGS = [
+  { name: '공고 1', required: 5, preferred: 0, reference: 1,
+    applicants: [['지원자 A','MMMMM','M'], ['지원자 B','MMMMS','N'], ['지원자 C','MMSSD','M'],
+                 ['지원자 D','MSSDN','N'], ['지원자 E','MMMSU','S'], ['지원자 F','DDNNN','N']] },
+  { name: '공고 2', required: 3, preferred: 2, reference: 2,
+    applicants: [['지원자 A','MMM','MM','MN'], ['지원자 B','MMS','MM','NN'], ['지원자 C','MMD','MM','MN'],
+                 ['지원자 D','MMM','NN','NN'], ['지원자 E','MSU','SN','NN'], ['지원자 F','DNN','NN','NN']] },
+];
+const LABEL = { M: '일치', S: '비슷', D: '다름', N: '이력서에 적혀 있지 않음', U: '근거를 확인하지 못함' };
+const VALUE = { M: 2, S: 1, D: 0, N: 0, U: 0 };
+const GROUPS = [['required', '자격요건'], ['preferred', '우대사항'], ['reference', '참고사항']];
+const RESUME_LINES = 12;
+
+let current = 0, opened = null, picked = null;
+const $ = id => document.getElementById(id);
+const log = text => { $('log').textContent = text; };
+
+function scoreOf(posting, a) {
+  const sum = s => [...s].reduce((t, c) => t + VALUE[c], 0);
+  const count = s => [...s].filter(c => c === 'M').length;
+  const req = a[1], pre = posting.preferred ? a[2] : '';
+  const reqRate = sum(req) / (req.length * 2);
+  const preRate = pre ? sum(pre) / (pre.length * 2) : null;
+  const score = preRate === null ? 100 * reqRate : 70 * reqRate + 30 * preRate;
+  return { name: a[0], req, pre, ref: a[posting.preferred ? 3 : 2], score: Math.round(score),
+           reqSum: sum(req), reqMax: req.length * 2, preSum: pre ? sum(pre) : 0, preMax: pre.length * 2,
+           reqMatched: count(req), preMatched: count(pre) };
+}
+
+function ranked(posting) {
+  const list = posting.applicants.map(a => scoreOf(posting, a)).sort((x, y) => y.score - x.score);
+  list.forEach((r, i) => { r.rank = i > 0 && list[i - 1].score === r.score ? list[i - 1].rank : i + 1; });
+  return list;
+}
+
+function renderTabs() {
+  $('tabs').innerHTML = POSTINGS.map((p, i) =>
+    `<button role="tab" aria-selected="${i === current}" data-i="${i}">${p.name}</button>`).join(' ');
+}
+
+function renderFeatures() {
+  const p = POSTINGS[current];
+  const chips = (n, word) => n ? Array.from({ length: n }, (_, i) => `<span>${word} ${i + 1}</span>`).join('') : '<span class="muted">없음</span>';
+  $('features').innerHTML = `
+    <div>직무 &nbsp;<span class="chips"><span>직무의 이름</span></span></div>
+    <div class="chips">자격요건 &nbsp;${chips(p.required, '조건')}</div>
+    <div class="chips">우대사항 &nbsp;${chips(p.preferred, '조건')}</div>
+    <div class="chips">참고사항 &nbsp;${chips(p.reference, '조건')} <span class="muted" style="border:0">점수에 넣지 않는다</span></div>`;
+}
+
+function evidenceRows(group, title, verdicts, offset) {
+  if (!verdicts) return '';
+  const rows = [...verdicts].map((v, i) => {
+    const line = (offset + i * 2) % RESUME_LINES;
+    const has = v === 'M' || v === 'S' || v === 'D';
+    const cls = v === 'U' ? 'unverified' : v === 'N' ? 'none' : '';
+    const quote = has ? `"이력서의 구절 (${line + 1}번째 줄)"` : v === 'U' ? '"이력서에 없는 구절"' : '—';
+    return `<tr class="${has ? 'pick' : ''} ${cls}" ${has ? `tabindex="0" data-line="${line}" data-key="${group}${i}"` : ''}>
+      <td>${title} ${i + 1}</td><td><span class="tag ${cls}">${LABEL[v]}</span></td><td>${quote}</td></tr>`;
+  }).join('');
+  const note = group === 'reference' ? ' <span class="muted">점수에 넣지 않는다</span>' : '';
+  return `<tr><th colspan="3">${title}${note}</th></tr>${rows}`;
+}
+
+function detailRow(r) {
+  const calc = r.pre
+    ? `70 × (${r.reqSum}/${r.reqMax}) + 30 × (${r.preSum}/${r.preMax}) = ${r.score}`
+    : `100 × (${r.reqSum}/${r.reqMax}) = ${r.score} <span class="muted">우대사항이 없는 공고</span>`;
+  const resume = Array.from({ length: RESUME_LINES }, (_, i) => `<div data-line="${i}">이력서의 ${i + 1}번째 줄</div>`).join('');
+  return `<tr class="detail"><td colspan="5"><div class="detail-grid">
+    <div>
+      <div class="name"><span class="mark">4</span>점수의 계산</div>
+      <div class="calc">${calc}<br><span class="muted">일치 2, 비슷 1, 다름 0</span></div>
+      <div class="name"><span class="mark">5</span>조건마다 판정과 근거</div>
+      <table class="ev"><thead><tr><th>조건</th><th>판정</th><th>근거</th></tr></thead><tbody>
+        ${evidenceRows('required', '자격요건', r.req, 0)}
+        ${evidenceRows('preferred', '우대사항', r.pre, 1)}
+        ${evidenceRows('reference', '참고사항', r.ref, 5)}
+      </tbody></table>
+    </div>
+    <div>
+      <div class="name"><span class="mark">6</span>이력서 원문</div>
+      <div class="resume">${resume}</div>
+    </div>
+  </div></td></tr>`;
+}
+
+function renderRanking() {
+  const p = POSTINGS[current];
+  $('ranking').innerHTML = ranked(p).map(r => {
+    const open = opened === r.name;
+    const pre = p.preferred ? `${r.preMatched}/${r.pre.length}` : '<span class="muted">없음</span>';
+    return `<tr class="row ${open ? 'open' : ''}" tabindex="0" aria-expanded="${open}" data-name="${r.name}">
+      <td>${open ? '▼' : '▶'} ${r.rank}</td><td>${r.name}</td><td>${r.score}</td>
+      <td>${r.reqMatched}/${r.req.length}</td><td>${pre}</td></tr>${open ? detailRow(r) : ''}`;
+  }).join('');
+  if (picked) pick(picked.key, picked.line, false);
+}
+
+function pick(key, line, say = true) {
+  picked = { key, line };
+  document.querySelectorAll('.ev tr.on, .resume .hit').forEach(el => el.classList.remove('on', 'hit'));
+  const row = document.querySelector(`.ev tr[data-key="${key}"]`);
+  const target = document.querySelector(`.resume [data-line="${line}"]`);
+  if (!row || !target) return;
+  row.classList.add('on'); target.classList.add('hit');
+  if (say) log(`⑤에서 근거를 골랐다 → ⑥에서 이력서의 ${Number(line) + 1}번째 줄이 표시된다.`);
+}
+
+function render() { renderTabs(); renderFeatures(); renderRanking(); }
+
+function act(target) {
+  const tab = target.closest('#tabs button');
+  if (tab) {
+    current = Number(tab.dataset.i); opened = null; picked = null; render();
+    return log(`①에서 ${POSTINGS[current].name}을 골랐다 → ②와 ③이 바뀌고, 펼친 지원자가 닫힌다.`);
+  }
+  const ev = target.closest('.ev tr.pick');
+  if (ev) return pick(ev.dataset.key, ev.dataset.line);
+  if (target.closest('.ev tr')) return log('⑤에서 근거가 없는 줄을 눌렀다 → 바뀌는 것이 없다.');
+  const row = target.closest('#ranking tr.row');
+  if (row) {
+    const name = row.dataset.name;
+    opened = opened === name ? null : name; picked = null; renderRanking();
+    return log(opened ? `③에서 ${name}의 줄을 눌렀다 → 그 아래에 ④ ⑤ ⑥이 펼쳐진다.` : `③에서 ${name}의 줄을 다시 눌렀다 → 닫힌다.`);
+  }
+}
+
+$('screen').addEventListener('click', e => act(e.target));
+$('screen').addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr[tabindex]')) { e.preventDefault(); act(e.target); }
+});
+render();
+</script>
+</body>
+</html>
