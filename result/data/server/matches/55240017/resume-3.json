@@ -1,0 +1,64 @@
+{
+  "posting_id": "55240017",
+  "resume_id": "resume-3",
+  "model": "gpt-4.1-mini",
+  "judgments": [
+    {
+      "condition_id": "C1",
+      "thinking": "조건은 한국공인회계사(KICPA) 등록자임을 요구한다. 이력서에 '한국공인회계사(KICPA) 등록 (2022.09)'라고 명확히 적혀 있어 조건과 일치한다.",
+      "quotes": [
+        "한국공인회계사(KICPA) 등록 (2022.09)"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C2",
+      "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에 '새한회계법인 감사부문 근무, 2022.09 ~ 현재 (4년 1개월)'라고 적혀 있어 4년 1개월 경력으로 3~5년 범위에 들어 조건과 일치한다.",
+      "quotes": [
+        "새한회계법인 감사부문 근무, 2022.09 ~ 현재 (4년 1개월)"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C3",
+      "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서에 '한빛대학교 경영학과 졸업 (학사, 2021.02)'라고 명확히 적혀 있어 조건과 일치한다.",
+      "quotes": [
+        "한빛대학교 경영학과 졸업 (학사, 2021.02)"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C5",
+      "thinking": "조건은 K-IFRS 상장사 외부감사(에너지ㆍ유틸리티) 경험자를 우대한다. 이력서에 관련 경험이나 K-IFRS, 상장사, 에너지ㆍ유틸리티 분야 외부감사 경험에 대한 언급이 전혀 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C6",
+      "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 SAP 사용 경험에 대한 언급이 전혀 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C4",
+      "thinking": "조건은 남자의 경우 군필 또는 면제, 해외여행 결격사유 없음이다. 이력서에 군필, 면제, 해외여행 결격사유에 대한 언급이 전혀 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C7",
+      "thinking": "조건은 국가보훈대상자 및 장애인 우대 사항이다. 이력서에 국가보훈대상자나 장애인 여부에 대한 언급이 전혀 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    }
+  ],
+  "input_tokens": 1464,
+  "output_tokens": 562
+}

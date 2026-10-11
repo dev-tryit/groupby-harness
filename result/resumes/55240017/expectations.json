@@ -1,0 +1,56 @@
+{
+  "posting_id": "55240017",
+  "resumes": [
+    {
+      "file": "resume-1.md",
+      "type": "완벽",
+      "form": "항목형",
+      "hypothesis": "기준선. 공고의 표현 그대로 자격요건과 우대사항을 모두 갖췄다.",
+      "changed_from": null
+    },
+    {
+      "file": "resume-2.md",
+      "type": "완벽",
+      "form": "성과형",
+      "hypothesis": "표현과 형태가 달라도 판정이 같다. 1번과 내용은 같고 다른 말로 썼다. 자격이 학력보다 뒤에, 다른 칸 이름 아래에 있다.",
+      "changed_from": "resume-1.md"
+    },
+    {
+      "file": "resume-3.md",
+      "type": "부분",
+      "form": "요약형",
+      "hypothesis": "적지 않은 것을 없는 것과 가려낸다. 자격요건은 다 갖췄지만 짧게 써서 우대사항에 대한 내용이 없다.",
+      "changed_from": "resume-1.md",
+      "target": "우대사항 2개"
+    },
+    {
+      "file": "resume-4.md",
+      "type": "부분",
+      "form": "항목형",
+      "hypothesis": "자격요건 하나가 빠지면 그 조건만 내려간다. 1번에서 회계사 등록만 뺐다. 우대사항은 모두 갖췄다.",
+      "changed_from": "resume-1.md",
+      "target": "한국공인회계사(KICPA) 등록자"
+    },
+    {
+      "file": "resume-5.md",
+      "type": "부분",
+      "form": "항목형",
+      "hypothesis": "조금 모자란 것을 충족으로 보지 않는다. 감사 경력이 2년이다.",
+      "changed_from": "resume-1.md",
+      "target": "회계법인 감사부문 경력 3~5년"
+    },
+    {
+      "file": "resume-6.md",
+      "type": "미스매칭",
+      "form": "서술형",
+      "hypothesis": "단어만 겹치는 사람을 걸러낸다. 일반 회사의 회계 담당자이고 회계, 외부감사, SAP라는 단어가 나온다. 우대사항(SAP 사용)은 실제로 갖췄지만 자격요건은 하나도 갖추지 못했다.",
+      "changed_from": null
+    }
+  ],
+  "expected_order": [
+    "resume-1.md와 resume-2.md의 점수가 같다",
+    "resume-3.md, resume-4.md, resume-5.md는 resume-1.md보다 낮다",
+    "자격요건을 다 갖춘 resume-3.md가 자격요건이 빠진 resume-4.md, resume-5.md보다 낮지 않다",
+    "resume-6.md가 가장 낮다"
+  ]
+}

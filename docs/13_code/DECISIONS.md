@@ -53,3 +53,35 @@
 **영향을 받는 다른 단계**
 
 - 없다. 지금 백엔드 코드에는 주석이 많다. 코드를 고칠 때 맞춘다.
+
+## 2026-10-11 20:55 — API와 HTTP 서버, Docker Compose, 프론트엔드, `result/`
+
+**무엇을 바꿨는지**
+
+- 백엔드에 보여 주기(`groupby/server/viewing/`)를 더했다. 저장된 특징과 비교에서 `07_api/request-response`의 응답 3개를 만든다. 점수와 순위는 이때 계산한다. LLM을 부르지 않는다.
+- HTTP 진입점(`server/adapters/inbound/http.py`)을 더했다. 표준 라이브러리의 HTTP 서버다. API 3개와 화면의 정적 파일을 준다. 오류는 `not_found`, `bad_request`, `internal`이고 모든 응답에 `X-Trace-Id`를 넣는다.
+- 서버 CLI에 `serve` 명령을 더했다. 넘겨받은 공고를 비교한 뒤 서버를 연다. 공고나 이력서 하나가 실패해도 다음으로 넘어간다. 기존의 `extract`, `rank` 명령은 그대로다.
+- 로그 도우미(`shared/log.py`)를 더했다. 한 줄에 JSON 하나다. `serve`와 API가 쓴다.
+- 공고 목록의 어댑터(`file_posting_catalog.py`)를 더했다. 특징이 저장된 공고가 목록이고, 제목은 넘긴 것에서 얻는다. 넘긴 것이 없으면 직무를 제목 자리에 쓴다.
+- 두 CLI가 키가 없어도 시작하게 했다(`os.environ.get`). 고객사 CLI는 공고 하나가 실패해도 다음 공고로 넘어간다.
+- `Dockerfile`과 `.dockerignore`를 더했다. root가 아닌 사용자로 실행하고, `.env`는 이미지에 넣지 않는다. 테스트는 이미지에 넣어 컨테이너에서 돌릴 수 있게 했다.
+- `infra/local/docker-compose.yml`을 더했다. 컨테이너는 `client`와 `server` 둘이고 포트는 `127.0.0.1:8000`이다.
+- `frontend/index.html`을 더했다. `09_screen-design/screen-design.html`을 그대로 복사한 것이다. 서버에서 열면 API를 부르고, 파일로 열면 미리보기 데이터를 쓴다.
+- 테스트 `tests/test_api.py`(9개)를 더했다.
+- 루트에 `result/`를 만들고 위의 것을 복사했다. `result/docker-compose.yml`은 경로만 `result/`의 모양에 맞췄다.
+
+**왜 바꿨는지**
+
+- 과제의 요구사항 6(명령 하나로 실행)과 7(UI)이 충족되지 않았다. 사용자가 다 충족하게 만들라고 했다. 설계는 `07_api`, `08_infra`, `09_screen-design`에 이미 있었고 그대로 따랐다.
+- `result/`는 사용자가 정했다. 평가자가 결과로서 볼 것만 한 곳에 두고 거기서 실행하게 하려는 것이다. 서브모듈을 받지 않아도 실행된다.
+- 이력서 번호는 API에서 `{공고 번호}-{파일 이름}`으로 만든다. 골든셋의 파일 이름이 공고마다 겹치기 때문이다. 파일 이름을 바꾸면 저장된 비교 결과의 경로가 함께 바뀌어야 해서, 사이드 이펙트가 적은 쪽을 골랐다.
+- `server`는 `client`가 끝난 뒤 시작한다. `client`는 실패해도 0으로 끝나므로, 수집이 실패해도 `server`가 저장된 결과로 화면을 연다(`08_infra/infra.md` 4장).
+
+**되돌리려면**
+
+- 백엔드에서 `viewing/`, `adapters/inbound/http.py`, `adapters/outbound/file_posting_catalog.py`, `shared/log.py`, `tests/test_api.py`, `Dockerfile`, `.dockerignore`를 지우고, 두 `cli.py`를 앞 커밋으로 돌린다. `infra/local/docker-compose.yml`, `frontend/index.html`, `result/`를 지운다.
+
+**설계와 아직 어긋난 곳**
+
+- 로그는 `11_log`의 사건 가운데 `run.*`, `resume.matched`, `llm.failed`, `api.*`만 남긴다. 고객사 프로그램은 아직 사람이 읽는 글을 출력한다. 넘긴 것에 `trace_id`가 없다.
+- 저장된 파일의 필드 이름(`id`, `condition_id`)은 `06_data-model`의 이름(`item_id`, `no`)과 다르다. API의 응답에서 맞춘다.

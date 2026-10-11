@@ -1,0 +1,69 @@
+{
+  "posting_id": "55240017",
+  "resume_id": "resume-6",
+  "model": "gpt-4.1-mini",
+  "judgments": [
+    {
+      "condition_id": "C1",
+      "thinking": "조건은 한국공인회계사(KICPA) 등록자를 요구한다. 이력서에는 공인회계사 자격이 없다고 명확히 적혀 있다. 따라서 이 조건을 충족하지 못한다.",
+      "quotes": [
+        "공인회계사 자격은 없습니다."
+      ],
+      "verdict": "다름",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C2",
+      "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에는 중견 제조 회사 재경팀에서 8년간 회계 실무를 했다고 되어 있으나, 회계법인 감사부문 경력은 없고 회사는 비상장사이며 외부감사 대응 경험만 있다. 따라서 요구하는 경력과는 다르다.",
+      "quotes": [
+        "회사에 회계법인이 외부감사를 나오면 요청 자료를 준비해 감사에 대응했습니다.",
+        "회사 비상장사이고 일반기업회계기준을 씁니다."
+      ],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C3",
+      "thinking": "조건은 대졸(학사) 이상 학력을 요구한다. 이력서에는 전문대학 세무회계과를 졸업한 전문학사 학위가 있다. 전문학사는 대졸(학사)보다 낮은 학위이므로 조건과 다르다.",
+      "quotes": [
+        "학교는 동원전문대학 세무회계과를 2018년 2월에 졸업했습니다(전문학사)."
+      ],
+      "verdict": "다름",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C5",
+      "thinking": "조건은 K-IFRS 상장사 외부감사(에너지ㆍ유틸리티) 경험을 우대한다. 이력서에는 비상장사에서 일반기업회계기준을 사용했고, 업종도 제조업으로 에너지ㆍ유틸리티가 아니며 K-IFRS 경험도 없다. 따라서 조건과 다르다.",
+      "quotes": [
+        "회사 비상장사이고 일반기업회계기준을 씁니다."
+      ],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C6",
+      "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 회사에서 SAP에 전표를 입력하는 일을 매일 했다고 명확히 적혀 있어 조건과 일치한다.",
+      "quotes": [
+        "회사에서 쓰는 SAP에 전표를 입력하는 일을 매일 했습니다."
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C4",
+      "thinking": "조건은 남자의 경우 군필 또는 면제자여야 한다. 이력서에 군필 여부나 면제 여부에 대한 언급이 전혀 없다. 따라서 조건 충족 여부를 판단할 근거가 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C7",
+      "thinking": "조건은 국가보훈대상자 및 장애인 우대 사항이다. 이력서에 이에 대한 언급이 전혀 없다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    }
+  ],
+  "input_tokens": 1569,
+  "output_tokens": 637
+}

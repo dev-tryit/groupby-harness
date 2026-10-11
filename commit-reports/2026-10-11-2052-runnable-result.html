@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 명령 하나로 실행되는 결과물</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>명령 하나로 실행되는 결과물</h1>
+<div class="meta">보고서 작성: 2026-10-11 20:52 · 브랜치 <code>v1.0.0</code> · 커밋 4개 (서브모듈 3개, 이 레포 1개)</div>
+
+<h2>무엇을</h2>
+<p>API와 HTTP 서버, Docker Compose, 프론트엔드 화면을 만들고, 평가자가 볼 것만 모은 <code>result/</code>를 더했다. README를 <code>result/</code> 기준으로 다시 썼다.</p>
+
+<h2>왜</h2>
+<p>과제의 요구사항 6(명령 하나로 실행)과 7(UI)이 충족되지 않았고, README에 "작성 예정"이 남아 있었다. <code>result/</code>와 README의 방침은 사용자가 정했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>설계(<code>07_api</code>, <code>08_infra</code>, <code>09_screen-design</code>)를 그대로 따랐다. 읽기 API 3개, 컨테이너 둘(<code>client</code>, <code>server</code>), 포트 <code>127.0.0.1:8000</code>.</li>
+  <li>점수와 순위는 저장하지 않고 API가 응답을 만들 때 계산한다. LLM을 부르지 않는다.</li>
+  <li><code>result/</code>에서 <code>docker compose up --build</code>로 수집부터 화면까지 돌렸다. 키가 없어도 저장된 결과로 화면이 나온다. 테스트 37개가 통과한다.</li>
+  <li>README는 과제를 읽은 방식 → 가설과 생각의 변화 → 결론의 순서이고, 다이어그램 다섯 개를 넣었다.</li>
+  <li>남은 것: 회계 공고의 골든셋 기대 하나가 결과와 어긋난다(70점과 77점). 로그는 설계의 일부만 남긴다. 둘 다 README와 <code>CHECKLIST.md</code>에 적었다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>backend</code> (서브모듈)</td><td><code>server/viewing/</code>, <code>adapters/inbound/http.py</code>, <code>file_posting_catalog.py</code>, <code>shared/log.py</code>, <code>tests/test_api.py</code>, <code>Dockerfile</code>, <code>.dockerignore</code> 추가. 두 <code>cli.py</code> 수정(<code>serve</code> 명령, 키가 없어도 시작, 실패해도 다음으로)</td></tr>
+  <tr><td><code>frontend</code> (서브모듈)</td><td><code>index.html</code> 추가. 화면설계도를 복사한 것</td></tr>
+  <tr><td><code>infra</code> (서브모듈)</td><td><code>local/docker-compose.yml</code>, 저장해 둔 조건과 판정(<code>local/data/server/features</code>, <code>matches</code>) 추가. <code>.gitignore</code> 수정</td></tr>
+  <tr><td><code>result/</code></td><td>새로 추가. 백엔드 코드와 테스트, 화면, 목업 이력서, 저장해 둔 조건과 판정, <code>docker-compose.yml</code>, 화면 캡처</td></tr>
+  <tr><td><code>README.md</code></td><td><code>result/</code> 기준으로 다시 작성</td></tr>
+  <tr><td><code>CHECKLIST.md</code></td><td><code>result/</code>, README의 방침, 쓴 금액, 남은 것 기록</td></tr>
+  <tr><td><code>docs/13_code/DECISIONS.md</code></td><td>무엇을 왜 바꿨는지와 되돌리는 방법</td></tr>
+  <tr><td><code>commit-reports/</code></td><td>이 보고서와 <code>TRACKER.md</code></td></tr>
+</table>
+</body>
+</html>

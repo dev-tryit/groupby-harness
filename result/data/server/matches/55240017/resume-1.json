@@ -1,0 +1,69 @@
+{
+  "posting_id": "55240017",
+  "resume_id": "resume-1",
+  "model": "gpt-4.1-mini",
+  "judgments": [
+    {
+      "condition_id": "C1",
+      "thinking": "조건은 한국공인회계사(KICPA) 등록자임을 요구한다. 이력서 자격란에 '한국공인회계사(KICPA) 등록 (2022.09)'라고 명확히 적혀 있어 일치한다.",
+      "quotes": [
+        "한국공인회계사(KICPA) 등록 (2022.09)"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C2",
+      "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서 경력란에 새한회계법인 감사부문 Senior로 2022.09부터 현재(2026.10)까지 약 4년 1개월 경력이 있어 요구 기간 3~5년 내에 해당하므로 일치한다.",
+      "quotes": [
+        "새한회계법인 · 감사부문 Senior · 2022.09 ~ 현재"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C3",
+      "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서 학력란에 '한빛대학교 경영학과 졸업 (학사, 2021.02)'라고 명확히 적혀 있어 일치한다.",
+      "quotes": [
+        "한빛대학교 경영학과 졸업 (학사, 2021.02)"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C5",
+      "thinking": "조건은 K-IFRS 상장사 외부감사 경험 중 에너지ㆍ유틸리티 업종을 우대한다. 이력서 경력란에 'K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.'라고 명확히 적혀 있어 일치한다.",
+      "quotes": [
+        "K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다."
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C6",
+      "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서 경력란과 스킬란에 '피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.'와 'SAP 사용 경험'이라고 명확히 적혀 있어 일치한다.",
+      "quotes": [
+        "피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.",
+        "SAP 사용 경험"
+      ],
+      "verdict": "일치",
+      "quotes_in_resume": true
+    },
+    {
+      "condition_id": "C4",
+      "thinking": "조건은 남자의 경우 군필 또는 면제로 해외여행에 결격사유가 없는 자임을 참고사항으로 요구한다. 이력서에 군필, 면제, 해외여행 결격사유에 관한 내용이 전혀 없어 다름이다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    },
+    {
+      "condition_id": "C7",
+      "thinking": "조건은 국가보훈대상자 및 장애인 우대를 참고사항으로 요구한다. 이력서에 관련 내용이 전혀 없어 다름이다.",
+      "quotes": [],
+      "verdict": "다름",
+      "quotes_in_resume": false
+    }
+  ],
+  "input_tokens": 1584,
+  "output_tokens": 680
+}

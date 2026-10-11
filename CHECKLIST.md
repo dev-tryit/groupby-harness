@@ -161,12 +161,18 @@
 - [ ] README의 "실행 방법"에, 특징 추출과 비교를 처음부터 돌리려면 저장된 결과를 지우라는 것을 적는다
 - [ ] 예산: 평가자가 실행할 몫을 남긴다. 처음부터 끝까지 한 번 실행하는 데 약 $0.04다(`docs/08_infra/infra.md` 6.2)
 - [x] 사용자의 판단(2026-10-11): 인프라는 원래 GCP나 AWS로 해야 하지만, 지금은 로컬 기반이므로 Docker Compose에서 가능한 선으로 만든다 (`docs/08_infra/infra.md` 2장)
-- [ ] Docker Compose 구성
 
 ## `13_code`
 
+- [x] 제출용 폴더 `result/`(사용자가 정함, 2026-10-11): `docs/`와 나란히 `result/`를 두고, 평가자가 결과로서 볼 것만 복사해 거기서 실행한다. README는 `result/`를 기준으로 설명한다. 들어 있는 것은 백엔드 코드와 테스트, 화면(`frontend/index.html`), 목업 이력서(`resumes/`), 저장해 둔 조건과 판정(`data/server/`), `docker-compose.yml`이다. 원본은 `docs/13_code/`와 `docs/12_test-scenario/golden-set/`이고, 원본을 고치면 `result/`에 다시 복사해야 한다
+- [x] README의 방침(사용자, 2026-10-11): 과제를 기준으로 생각이 바뀐 흐름, 가설, 결론을 쓴다. 설계 문서에서 만든 것(UML)으로 흐름 있게 설명하고 말은 최소화한다
+- [x] 2026-10-11에 `result/`에서 `docker compose up --build`로 처음부터 끝까지 돌렸다. 수집과 읽기는 새로 했고 약 $0.016을 썼다. 조건 추출과 비교는 저장된 결과를 썼다. 키 없이도 저장된 결과로 화면이 나오는 것을 확인했다
+- [ ] 골든셋의 기대와 결과가 어긋난 곳: 55240017의 `expected_order`에 "자격요건을 다 갖춘 resume-3이 resume-4, resume-5보다 낮지 않다"가 있는데 결과는 70점과 77점이다. 문턱 식을 버리기 전의 기대다. 골든셋은 코드에 맞춰 고치지 않으므로 그대로 두었고 README 6장에 적었다. 고칠지는 사용자가 정한다
+- [ ] 이력서 번호: API에서는 `{공고 번호}-{파일 이름}`으로 전체에서 고유하게 만든다(화면설계도의 미리보기와 같은 모양). 파일 이름은 바꾸지 않았다
+- [ ] 로그: 서비스 제공사 프로그램의 `run.*`, `resume.matched`, `llm.failed`, `api.*`만 설계대로 남긴다. 고객사 프로그램의 로그와 공고마다의 trace id는 아직 설계와 어긋나 있다
+- [x] Docker Compose 구성: `docs/13_code/infra/local/docker-compose.yml`과 `result/docker-compose.yml`
+- [x] README의 "실행 방법"에 실행 명령을 적었다
 - [ ] 백엔드와 인프라 서브모듈의 `.gitignore`에 `.env`를 넣는다
-- [ ] README의 "실행 방법"에 실행 명령을 적는다
 
 ## 정한 것
 

@@ -1,0 +1,32 @@
+# 실행: 이 폴더에서  docker compose up --build   →  http://127.0.0.1:8000
+services:
+  # 고객사 프로그램. 사람인에서 공고 이미지를 가져와 읽고, 제목과 읽은 내용만 넘긴다. 한 번 돌고 끝난다.
+  client:
+    build: ./backend
+    command: python -m groupby.client --data /data/client --outbox /data/submissions collect 54762507 55240017
+    env_file:
+      - path: ../.env
+        required: false
+    volumes:
+      - ./data/client:/data/client
+      - ./data/submissions:/data/submissions
+
+  # 서비스 제공사 프로그램. 넘겨받은 것만 본다. 조건 추출 → 비교 → 점수 → 화면과 API.
+  server:
+    build: ./backend
+    command: >
+      python -m groupby.server --inbox /data/submissions --data /data/server
+      serve --resumes /resumes --static /frontend --host 0.0.0.0 --port 8000
+    env_file:
+      - path: ../.env
+        required: false
+    volumes:
+      - ./data/submissions:/data/submissions:ro
+      - ./data/server:/data/server
+      - ./resumes:/resumes:ro
+      - ./frontend:/frontend:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      client:
+        condition: service_completed_successfully

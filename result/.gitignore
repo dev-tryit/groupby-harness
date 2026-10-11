@@ -1,0 +1,9 @@
+# 실행하며 만든 데이터는 올리지 않는다. 특징과 비교의 결과만 올린다.
+data/client/*
+data/submissions/*
+data/server/results/
+!.gitkeep
+__pycache__/
+*.pyc
+.env
+.env.*
