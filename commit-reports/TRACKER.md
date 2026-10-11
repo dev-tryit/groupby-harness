@@ -20,7 +20,7 @@
 | `2026-10-11-1346-research-screening.html` | 검토 방식 조사 문서 작성 | 반영 | `ca965a8` |
 | `2026-10-11-1346-problem-hypothesis.html` | 문제 정의에 용어와 가설 추가 | 반영 | `956f566` |
 | `2026-10-11-1554-research-posting-ocr.html` | 실제 공고 조사와 읽기 방법 측정 | 반영 | `40c8e24` |
-| `2026-10-11-1619-decisions-posting-reading.html` | 조사를 바탕으로 정한 것 기록 | 미반영 | - |
+| `2026-10-11-1619-decisions-posting-reading.html` | 조사를 바탕으로 정한 것 기록 | 반영 | `6365cb6` |
 | `2026-10-11-1640-reading.html` | 읽기(OCR) 구현 | 폐기 | - |
 | `2026-10-11-1755-client-server-extraction.html` | 고객사 프로그램(수집, 읽기)과 특징 추출 구현 | 미반영 | - |
 | `2026-10-11-1755-golden-set-resumes.html` | 목업 이력서 12개 작성 | 미반영 | - |
