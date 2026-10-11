@@ -23,4 +23,6 @@
 | `2026-10-11-1619-decisions-posting-reading.html` | 조사를 바탕으로 정한 것 기록 | 반영 | `6365cb6` |
 | `2026-10-11-1640-reading.html` | 읽기(OCR) 구현 | 폐기 | - |
 | `2026-10-11-1755-client-server-extraction.html` | 고객사 프로그램(수집, 읽기)과 특징 추출 구현 | 반영 | `50a96d1` |
-| `2026-10-11-1755-golden-set-resumes.html` | 목업 이력서 12개 작성 | 미반영 | - |
+| `2026-10-11-1755-golden-set-resumes.html` | 목업 이력서 12개 작성 | 반영 | `7597745` |
+| `2026-10-11-1844-algorithm.html` | 핵심 알고리즘 문서 작성 | 미반영 | - |
+| `2026-10-11-1844-matching-scoring.html` | 비교와 점수 구현, 테스트 작성 | 미반영 | - |
