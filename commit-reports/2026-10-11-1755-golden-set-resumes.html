@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 목업 이력서 12개 작성</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>목업 이력서 12개 작성</h1>
+<div class="meta">보고서 작성: 2026-10-11 17:55 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p>두 공고의 목업 이력서를 6개씩, 모두 12개 만들었다. 공고마다 완벽 2, 부분 3, 미스매칭 1이다.</p>
+
+<h2>왜</h2>
+<p>과제의 조건이다. 뽑힌 조건을 기준으로, 사용자가 정한 기준(스코어링이 틀릴 수 있는 지점을 건드린다, 여러 형태로 만든다)에 따라 만들었다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>이력서 하나가 가설 하나를 확인한다. 가설은 <code>expectations.json</code>에 적었다.</li>
+  <li>부분 3명은 기준 이력서(1번)에서 한 군데만 바꿨다: 조건 하나 빠짐, 조건의 일부만 채움, 수치가 조금 모자람, 짧게 써서 정보가 없음.</li>
+  <li>완벽 2명은 내용이 같고 표현과 형태가 다르다. 미스매칭 1명은 공고의 단어만 겹친다.</li>
+  <li>형태는 항목형, 서술형, 요약형, 성과형을 섞었다. 기대값은 점수가 아니라 순서로 적었다.</li>
+  <li><strong>알릴 것:</strong> 사용자가 이력서의 내용을 아직 읽어 보지 않았다. 테스트 시나리오 문서(<code>test-scenario.md</code>)는 아직 없다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/13_test-scenario/golden-set/54762507/</code></td><td>마케팅 이력서 6개와 가설</td></tr>
+  <tr><td><code>docs/13_test-scenario/golden-set/55240017/</code></td><td>회계 이력서 6개와 가설</td></tr>
+  <tr><td><code>docs/13_test-scenario/DECISIONS.md</code></td><td>골든셋을 만든 이유 기록</td></tr>
+  <tr><td><code>commit-reports/2026-10-11-1755-golden-set-resumes.html</code></td><td>이 보고서</td></tr>
+</table>
+</body>
+</html>

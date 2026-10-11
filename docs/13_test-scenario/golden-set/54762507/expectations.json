@@ -1,0 +1,55 @@
+{
+  "posting_id": "54762507",
+  "resumes": [
+    {
+      "file": "resume-1.md",
+      "type": "완벽",
+      "form": "항목형",
+      "hypothesis": "기준선. 공고의 표현 그대로 모든 자격요건을 갖췄다.",
+      "changed_from": null
+    },
+    {
+      "file": "resume-2.md",
+      "type": "완벽",
+      "form": "서술형",
+      "hypothesis": "표현과 형태가 달라도 판정이 같다. 1번과 내용은 같고 다른 말로, 칸 없이 줄글로 썼다.",
+      "changed_from": "resume-1.md"
+    },
+    {
+      "file": "resume-3.md",
+      "type": "부분",
+      "form": "항목형",
+      "hypothesis": "조건 하나가 빠지면 그 조건만 내려간다. 1번에서 지표로 개선안을 낸 경험만 뺐다.",
+      "changed_from": "resume-1.md",
+      "target": "매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있으신 분"
+    },
+    {
+      "file": "resume-4.md",
+      "type": "부분",
+      "form": "항목형",
+      "hypothesis": "조건의 일부만 채운 것을 가려낸다. 캠페인을 실행만 했고 기획과 성과 분석은 하지 않았다.",
+      "changed_from": "resume-1.md",
+      "target": "브랜드 캠페인 기획, 실행, 성과 분석까지 경험해보신 분"
+    },
+    {
+      "file": "resume-5.md",
+      "type": "부분",
+      "form": "항목형",
+      "hypothesis": "조금 모자란 것을 충족으로 보지 않는다. 경력이 2년 6개월이다.",
+      "changed_from": "resume-1.md",
+      "target": "관련 업무 경력 3년 이상이신 분"
+    },
+    {
+      "file": "resume-6.md",
+      "type": "미스매칭",
+      "form": "성과형",
+      "hypothesis": "단어만 겹치는 사람을 걸러낸다. 반려동물 용품 매장의 판매직이고 브랜드, 캠페인, 매출이라는 단어가 나온다. 참고사항(반려동물 양육)은 갖췄지만 점수에 들어가지 않는다.",
+      "changed_from": null
+    }
+  ],
+  "expected_order": [
+    "resume-1.md와 resume-2.md의 점수가 같다",
+    "resume-3.md, resume-4.md, resume-5.md는 resume-1.md보다 낮다",
+    "resume-6.md가 가장 낮다"
+  ]
+}
