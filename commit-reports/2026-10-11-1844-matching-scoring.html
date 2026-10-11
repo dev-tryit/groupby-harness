@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 비교와 점수 구현, 테스트 작성</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>비교와 점수 구현, 테스트 작성</h1>
+<div class="meta">보고서 작성: 2026-10-11 18:44 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p>백엔드에 비교(이력서마다 조건별 판정과 근거)와 점수(0~100점, 랭킹)를 만들고, 테스트 28개를 썼다. 이력서 12개로 돌렸다.</p>
+
+<h2>왜</h2>
+<p>과제가 요구한 매칭 스코어링과 최소한의 테스트다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>비교: 이력서마다 <code>gpt-4.1-mini</code>를 한 번 부른다. 조건마다 생각 → 근거 → 판정의 순서로 받는다. 근거가 이력서 안에 글자 그대로 있는지 코드로 대조하고, 없으면 그 판정을 다름으로 친다.</li>
+  <li>점수: 코드가 계산한다. LLM은 숫자를 내지 않는다.</li>
+  <li>결과(7:3): 마케팅 1·2번 100, 4·5번 90, 3번 80, 6번 0. 회계 1·2번 100, 4·5번 77, 3번 70, 6번 0. 12명에 약 $0.02.</li>
+  <li>테스트: 점수의 식과 성질(판정의 모든 조합), 지어낸 근거와 조건을 잡는 규칙, 수집과 읽기의 규칙. LLM을 부르지 않는다.</li>
+  <li><strong>남은 것:</strong> 회계 5번(감사 경력 2년)이 비슷이 아니라 다름으로 나온다. 회계 6번은 모델이 근거를 한 글자 바꿔 옮겨서 맞는 판정이 0점이 되었다. 설계 문서(<code>04</code>~<code>13</code>)와 맞추는 일이 남아 있다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>backend/groupby/server/matching/</code></td><td>비교의 도메인, 포트, 흐름</td></tr>
+  <tr><td><code>backend/groupby/server/scoring/</code></td><td>점수의 도메인 (식과 랭킹)</td></tr>
+  <tr><td><code>backend/groupby/server/adapters/outbound/</code></td><td>OpenAI 비교(프롬프트 포함), 이력서와 판정의 파일 저장</td></tr>
+  <tr><td><code>backend/groupby/server/adapters/inbound/cli.py</code></td><td><code>rank</code> 명령 추가</td></tr>
+  <tr><td><code>backend/tests/</code></td><td>테스트 28개</td></tr>
+  <tr><td><code>docs/14_code/backend</code></td><td>서브모듈이 가리키는 커밋 갱신</td></tr>
+  <tr><td><code>commit-reports/2026-10-11-1844-matching-scoring.html</code></td><td>이 보고서</td></tr>
+</table>
+</body>
+</html>
