@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 보안과 로그 설계 문서 작성</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>보안과 로그 설계 문서 작성</h1>
+<div class="meta">보고서 작성: 2026-10-11 20:20 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p><code>10_security</code>와 <code>11_log</code>의 설계 문서를 썼다.</p>
+
+<h2>왜</h2>
+<p>사용자가 보안은 앞 단계(<code>00</code>~<code>09</code>)를 하나하나 보면서 허점을 체크하고 막는 것이라고 했다. 로그까지 정합성을 맞추라고 했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>보안: 단계마다 무엇을 보았는지, 허점, 막는 방법, 그 대책이 있는 곳을 적었다. 허점 27개, 보안 시나리오 13개다.</li>
+  <li>막으려면 앞 단계를 고쳐야 하는 허점 다섯은 고치지 않고 &quot;막지 못한 것&quot;에 적었다. 사용자가 정한다.</li>
+  <li>로그: 한 줄에 JSON 하나. 로그로 답하려는 질문에서 남기는 일의 목록을 냈다. trace id가 공고 하나의 처리, 화면의 요청, 프로그램의 실행에서 어떻게 이어지는지를 적었다.</li>
+  <li>로그에 키, 이력서의 글자, 읽은 내용을 남기지 않는다. 대조에 실패한 것은 번호로 남긴다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/10_security/security.md</code></td><td>새로 씀</td></tr>
+  <tr><td><code>docs/11_log/log.md</code></td><td>새로 씀</td></tr>
+  <tr><td><code>docs/10_security, 11_log의 AGENTS.md, DECISIONS.md</code></td><td>규칙과 수정 기록</td></tr>
+</table>
+</body>
+</html>
