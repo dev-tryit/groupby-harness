@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지원자 랭킹과 근거</title>
+<style>
+  :root {
+    --blue-500: #3182f6; --blue-600: #1b64da; --blue-50: #e8f3ff;
+    --grey-900: #191f28; --grey-800: #333d4b; --grey-700: #4e5968; --grey-600: #6b7684; --grey-500: #8b95a1; --grey-400: #b0b8c1;
+    --grey-300: #d1d6db; --grey-200: #e5e8eb; --grey-100: #f2f4f6; --grey-50: #f9fafb; --white: #ffffff;
+    --fill-brand: var(--blue-500); --fill-primary: var(--grey-900); --fill-secondary: var(--grey-100); --fill-weak: var(--grey-50);
+    --text-primary: var(--grey-900); --text-secondary: var(--grey-700); --text-tertiary: var(--grey-600); --text-brand: var(--blue-600);
+    --border-secondary: var(--grey-200); --border-focus: var(--blue-500);
+    --verdict-match: #007738; --verdict-match-weak: #dcf9e4;
+    --verdict-similar: #9f5100; --verdict-similar-weak: #ffecd0;
+    --verdict-different: #c2152f; --verdict-different-weak: #ffe1e1;
+    --radius-m: 12px; --radius-xl: 16px; --radius-3xl: 24px; --radius-full: 999px;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1); --dur-fast: 120ms; --dur-base: 200ms; --dur-slow: 320ms;
+    --top-bar: 56px;
+    --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: calc(var(--top-bar) + var(--space-6)) var(--space-6) 96px; background: var(--fill-secondary); color: var(--text-primary);
+         font: 400 15px/1.5 var(--font); letter-spacing: -0.005em; }
+  main { max-width: 1120px; margin: 0 auto; }
+  h1, h2, h3, p, ul, dl, dd { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  button { font: inherit; letter-spacing: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; text-align: left; }
+  :focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+  .display-2 { font: 700 40px/1.2 var(--font); letter-spacing: -0.02em; }
+  .h4 { font: 700 20px/1.35 var(--font); letter-spacing: -0.015em; }
+  .title-2 { font: 600 17px/1.45 var(--font); letter-spacing: -0.01em; }
+  .body-1 { font: 400 17px/1.5 var(--font); }
+  .body-3 { font: 400 13px/1.5 var(--font); letter-spacing: 0; }
+  .label-s { font: 600 13px/1.25 var(--font); letter-spacing: 0; }
+  .secondary { color: var(--text-secondary); }
+  .tertiary { color: var(--text-tertiary); }
+  .tnum { font-feature-settings: "tnum"; }
+
+  .top-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; height: var(--top-bar); padding: 0 var(--space-6); background: var(--white); border-bottom: 1px solid var(--border-secondary); }
+  .top-bar > div { max-width: 1120px; height: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); }
+  .home { display: flex; color: var(--fill-primary); border-radius: 8px; }
+  .menu { display: flex; gap: var(--space-6); height: 100%; }
+  .menu-item { display: flex; align-items: center; height: 100%; font: 600 15px/1.25 var(--font); color: var(--text-tertiary); border-bottom: 2.5px solid transparent; border-top: 2.5px solid transparent; text-decoration: none; white-space: nowrap; }
+  .menu-item[aria-current="page"] { color: var(--text-primary); border-bottom-color: var(--fill-brand); }
+  .tabs { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .tab { min-height: 34px; padding: var(--space-1) var(--space-4); border-radius: var(--radius-full); background: var(--white); border: 1px solid var(--border-secondary); color: var(--text-secondary);
+         font: 600 15px/1.25 var(--font); text-align: left; transition: background var(--dur-fast) var(--ease), color var(--dur-base) var(--ease); max-width: 100%; }
+  .tab:hover { background: var(--fill-weak); }
+  .tab[aria-selected="true"] { background: var(--fill-primary); border-color: var(--fill-primary); color: var(--white); }
+
+  .hero { padding: var(--space-10) 0 0; }
+  .hero > p { margin-top: var(--space-3); max-width: 60ch; }
+  .duties { margin-top: var(--space-6); display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); }
+  .duties > .label-s { margin-right: var(--space-1); }
+  .chip { display: inline-flex; align-items: center; min-height: 34px; padding: var(--space-1) var(--space-4); border-radius: var(--radius-full); background: var(--white); border: 1px solid var(--border-secondary); color: var(--text-secondary); }
+
+  .card { background: var(--white); border-radius: var(--radius-3xl); padding: var(--space-8); }
+  .section { margin-top: var(--space-12); }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); }
+  .section-note { margin-top: var(--space-3); }
+
+  .button-secondary { display: inline-flex; align-items: center; height: 32px; padding: 0 var(--space-3); border-radius: 10px; background: var(--fill-secondary);
+                      font: 600 13px/1.25 var(--font); white-space: nowrap; transition: background var(--dur-fast) var(--ease); }
+  .button-secondary:hover, .row-head:hover .button-secondary { background: var(--grey-200); }
+  .text-button { font: 600 13px/1.25 var(--font); color: var(--text-brand); padding: var(--space-2) 0; }
+  .text-button:hover { text-decoration: underline; }
+
+  .conditions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+  .condition-group { background: var(--white); border-radius: var(--radius-3xl); padding: var(--space-6); }
+  .condition-group.excluded { background: transparent; border: 1px solid var(--border-secondary); }
+  .condition-group > .head { margin-bottom: var(--space-3); }
+  .condition-group > .head .body-3 { display: block; }
+  .condition-group li { display: grid; grid-template-columns: 32px minmax(0, 1fr); padding: var(--space-2) 0; }
+  .condition-group li.plain { grid-template-columns: minmax(0, 1fr); }
+  .no { font: 600 13px/1.75 var(--font); color: var(--text-tertiary); font-feature-settings: "tnum"; }
+
+  .badge { display: inline-flex; align-items: center; gap: var(--space-1); height: 22px; padding: 0 6px; border-radius: 6px; font: 600 13px/1.25 var(--font); white-space: nowrap; }
+  .badge-match { color: var(--verdict-match); background: var(--verdict-match-weak); }
+  .badge-similar { color: var(--verdict-similar); background: var(--verdict-similar-weak); }
+  .badge-different { color: var(--verdict-different); background: var(--verdict-different-weak); }
+  .badge-neutral { color: var(--text-secondary); background: var(--fill-secondary); }
+  .badge-unverified { color: var(--text-secondary); border: 1px dashed var(--grey-400); }
+  .badge .no { font-weight: 500; line-height: 1.25; color: inherit; opacity: 0.8; }
+
+  .legend { margin-bottom: var(--space-3); padding: var(--space-5) var(--space-6); border-radius: var(--radius-xl); }
+  .legend li { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; padding: var(--space-2) 0; }
+
+  .board { display: grid; gap: var(--space-3); }
+  .board-row { background: var(--white); border-radius: var(--radius-xl); border: 1.5px solid transparent; transition: border-color var(--dur-base) var(--ease); }
+  .board-row.open { border-color: var(--fill-brand); }
+  .row-head { display: grid; grid-template-columns: 32px minmax(120px, 190px) minmax(0, 1fr) 168px auto; align-items: center; gap: var(--space-4);
+              padding: var(--space-5) var(--space-6); border-radius: var(--radius-xl); cursor: pointer; }
+  .rank { font: 700 20px/1.35 var(--font); font-feature-settings: "tnum"; color: var(--text-tertiary); }
+  .rank.first { color: var(--text-primary); }
+  .verdicts { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+  .verdict-group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+  .verdict-group > .body-3 { margin-right: var(--space-1); }
+  .score-box { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: var(--space-3); }
+  .score { font: 700 28px/1.3 var(--font); letter-spacing: -0.02em; font-feature-settings: "tnum"; text-align: right; }
+  .progress { height: 6px; border-radius: var(--radius-full); background: var(--grey-200); overflow: hidden; }
+  .progress > span { display: block; height: 100%; border-radius: var(--radius-full); background: var(--fill-primary); }
+
+  .detail { display: grid; grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); gap: var(--space-10); align-items: start;
+            padding: var(--space-6); border-top: 1px solid var(--border-secondary); }
+  .calc { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); }
+  .formula { width: 100%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-m); background: var(--fill-secondary); }
+  .evidence-group { margin-top: var(--space-8); }
+  .evidence-group > .head { margin-bottom: var(--space-2); }
+  .evidence-item { padding: var(--space-4) 0; border-top: 1px solid var(--border-secondary); }
+  .evidence-item > .top { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: start; gap: 0 var(--space-2); }
+  .evidence-item .text { font-weight: 600; }
+  .evidence-body { margin: var(--space-3) 0 0 32px; display: grid; gap: var(--space-2); justify-items: start; }
+  .quote-block { width: 100%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-m); background: var(--fill-secondary); border: 1.5px solid transparent;
+                 transition: background var(--dur-fast) var(--ease), border-color var(--dur-base) var(--ease); }
+  button.quote-block:hover { background: var(--grey-200); }
+  .quote-block[aria-pressed="true"] { background: var(--white); border-color: var(--fill-brand); }
+  .quote-block.plain { color: var(--text-secondary); }
+  .quote-hint { display: block; margin-top: var(--space-1); color: var(--text-brand); }
+  .reason { padding: var(--space-3) var(--space-4); border-radius: var(--radius-m); border: 1px solid var(--border-secondary); color: var(--text-secondary); }
+
+  .resume-pane { position: sticky; top: calc(var(--top-bar) + var(--space-4)); }
+  .resume-pane .body-3 { margin-top: var(--space-1); min-height: 22px; }
+  .resume { margin: var(--space-3) 0 0; padding: var(--space-6); border-radius: var(--radius-xl); background: var(--fill-secondary);
+            font: 400 15px/1.7 var(--font); white-space: pre-wrap; overflow-wrap: anywhere; max-height: calc(100vh - var(--top-bar) - 120px); overflow-y: auto; }
+  .quote-highlight { color: var(--text-primary); background-color: transparent; background-repeat: no-repeat; background-size: 100% 100%;
+                     border-radius: 4px; padding: 2px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .hl-match { background-image: linear-gradient(var(--verdict-match-weak), var(--verdict-match-weak)); }
+  .hl-similar { background-image: linear-gradient(var(--verdict-similar-weak), var(--verdict-similar-weak)); }
+  .hl-different { background-image: linear-gradient(var(--verdict-different-weak), var(--verdict-different-weak)); }
+
+  .state { padding: var(--space-16) var(--space-6); text-align: center; }
+  .state p + p, .state p + button { margin-top: var(--space-3); }
+  .loader { display: inline-flex; gap: 6px; }
+  .loader > span { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--grey-400); }
+
+  @media (max-width: 900px) {
+    body { padding: calc(var(--top-bar) + var(--space-4)) var(--space-4) 72px; }
+    .top-bar { padding: 0 var(--space-4); }
+    .top-bar > div { gap: var(--space-4); }
+    .resume { max-height: none; }
+    .display-2 { font-size: 28px; line-height: 1.3; }
+    .card { padding: var(--space-6); border-radius: var(--radius-xl); }
+    .conditions, .detail { grid-template-columns: 1fr; }
+    .row-head { grid-template-columns: 28px minmax(0, 1fr) auto; }
+    .row-head .verdicts { grid-column: 1 / -1; order: 3; }
+    .row-head .score-box { grid-template-columns: auto; }
+    .row-head .progress, .row-head .button-secondary { display: none; }
+    .detail { padding: var(--space-4); gap: var(--space-8); }
+    .resume-pane { position: static; }
+    .legend li { grid-template-columns: 1fr; gap: var(--space-1); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .resume { scroll-behavior: smooth; }
+    .quote-highlight { animation: stroke var(--dur-slow) var(--ease) both; }
+    .loader > span { animation: pulse 900ms var(--ease) infinite; }
+    .loader > span:nth-child(2) { animation-delay: 150ms; }
+    .loader > span:nth-child(3) { animation-delay: 300ms; }
+    @keyframes stroke { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+  }
+</style>
+</head>
+<body>
+<header class="top-bar"><div>
+  <a class="home" href="#" aria-label="처음으로">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <rect width="28" height="28" rx="8" fill="currentColor"/>
+      <path d="M8 9.5h7M8 14h4.5M8 18.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M15.5 16.5l2.2 2.2 3.8-4.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <nav class="menu" aria-label="메뉴"><a class="menu-item" href="#" aria-current="page">채용공고 매칭</a></nav>
+</div></header>
+<main id="app" aria-live="polite"></main>
+
+<script>
+const PREVIEW = {"postings": [{"posting_id": "54762507", "title": "[압타바이오(주)] [코스닥 상장사] 펫 브랜드 '리카리카' 마케팅(대리급) 채용(채용시 마감)", "job": "마케팅 대리급"}, {"posting_id": "55240017", "title": "[(주)삼천리] 2026년 삼천리 회계부문 경력사원 모집(D-7)", "job": "회계부문 경력사원"}], "posting": {"54762507": {"posting_id": "54762507", "title": "[압타바이오(주)] [코스닥 상장사] 펫 브랜드 '리카리카' 마케팅(대리급) 채용(채용시 마감)", "job": "마케팅 대리급", "duties": [{"item_id": "54762507-D1", "no": "D1", "text": "마케팅 연간/월간 전략 수립 및 운영"}, {"item_id": "54762507-D2", "no": "D2", "text": "마케팅 예산 관리 및 광고 효율 분석"}, {"item_id": "54762507-D3", "no": "D3", "text": "신제품 론칭 및 브랜드 캠페인 기획"}, {"item_id": "54762507-D4", "no": "D4", "text": "광고 콘텐츠 기획 및 매체별 운영  ᄂ 메타, 네이버, 구글 등"}, {"item_id": "54762507-D5", "no": "D5", "text": "전략적인 제품 상세페이지 기획"}, {"item_id": "54762507-D6", "no": "D6", "text": "매출/고객 데이터 분석을 통한 인사이트 도출"}], "conditions": {"자격요건": [{"item_id": "54762507-C1", "no": "C1", "text": "관련 업무 경력 3년 이상이신 분", "in_reading": true}, {"item_id": "54762507-C3", "no": "C3", "text": "브랜드 및 커머스 마케팅에 대한 이해가 높으신 분", "in_reading": true}, {"item_id": "54762507-C4", "no": "C4", "text": "브랜드 캠페인 기획, 실행, 성과 분석까지 경험해보신 분", "in_reading": true}, {"item_id": "54762507-C5", "no": "C5", "text": "매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있으신 분", "in_reading": true}, {"item_id": "54762507-C6", "no": "C6", "text": "마케팅 실무를 주도적으로 운영할 수 있으신 분", "in_reading": true}], "우대사항": [], "참고사항": [{"item_id": "54762507-C2", "no": "C2", "text": "반려동물을 현재 직접 양육 중이신 분", "in_reading": true}]}, "ranking": [{"rank": 1, "resume_id": "54762507-resume-1", "score": 100, "required": {"points": 10, "full": 10, "matched": 5, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "일치"}, {"item_id": "54762507-C3", "mark": "일치"}, {"item_id": "54762507-C4", "mark": "일치"}, {"item_id": "54762507-C5", "mark": "일치"}, {"item_id": "54762507-C6", "mark": "일치"}, {"item_id": "54762507-C2", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 1, "resume_id": "54762507-resume-2", "score": 100, "required": {"points": 10, "full": 10, "matched": 5, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "일치"}, {"item_id": "54762507-C3", "mark": "일치"}, {"item_id": "54762507-C4", "mark": "일치"}, {"item_id": "54762507-C5", "mark": "일치"}, {"item_id": "54762507-C6", "mark": "일치"}, {"item_id": "54762507-C2", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 3, "resume_id": "54762507-resume-4", "score": 90, "required": {"points": 9, "full": 10, "matched": 4, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "일치"}, {"item_id": "54762507-C3", "mark": "일치"}, {"item_id": "54762507-C4", "mark": "비슷"}, {"item_id": "54762507-C5", "mark": "일치"}, {"item_id": "54762507-C6", "mark": "일치"}, {"item_id": "54762507-C2", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 3, "resume_id": "54762507-resume-5", "score": 90, "required": {"points": 9, "full": 10, "matched": 4, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "비슷"}, {"item_id": "54762507-C3", "mark": "일치"}, {"item_id": "54762507-C4", "mark": "일치"}, {"item_id": "54762507-C5", "mark": "일치"}, {"item_id": "54762507-C6", "mark": "일치"}, {"item_id": "54762507-C2", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 5, "resume_id": "54762507-resume-3", "score": 80, "required": {"points": 8, "full": 10, "matched": 4, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "일치"}, {"item_id": "54762507-C3", "mark": "일치"}, {"item_id": "54762507-C4", "mark": "일치"}, {"item_id": "54762507-C5", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "54762507-C6", "mark": "일치"}, {"item_id": "54762507-C2", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 6, "resume_id": "54762507-resume-6", "score": 0, "required": {"points": 0, "full": 10, "matched": 0, "count": 5}, "preferred": null, "verdicts": [{"item_id": "54762507-C1", "mark": "다름"}, {"item_id": "54762507-C3", "mark": "다름"}, {"item_id": "54762507-C4", "mark": "다름"}, {"item_id": "54762507-C5", "mark": "다름"}, {"item_id": "54762507-C6", "mark": "다름"}, {"item_id": "54762507-C2", "mark": "일치"}]}]}, "55240017": {"posting_id": "55240017", "title": "[(주)삼천리] 2026년 삼천리 회계부문 경력사원 모집(D-7)", "job": "회계부문 경력사원", "duties": [{"item_id": "55240017-D1", "no": "D1", "text": "별도ㆍ연결 재무제표 작성"}, {"item_id": "55240017-D2", "no": "D2", "text": "종속기업 연결 패키지 검토"}, {"item_id": "55240017-D3", "no": "D3", "text": "외부감사 대응 및 회계이슈 검토"}, {"item_id": "55240017-D4", "no": "D4", "text": "M&Aㆍ신규투자 관련 검토"}], "conditions": {"자격요건": [{"item_id": "55240017-C1", "no": "C1", "text": "한국공인회계사(KICPA) 등록자", "in_reading": true}, {"item_id": "55240017-C2", "no": "C2", "text": "회계법인 감사부문 경력 3~5년", "in_reading": true}, {"item_id": "55240017-C3", "no": "C3", "text": "대졸(학사) 이상 학력 보유자", "in_reading": true}], "우대사항": [{"item_id": "55240017-C5", "no": "C5", "text": "K-IFRS 상장사 외부감사(에너지ㆍ유틸리티)", "in_reading": true}, {"item_id": "55240017-C6", "no": "C6", "text": "SAP 사용 유경험자", "in_reading": true}], "참고사항": [{"item_id": "55240017-C4", "no": "C4", "text": "남자의 경우 군필 또는 면제로 해외여행에 결격사유가 없는 자", "in_reading": true}, {"item_id": "55240017-C7", "no": "C7", "text": "국가보훈대상자 및 장애인은 관계 법령에 의거 우대합니다.", "in_reading": true}]}, "ranking": [{"rank": 1, "resume_id": "55240017-resume-1", "score": 100, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "일치"}, {"item_id": "55240017-C2", "mark": "일치"}, {"item_id": "55240017-C3", "mark": "일치"}, {"item_id": "55240017-C5", "mark": "일치"}, {"item_id": "55240017-C6", "mark": "일치"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 1, "resume_id": "55240017-resume-2", "score": 100, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "일치"}, {"item_id": "55240017-C2", "mark": "일치"}, {"item_id": "55240017-C3", "mark": "일치"}, {"item_id": "55240017-C5", "mark": "일치"}, {"item_id": "55240017-C6", "mark": "일치"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 3, "resume_id": "55240017-resume-4", "score": 77, "required": {"points": 4, "full": 6, "matched": 2, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "다름"}, {"item_id": "55240017-C2", "mark": "일치"}, {"item_id": "55240017-C3", "mark": "일치"}, {"item_id": "55240017-C5", "mark": "일치"}, {"item_id": "55240017-C6", "mark": "일치"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 3, "resume_id": "55240017-resume-5", "score": 77, "required": {"points": 4, "full": 6, "matched": 2, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "일치"}, {"item_id": "55240017-C2", "mark": "다름"}, {"item_id": "55240017-C3", "mark": "일치"}, {"item_id": "55240017-C5", "mark": "일치"}, {"item_id": "55240017-C6", "mark": "일치"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 5, "resume_id": "55240017-resume-3", "score": 70, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 0, "full": 4, "matched": 0, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "일치"}, {"item_id": "55240017-C2", "mark": "일치"}, {"item_id": "55240017-C3", "mark": "일치"}, {"item_id": "55240017-C5", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C6", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}, {"rank": 6, "resume_id": "55240017-resume-6", "score": 0, "required": {"points": 0, "full": 6, "matched": 0, "count": 3}, "preferred": {"points": 0, "full": 4, "matched": 0, "count": 2}, "verdicts": [{"item_id": "55240017-C1", "mark": "다름"}, {"item_id": "55240017-C2", "mark": "다름"}, {"item_id": "55240017-C3", "mark": "다름"}, {"item_id": "55240017-C5", "mark": "다름"}, {"item_id": "55240017-C6", "mark": "근거를 확인하지 못함"}, {"item_id": "55240017-C4", "mark": "이력서에 적혀 있지 않음"}, {"item_id": "55240017-C7", "mark": "이력서에 적혀 있지 않음"}]}]}}, "match": {"54762507-resume-1": {"posting_id": "54762507", "resume_id": "54762507-resume-1", "score": 100, "required": {"points": 10, "full": 10, "matched": 5, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["경력 (총 5년 1개월)", "모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재", "그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02"], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에 총 경력 5년 1개월로 명시되어 있고, 마케팅 관련 업무를 2021년 9월부터 현재까지 수행하여 5년 이상 경력이 있다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리", "그린테이블 (식품 커머스) · 마케팅팀 사원", "스킬 - 브랜드 마케팅, 커머스 마케팅"], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에 브랜드 마케팅과 커머스 마케팅 경험 및 스킬이 명확히 적혀 있어 이해도가 높음을 알 수 있다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에 봄 시즌 브랜드 캠페인을 기획, 실행, 성과 분석까지 직접 수행한 경험이 명확히 적혀 있다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다."], "quotes_in_resume": true, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있어야 한다. 이력서에 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈다고 명시되어 있어 조건과 일치한다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있어야 한다. 이력서에 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했다고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 반려동물을 현재 직접 양육 중이어야 한다. 이력서에 반려동물 양육에 관한 내용이 전혀 없으므로 조건을 충족하지 못한다."}], "resume_text": "# 이력서 — 한서윤\n\n## 경력 (총 5년 1개월)\n\n### 모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재\n- 연간·월간 마케팅 전략을 세우고 운영했습니다.\n- 봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다.\n- 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다.\n- 자사몰과 오픈마켓의 상품 상세페이지를 기획했습니다.\n- 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다.\n\n### 그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02\n- 메타, 네이버, 구글 광고를 운영했습니다.\n- 신제품 론칭 캠페인의 기획과 실행에 참여했습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2021.08)\n\n## 스킬\n- 브랜드 마케팅, 커머스 마케팅, 메타 광고 관리자, 네이버 검색광고, 구글 애널리틱스\n"}, "54762507-resume-2": {"posting_id": "54762507", "resume_id": "54762507-resume-2", "score": 100, "required": {"points": 10, "full": 10, "matched": 5, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["저는 5년 넘게 소비재 온라인 브랜드에서 마케터로 일해 왔습니다.", "2023년 3월부터 지금까지는 홈데코 쇼핑몰 브랜드 \"하우스결\"에서 브랜드 마케팅을 맡고 있습니다.", "그 전에는 2021년 9월부터 2023년 2월까지 간편식 온라인몰 \"오늘한끼\"에서 일했습니다."], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에는 2021년 9월부터 2026년 10월 현재까지 약 5년 1개월간 소비재 온라인 브랜드에서 마케터로 일한 경력이 명시되어 있어 요구 기간을 충족한다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["2023년 3월부터 지금까지는 홈데코 쇼핑몰 브랜드 \"하우스결\"에서 브랜드 마케팅을 맡고 있습니다.", "브랜드를 키우는 일과 온라인에서 파는 일이 어떻게 맞물리는지를 현장에서 익혔습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에는 브랜드 마케팅을 맡았고 브랜드를 키우는 일과 온라인 판매가 어떻게 맞물리는지 현장에서 익혔다고 하여 브랜드 및 커머스 마케팅 이해가 높음을 보여준다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["가을 프로모션을 처음 구상하는 단계부터 집행, 그리고 끝난 뒤 결과를 돌아보는 리뷰까지 혼자 끌고 갔습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에는 가을 프로모션을 처음 구상부터 집행, 결과 리뷰까지 혼자 진행했다고 하여 캠페인 기획, 실행, 성과 분석 경험이 있음을 보여준다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["판매액과 광고 지출, 광고수익률(ROAS)을 매주 들여다보고, 효율이 낮은 채널의 예산을 줄이고 잘 되는 채널로 옮기자는 안을 만들어 실제로 반영했습니다."], "quotes_in_resume": true, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있어야 한다. 이력서에는 판매액과 광고 지출, ROAS를 매주 모니터링하며 효율이 낮은 채널의 예산을 줄이고 잘 되는 채널로 옮기는 안을 만들어 실제 반영했다고 하여 조건에 부합한다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["윗선의 지시를 기다리지 않고 제가 먼저 일을 정해서 굴리는 편입니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있어야 한다. 이력서에는 윗선 지시를 기다리지 않고 스스로 일을 정해서 굴리는 편이라고 명시되어 있어 주도적 운영 능력을 보여준다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 반려동물을 현재 직접 양육 중이어야 한다. 이력서에는 반려동물 양육에 관한 내용이 전혀 없어 조건을 충족하지 않는다."}], "resume_text": "# 한 일 소개 — 윤도현\n\n저는 5년 넘게 소비재 온라인 브랜드에서 마케터로 일해 왔습니다.\n\n2023년 3월부터 지금까지는 홈데코 쇼핑몰 브랜드 \"하우스결\"에서 브랜드 마케팅을 맡고 있습니다. 가을 프로모션을 처음 구상하는 단계부터 집행, 그리고 끝난 뒤 결과를 돌아보는 리뷰까지 혼자 끌고 갔습니다. 판매액과 광고 지출, 광고수익률(ROAS)을 매주 들여다보고, 효율이 낮은 채널의 예산을 줄이고 잘 되는 채널로 옮기자는 안을 만들어 실제로 반영했습니다. 한 해 계획과 달마다의 계획도 제가 짰습니다. 윗선의 지시를 기다리지 않고 제가 먼저 일을 정해서 굴리는 편입니다.\n\n그 전에는 2021년 9월부터 2023년 2월까지 간편식 온라인몰 \"오늘한끼\"에서 일했습니다. 인스타그램과 페이스북, 네이버, 구글에 광고를 집행했고 새 상품이 나올 때마다 알리는 일을 했습니다.\n\n브랜드를 키우는 일과 온라인에서 파는 일이 어떻게 맞물리는지를 현장에서 익혔습니다.\n\n학교는 서림대학교 광고홍보학과를 2021년 8월에 졸업했습니다(학사).\n"}, "54762507-resume-3": {"posting_id": "54762507", "resume_id": "54762507-resume-3", "score": 80, "required": {"points": 8, "full": 10, "matched": 4, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["경력 (총 5년 1개월)", "그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02", "모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재"], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에 총 경력 5년 1개월로 명시되어 있고, 마케팅 관련 업무를 2021년 9월부터 현재까지 수행하여 5년 이상 경력이 충족된다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리", "그린테이블 (식품 커머스) · 마케팅팀 사원", "스킬 - 브랜드 마케팅, 커머스 마케팅"], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에 브랜드 마케팅과 커머스 마케팅 경험 및 스킬이 명확히 기재되어 있어 요구사항과 일치한다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에 봄 시즌 브랜드 캠페인을 기획, 직접 실행, 성과 분석까지 맡았다고 명확히 적혀 있어 일치한다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "이력서에 적혀 있지 않음", "points": 0, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있어야 한다. 이력서에는 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출했다는 직접적인 언급이 없고, 관련 지표 분석 경험도 명시되어 있지 않다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있어야 한다. 이력서에 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했다고 명확히 적혀 있어 일치한다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 반려동물을 현재 직접 양육 중이어야 한다. 이력서에 반려동물 양육에 관한 내용이 전혀 없으므로 다름이다."}], "resume_text": "# 이력서 — 정하람\n\n## 경력 (총 5년 1개월)\n\n### 모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재\n- 연간·월간 마케팅 전략을 세우고 운영했습니다.\n- 봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다.\n- 자사몰과 오픈마켓의 상품 상세페이지를 기획했습니다.\n- 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다.\n\n### 그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02\n- 메타, 네이버, 구글 광고를 운영했습니다.\n- 신제품 론칭 캠페인의 기획과 실행에 참여했습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2021.08)\n\n## 스킬\n- 브랜드 마케팅, 커머스 마케팅, 메타 광고 관리자, 네이버 검색광고\n"}, "54762507-resume-4": {"posting_id": "54762507", "resume_id": "54762507-resume-4", "score": 90, "required": {"points": 9, "full": 10, "matched": 4, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["경력 (총 5년 1개월)", "그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02", "모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재"], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에 총 경력 5년 1개월로 명시되어 있고, 마케팅 관련 업무를 2021년 9월부터 현재까지 수행하여 3년 이상 경력이 충족된다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리", "그린테이블 (식품 커머스) · 마케팅팀 사원", "스킬 - 브랜드 마케팅, 커머스 마케팅"], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에 브랜드 마케팅과 커머스 마케팅 경험 및 스킬이 명확히 기재되어 있어 이해도가 높음을 보여준다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "비슷", "points": 1, "quotes": ["기획팀이 정한 봄 시즌 브랜드 캠페인을 넘겨받아 실행했습니다. 성과 분석은 데이터팀이 맡았습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에는 캠페인 기획과 실행 경험은 있으나 성과 분석은 데이터팀이 맡았다고 명시되어 있어 성과 분석 경험은 없다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다."], "quotes_in_resume": true, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있어야 한다. 이력서에 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈다고 명시되어 있어 조건을 충족한다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있어야 한다. 이력서에 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했다고 명시되어 있어 조건을 충족한다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 반려동물을 현재 직접 양육 중이어야 한다. 이력서에 반려동물 양육에 관한 내용이 전혀 없으므로 조건을 충족하지 못한다."}], "resume_text": "# 이력서 — 오지안\n\n## 경력 (총 5년 1개월)\n\n### 모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 대리 · 2023.03 ~ 현재\n- 연간·월간 마케팅 전략을 세우고 운영했습니다.\n- 기획팀이 정한 봄 시즌 브랜드 캠페인을 넘겨받아 실행했습니다. 성과 분석은 데이터팀이 맡았습니다.\n- 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다.\n- 자사몰과 오픈마켓의 상품 상세페이지를 기획했습니다.\n- 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다.\n\n### 그린테이블 (식품 커머스) · 마케팅팀 사원 · 2021.09 ~ 2023.02\n- 메타, 네이버, 구글 광고를 운영했습니다.\n- 신제품 론칭 때 정해진 광고 소재를 매체에 올렸습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2021.08)\n\n## 스킬\n- 브랜드 마케팅, 커머스 마케팅, 메타 광고 관리자, 네이버 검색광고, 구글 애널리틱스\n"}, "54762507-resume-5": {"posting_id": "54762507", "resume_id": "54762507-resume-5", "score": 90, "required": {"points": 9, "full": 10, "matched": 4, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "비슷", "points": 1, "quotes": ["경력 (총 2년 6개월)"], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에는 총 경력이 2년 6개월로 명시되어 있어 요구 기간보다 6개월 부족하다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["브랜드마케팅팀", "브랜드 마케팅, 커머스 마케팅"], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에 브랜드 마케팅과 커머스 마케팅 경험 및 관련 스킬이 명확히 적혀 있어 일치한다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에 봄 시즌 브랜드 캠페인을 기획, 실행, 성과 분석까지 직접 맡았다고 명시되어 있어 일치한다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다."], "quotes_in_resume": true, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있어야 한다. 이력서에 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈다고 명시되어 있어 일치한다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있어야 한다. 이력서에 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했다고 명시되어 있어 일치한다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 반려동물을 현재 직접 양육 중인지를 요구한다. 이력서에 반려동물 양육에 관한 내용이 전혀 없으므로 다름이다."}], "resume_text": "# 이력서 — 문채원\n\n## 경력 (총 2년 6개월)\n\n### 모아리빙 (리빙 커머스 브랜드) · 브랜드마케팅팀 사원 · 2024.04 ~ 현재\n- 연간·월간 마케팅 전략을 세우고 운영했습니다.\n- 봄 시즌 브랜드 캠페인을 기획하고, 직접 실행하고, 끝난 뒤 성과 분석까지 맡았습니다.\n- 매출, 광고비, ROAS 지표를 주 단위로 보고 매체별 예산 배분 개선안을 냈습니다.\n- 자사몰과 오픈마켓의 상품 상세페이지를 기획했습니다.\n- 팀장 없이 브랜드 마케팅 실무를 주도적으로 운영했습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2024.02)\n\n## 스킬\n- 브랜드 마케팅, 커머스 마케팅, 메타 광고 관리자, 네이버 검색광고, 구글 애널리틱스\n"}, "54762507-resume-6": {"posting_id": "54762507", "resume_id": "54762507-resume-6", "score": 0, "required": {"points": 0, "full": 10, "matched": 0, "count": 5}, "preferred": null, "judgments": [{"item_id": "54762507-C1", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["반려동물 용품 브랜드 매장에서 6년 동안 판매와 매장 운영을 했습니다."], "quotes_in_resume": true, "thinking": "조건은 관련 업무 경력 3년 이상을 요구한다. 이력서에는 마케팅 관련 업무 경력이 없고, 매장 판매 및 운영 경력 6년이 있으나 마케팅 업무 경력은 없다. 따라서 관련 업무 경력 3년 이상 조건을 충족하지 못한다."}, {"item_id": "54762507-C3", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["본사 마케팅팀이 만든 브랜드 캠페인 포스터와 진열물을 매장에 설치했습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 및 커머스 마케팅에 대한 높은 이해를 요구한다. 이력서에는 마케팅팀이 만든 캠페인 포스터와 진열물을 매장에 설치한 경험만 있고, 직접적인 브랜드 및 커머스 마케팅 이해나 경험은 없다. 따라서 이해도가 높다는 조건을 충족하지 못한다."}, {"item_id": "54762507-C4", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["본사 마케팅팀이 만든 브랜드 캠페인 포스터와 진열물을 매장에 설치했습니다."], "quotes_in_resume": true, "thinking": "조건은 브랜드 캠페인 기획, 실행, 성과 분석 경험을 요구한다. 이력서에는 캠페인 포스터 설치 경험만 있고, 기획, 실행, 성과 분석 경험은 없다."}, {"item_id": "54762507-C5", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["매장 매출 전년 대비 18% 성장."], "quotes_in_resume": true, "thinking": "조건은 매출, 광고비, ROAS 등 주요 지표를 기반으로 개선안을 도출할 수 있는 경험을 요구한다. 이력서에는 매출 성장 수치는 있으나, 광고비나 ROAS 관련 경험이나 개선안 도출 경험은 없다."}, {"item_id": "54762507-C6", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["직원 4명 근무표와 재고를 관리했습니다."], "quotes_in_resume": true, "thinking": "조건은 마케팅 실무를 주도적으로 운영할 수 있는 능력을 요구한다. 이력서에는 매장 운영과 직원 근무표 및 재고 관리 경험은 있으나, 마케팅 실무 주도 경험은 없다."}, {"item_id": "54762507-C2", "group": "참고사항", "mark": "일치", "points": null, "quotes": ["반려견 2마리를 기르고 있습니다."], "quotes_in_resume": true, "thinking": "조건은 반려동물을 현재 직접 양육 중인 사람을 요구한다. 이력서에 반려견 2마리를 기르고 있다고 명확히 적혀 있어 조건을 충족한다."}], "resume_text": "# 성과 중심 이력서 — 배준서\n\n## 한 줄 소개\n반려동물 용품 브랜드 매장에서 6년 동안 판매와 매장 운영을 했습니다.\n\n## 주요 성과\n- 펫마루 강남점 점장 (2022.01 ~ 현재): 매장 매출 전년 대비 18% 성장. 직원 4명 근무표와 재고를 관리했습니다.\n- 본사 마케팅팀이 만든 브랜드 캠페인 포스터와 진열물을 매장에 설치했습니다.\n- 펫마루 잠실점 판매 사원 (2020.10 ~ 2021.12): 월 판매 1위 5회. 고객 상담과 계산을 맡았습니다.\n- 매장 인스타그램 계정에 신상품 사진을 올렸습니다.\n\n## 학력\n- 동원고등학교 졸업 (2020.02)\n\n## 기타\n- 반려견 2마리를 기르고 있습니다.\n"}, "55240017-resume-1": {"posting_id": "55240017", "resume_id": "55240017-resume-1", "score": 100, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한국공인회계사(KICPA) 등록 (2022.09)"], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자임을 요구한다. 이력서 자격란에 '한국공인회계사(KICPA) 등록 (2022.09)'라고 명확히 적혀 있어 일치한다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["새한회계법인 · 감사부문 Senior · 2022.09 ~ 현재"], "quotes_in_resume": true, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서 경력란에 새한회계법인 감사부문 Senior로 2022.09부터 현재(2026.10)까지 약 4년 1개월 경력이 있어 요구 기간 3~5년 내에 해당하므로 일치한다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한빛대학교 경영학과 졸업 (학사, 2021.02)"], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서 학력란에 '한빛대학교 경영학과 졸업 (학사, 2021.02)'라고 명확히 적혀 있어 일치한다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다."], "quotes_in_resume": true, "thinking": "조건은 K-IFRS 상장사 외부감사 경험 중 에너지ㆍ유틸리티 업종을 우대한다. 이력서 경력란에 'K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.'라고 명확히 적혀 있어 일치한다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.", "SAP 사용 경험"], "quotes_in_resume": true, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서 경력란과 스킬란에 '피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.'와 'SAP 사용 경험'이라고 명확히 적혀 있어 일치한다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제로 해외여행에 결격사유가 없는 자임을 참고사항으로 요구한다. 이력서에 군필, 면제, 해외여행 결격사유에 관한 내용이 전혀 없어 다름이다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대를 참고사항으로 요구한다. 이력서에 관련 내용이 전혀 없어 다름이다."}], "resume_text": "# 이력서 — 강민재\n\n## 자격\n- 한국공인회계사(KICPA) 등록 (2022.09)\n\n## 경력 (총 4년 1개월)\n\n### 새한회계법인 · 감사부문 Senior · 2022.09 ~ 현재\n- K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.\n- 별도·연결 재무제표 감사와 종속기업 연결 패키지 검토를 맡았습니다.\n- 피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2021.02)\n\n## 스킬\n- K-IFRS, 연결회계, SAP 사용 경험, 엑셀\n"}, "55240017-resume-2": {"posting_id": "55240017", "resume_id": "55240017-resume-2", "score": 100, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["- 공인회계사 (금융위원회 등록, 한국공인회계사회 정회원, 2022.09)"], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자를 요구한다. 이력서에 공인회계사 면허가 금융위원회 등록, 한국공인회계사회 정회원으로 2022.09에 취득했다고 명시되어 있어 조건과 일치한다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["- 2022.09 ~ 현재, 도원회계법인 Assurance 본부", "- 전력·가스 회사의 재무제표를 4년 동안 감사한 회계사입니다.", "- 코스피에 상장된 가스 공급 회사와 전력 회사의 연간 회계감사 (한국채택국제회계기준 적용, 외부감사인으로 참여)"], "quotes_in_resume": true, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에는 2022.09부터 현재(2026.10)까지 도원회계법인 Assurance 본부에서 근무하며 전력·가스 회사의 연간 회계감사를 4년간 수행했다고 되어 있어 3~5년 경력 조건에 부합한다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["- 서림대학교 회계학 전공, 학사 학위 (2021.02)"], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서에 서림대학교 회계학 전공, 학사 학위(2021.02) 취득이 명시되어 있어 조건과 일치한다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["- 코스피에 상장된 가스 공급 회사와 전력 회사의 연간 회계감사 (한국채택국제회계기준 적용, 외부감사인으로 참여)"], "quotes_in_resume": true, "thinking": "조건은 K-IFRS 상장사 외부감사 경험(에너지ㆍ유틸리티 분야)을 우대한다. 이력서에 코스피 상장 가스 공급 회사와 전력 회사의 외부감사를 수행했고, 한국채택국제회계기준(K-IFRS)을 적용했다고 명시되어 있어 조건과 일치한다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["- 감사 대상 회사의 ERP(SAP FI 모듈)에 접속해 분개와 계정별 원장을 추출"], "quotes_in_resume": true, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 감사 대상 회사의 ERP(SAP FI 모듈)에 접속해 분개와 계정별 원장을 추출했다고 명시되어 있어 SAP 사용 경험이 있음을 보여 조건과 일치한다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제자여야 하며 해외여행 결격사유가 없어야 한다. 이력서에 성별이나 군필 여부, 해외여행 결격사유에 관한 내용이 전혀 없어 판단할 근거가 없다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대 사항이다. 이력서에 이에 관한 내용이 전혀 없어 판단할 근거가 없다."}], "resume_text": "# 성과 중심 이력서 — 서유나\n\n## 한 줄 소개\n전력·가스 회사의 재무제표를 4년 동안 감사한 회계사입니다.\n\n## 주요 프로젝트\n- 2022.09 ~ 현재, 도원회계법인 Assurance 본부\n- 코스피에 상장된 가스 공급 회사와 전력 회사의 연간 회계감사 (한국채택국제회계기준 적용, 외부감사인으로 참여)\n- 자회사 12곳의 연결 보고 자료 점검\n- 감사 대상 회사의 ERP(SAP FI 모듈)에 접속해 분개와 계정별 원장을 추출\n\n## 면허\n- 공인회계사 (금융위원회 등록, 한국공인회계사회 정회원, 2022.09)\n\n## 배운 곳\n- 서림대학교 회계학 전공, 학사 학위 (2021.02)\n"}, "55240017-resume-3": {"posting_id": "55240017", "resume_id": "55240017-resume-3", "score": 70, "required": {"points": 6, "full": 6, "matched": 3, "count": 3}, "preferred": {"points": 0, "full": 4, "matched": 0, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한국공인회계사(KICPA) 등록 (2022.09)"], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자임을 요구한다. 이력서에 '한국공인회계사(KICPA) 등록 (2022.09)'라고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["새한회계법인 감사부문 근무, 2022.09 ~ 현재 (4년 1개월)"], "quotes_in_resume": true, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에 '새한회계법인 감사부문 근무, 2022.09 ~ 현재 (4년 1개월)'라고 적혀 있어 4년 1개월 경력으로 3~5년 범위에 들어 조건과 일치한다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한빛대학교 경영학과 졸업 (학사, 2021.02)"], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서에 '한빛대학교 경영학과 졸업 (학사, 2021.02)'라고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "이력서에 적혀 있지 않음", "points": 0, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 K-IFRS 상장사 외부감사(에너지ㆍ유틸리티) 경험자를 우대한다. 이력서에 관련 경험이나 K-IFRS, 상장사, 에너지ㆍ유틸리티 분야 외부감사 경험에 대한 언급이 전혀 없다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "이력서에 적혀 있지 않음", "points": 0, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 SAP 사용 경험에 대한 언급이 전혀 없다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제, 해외여행 결격사유 없음이다. 이력서에 군필, 면제, 해외여행 결격사유에 대한 언급이 전혀 없다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대 사항이다. 이력서에 국가보훈대상자나 장애인 여부에 대한 언급이 전혀 없다."}], "resume_text": "# 이력서 (요약) — 임태윤\n\n- 한국공인회계사(KICPA) 등록 (2022.09)\n- 새한회계법인 감사부문 근무, 2022.09 ~ 현재 (4년 1개월)\n- 한빛대학교 경영학과 졸업 (학사, 2021.02)\n"}, "55240017-resume-4": {"posting_id": "55240017", "resume_id": "55240017-resume-4", "score": 77, "required": {"points": 4, "full": 6, "matched": 2, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["- 공인회계사 2차 시험 부분 합격 (2022). 한국공인회계사로 등록하지 않았습니다."], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자를 요구한다. 이력서에는 공인회계사 2차 시험 부분 합격은 있으나 한국공인회계사로 등록하지 않았다고 명확히 적혀 있다. 따라서 조건을 충족하지 않는다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["### 새한회계법인 · 감사부문 감사 보조 · 2022.09 ~ 현재"], "quotes_in_resume": true, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에는 새한회계법인 감사부문 감사 보조로 2022.09부터 현재(2026.10)까지 약 4년 1개월 경력이 있어 기간과 분야 모두 조건에 부합한다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["- 한빛대학교 경영학과 졸업 (학사, 2021.02)"], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서에 한빛대학교 경영학과 졸업(학사, 2021.02)으로 명확히 적혀 있어 조건에 부합한다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["- K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다."], "quotes_in_resume": true, "thinking": "조건은 K-IFRS 상장사 외부감사(에너지ㆍ유틸리티) 경험자를 우대한다. 이력서에 K-IFRS를 적용하는 상장사의 외부감사를 수행했고 담당 업종이 에너지·유틸리티(도시가스, 발전)라고 명시되어 있어 조건에 부합한다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["- 피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.", "- K-IFRS, 연결회계, SAP 사용 경험, 엑셀"], "quotes_in_resume": true, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았고, 스킬란에도 SAP 사용 경험이 명시되어 있어 조건에 부합한다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제로 해외여행에 결격사유가 없는 자를 요구한다. 이력서에 군필 또는 면제 여부에 관한 내용이 전혀 없으므로 조건을 충족하지 않는다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대를 참고사항으로 둔다. 이력서에 이에 관한 내용이 전혀 없으므로 조건을 충족하지 않는다."}], "resume_text": "# 이력서 — 노은호\n\n## 자격\n- 공인회계사 2차 시험 부분 합격 (2022). 한국공인회계사로 등록하지 않았습니다.\n\n## 경력 (총 4년 1개월)\n\n### 새한회계법인 · 감사부문 감사 보조 · 2022.09 ~ 현재\n- K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.\n- 별도·연결 재무제표 감사와 종속기업 연결 패키지 검토를 맡았습니다.\n- 피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2021.02)\n\n## 스킬\n- K-IFRS, 연결회계, SAP 사용 경험, 엑셀\n"}, "55240017-resume-5": {"posting_id": "55240017", "resume_id": "55240017-resume-5", "score": 77, "required": {"points": 4, "full": 6, "matched": 2, "count": 3}, "preferred": {"points": 4, "full": 4, "matched": 2, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한국공인회계사(KICPA) 등록 (2024.10)"], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자임을 요구한다. 이력서 자격란에 '한국공인회계사(KICPA) 등록 (2024.10)'라고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["새한회계법인 · 감사부문 Associate · 2024.10 ~ 현재"], "quotes_in_resume": true, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에는 새한회계법인 감사부문에서 2024.10부터 현재(2026.10.11)까지 약 2년 경력만 적혀 있어 요구 기간 3~5년에 미치지 못한다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "일치", "points": 2, "quotes": ["한빛대학교 경영학과 졸업 (학사, 2024.02)"], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력 보유자를 요구한다. 이력서 학력란에 '한빛대학교 경영학과 졸업 (학사, 2024.02)'라고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다."], "quotes_in_resume": true, "thinking": "조건은 K-IFRS 상장사 외부감사 경험 중 에너지ㆍ유틸리티 업종을 우대한다. 이력서 경력란에 'K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.'라고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "일치", "points": 2, "quotes": ["피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.", "K-IFRS, 연결회계, SAP 사용 경험, 엑셀"], "quotes_in_resume": true, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서 경력란에 '피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.'와 스킬란에 'SAP 사용 경험'이 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제로 해외여행에 결격사유가 없는 자임을 참고사항으로 둔다. 이력서에 성별이나 군필 여부, 해외여행 결격사유에 관한 내용이 전혀 없어 판단할 근거가 없다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대를 참고사항으로 둔다. 이력서에 이에 관한 내용이 전혀 없어 판단할 근거가 없다."}], "resume_text": "# 이력서 — 백수아\n\n## 자격\n- 한국공인회계사(KICPA) 등록 (2024.10)\n\n## 경력 (총 2년)\n\n### 새한회계법인 · 감사부문 Associate · 2024.10 ~ 현재\n- K-IFRS를 적용하는 상장사의 외부감사를 수행했습니다. 담당 업종은 에너지·유틸리티(도시가스, 발전)입니다.\n- 별도·연결 재무제표 감사와 종속기업 연결 패키지 검토를 맡았습니다.\n- 피감사 회사의 SAP에서 전표와 원장을 직접 조회해 감사 증거를 모았습니다.\n\n## 학력\n- 한빛대학교 경영학과 졸업 (학사, 2024.02)\n\n## 스킬\n- K-IFRS, 연결회계, SAP 사용 경험, 엑셀\n"}, "55240017-resume-6": {"posting_id": "55240017", "resume_id": "55240017-resume-6", "score": 0, "required": {"points": 0, "full": 6, "matched": 0, "count": 3}, "preferred": {"points": 0, "full": 4, "matched": 0, "count": 2}, "judgments": [{"item_id": "55240017-C1", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["공인회계사 자격은 없습니다."], "quotes_in_resume": true, "thinking": "조건은 한국공인회계사(KICPA) 등록자를 요구한다. 이력서에는 공인회계사 자격이 없다고 명확히 적혀 있다. 따라서 이 조건을 충족하지 못한다."}, {"item_id": "55240017-C2", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["회사에 회계법인이 외부감사를 나오면 요청 자료를 준비해 감사에 대응했습니다.", "회사 비상장사이고 일반기업회계기준을 씁니다."], "quotes_in_resume": false, "thinking": "조건은 회계법인 감사부문 경력 3~5년을 요구한다. 이력서에는 중견 제조 회사 재경팀에서 8년간 회계 실무를 했다고 되어 있으나, 회계법인 감사부문 경력은 없고 회사는 비상장사이며 외부감사 대응 경험만 있다. 따라서 요구하는 경력과는 다르다."}, {"item_id": "55240017-C3", "group": "자격요건", "mark": "다름", "points": 0, "quotes": ["학교는 동원전문대학 세무회계과를 2018년 2월에 졸업했습니다(전문학사)."], "quotes_in_resume": true, "thinking": "조건은 대졸(학사) 이상 학력을 요구한다. 이력서에는 전문대학 세무회계과를 졸업한 전문학사 학위가 있다. 전문학사는 대졸(학사)보다 낮은 학위이므로 조건과 다르다."}, {"item_id": "55240017-C5", "group": "우대사항", "mark": "다름", "points": 0, "quotes": ["회사 비상장사이고 일반기업회계기준을 씁니다."], "quotes_in_resume": false, "thinking": "조건은 K-IFRS 상장사 외부감사(에너지ㆍ유틸리티) 경험을 우대한다. 이력서에는 비상장사에서 일반기업회계기준을 사용했고, 업종도 제조업으로 에너지ㆍ유틸리티가 아니며 K-IFRS 경험도 없다. 따라서 조건과 다르다."}, {"item_id": "55240017-C6", "group": "우대사항", "mark": "근거를 확인하지 못함", "points": 0, "quotes": ["회사에서 쓰는 SAP에 전표를 입력하는 일을 매일 했습니다."], "quotes_in_resume": false, "thinking": "조건은 SAP 사용 유경험자를 우대한다. 이력서에 회사에서 SAP에 전표를 입력하는 일을 매일 했다고 명확히 적혀 있어 조건과 일치한다."}, {"item_id": "55240017-C4", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 남자의 경우 군필 또는 면제자여야 한다. 이력서에 군필 여부나 면제 여부에 대한 언급이 전혀 없다. 따라서 조건 충족 여부를 판단할 근거가 없다."}, {"item_id": "55240017-C7", "group": "참고사항", "mark": "이력서에 적혀 있지 않음", "points": null, "quotes": [], "quotes_in_resume": false, "thinking": "조건은 국가보훈대상자 및 장애인 우대 사항이다. 이력서에 이에 대한 언급이 전혀 없다."}], "resume_text": "# 한 일 소개 — 구본석\n\n저는 8년 동안 중견 제조 회사 \"대명정밀\"의 재경팀에서 회계 실무를 했습니다(2018.10 ~ 현재).\n\n매달 결산을 하고 세금계산서와 전표를 처리했습니다. 회사가 쓰는 SAP에 전표를 입력하는 일을 매일 했습니다. 해마다 회계법인이 외부감사를 나오면 요청 자료를 준비해 감사에 대응했습니다. 회사는 비상장사이고 일반기업회계기준을 씁니다.\n\n자격증은 전산회계 1급과 전산세무 2급이 있습니다. 공인회계사 자격은 없습니다.\n\n학교는 동원전문대학 세무회계과를 2018년 2월에 졸업했습니다(전문학사).\n"}}};
+
+const usePreview = location.protocol === 'file:';
+const previewState = usePreview ? new URLSearchParams(location.search).get('state') : null;
+
+function newTraceId() {
+  return [...crypto.getRandomValues(new Uint8Array(4))].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function logFailure(traceId, path, error) {
+  console.error(JSON.stringify({ ts: new Date().toISOString(), level: 'ERROR', service: 'frontend', trace_id: traceId, event: 'api.failed', path, error }));
+}
+async function request(path, preview) {
+  const traceId = newTraceId();
+  try {
+    if (usePreview) {
+      if (previewState === 'loading') return new Promise(() => {});
+      if (previewState === 'error') throw new Error('preview');
+      const value = preview();
+      if (value === undefined) throw new Error('not_found');
+      return value;
+    }
+    const response = await fetch(path, { headers: { 'X-Trace-Id': traceId } });
+    if (!response.ok) throw new Error('status ' + response.status);
+    return await response.json();
+  } catch (e) {
+    logFailure(traceId, path, e.message);
+    throw e;
+  }
+}
+const api = {
+  postings: () => request('/api/postings', () => ({ postings: previewState === 'empty' ? [] : PREVIEW.postings })),
+  posting: id => request(`/api/postings/${encodeURIComponent(id)}`, () => {
+    const p = PREVIEW.posting[id];
+    return p && previewState === 'no-resume' ? { ...p, ranking: [] } : p;
+  }),
+  resumeMatch: rid => request(`/api/resumes/${encodeURIComponent(rid)}`, () => PREVIEW.match[rid]),
+};
+
+const SCORED = ['자격요건', '우대사항'];
+const BADGE = { '일치': 'badge-match', '비슷': 'badge-similar', '다름': 'badge-different',
+                '이력서에 적혀 있지 않음': 'badge-neutral', '근거를 확인하지 못함': 'badge-unverified' };
+const SHORT = { '일치': '일치', '비슷': '비슷', '다름': '다름', '이력서에 적혀 있지 않음': '없음', '근거를 확인하지 못함': '미확인' };
+const HIGHLIGHT = { '일치': 'hl-match', '비슷': 'hl-similar', '다름': 'hl-different' };
+const LEGEND = [['일치', '조건을 그대로 채웠어요. 2점이에요.'], ['비슷', '가깝지만 그대로는 아니에요. 1점이에요.'], ['다름', '채우지 못했어요. 0점이에요.'],
+  ['이력서에 적혀 있지 않음', '이력서에서 근거로 낼 구절을 찾지 못했어요. 0점이에요.'],
+  ['근거를 확인하지 못함', '근거로 낸 구절이 이력서에 없어서 판정을 믿지 않아요. 0점이에요.']];
+
+const view = { postings: null, current: null, posting: null, opened: null, match: null, picked: null,
+               showLegend: false, showCalc: false, showReference: false, reasons: new Set() };
+
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') node.className = v;
+    else if (k === 'on') for (const [e, f] of Object.entries(v)) node.addEventListener(e, f);
+    else node.setAttribute(k, v);
+  }
+  for (const c of children) if (c !== null && c !== undefined) node.append(c instanceof Node ? c : document.createTextNode(c));
+  return node;
+}
+function pressable(node, fn) {
+  node.tabIndex = 0;
+  node.setAttribute('role', 'button');
+  node.addEventListener('click', fn);
+  node.addEventListener('keydown', e => { if (e.target === node && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); fn(); } });
+  return node;
+}
+const toggle = (key, label, hideLabel) => el('button', { class: 'text-button', 'aria-expanded': String(view[key]), on: { click: () => { view[key] = !view[key]; render(); } } }, view[key] ? hideLabel : label);
+const badge = (mark, text) => el('span', { class: 'badge ' + BADGE[mark] }, text === undefined ? mark : text);
+
+const loading = () => el('div', { class: 'state', role: 'status', 'aria-label': '불러오는 중' }, el('span', { class: 'loader' }, el('span'), el('span'), el('span')));
+const failed = retry => el('div', { class: 'state' }, el('p', { class: 'title-2' }, '불러오지 못했어요'),
+  el('p', { class: 'secondary' }, '잠시 뒤에 다시 불러올 수 있어요.'), el('button', { class: 'button-secondary', on: { click: retry } }, '다시 불러오기'));
+
+async function load(key, fetcher, stillWanted) {
+  view[key] = 'loading'; render();
+  try { const value = await fetcher(); if (stillWanted()) { view[key] = value; render(); } }
+  catch (e) { if (stillWanted()) { view[key] = e; render(); } }
+}
+const loadPostings = () => load('postings', async () => {
+  const list = (await api.postings()).postings;
+  if (list.length && view.current === null) selectPosting(list[0].posting_id);
+  return list;
+}, () => true);
+function selectPosting(id) {
+  Object.assign(view, { current: id, opened: null, match: null, picked: null, showCalc: false, showReference: false, reasons: new Set() });
+  load('posting', () => api.posting(id), () => view.current === id);
+}
+function toggleResume(rid) {
+  const open = view.opened !== rid;
+  Object.assign(view, { opened: open ? rid : null, match: null, picked: null, showCalc: false, showReference: false, reasons: new Set() });
+  if (open) load('match', () => api.resumeMatch(rid), () => view.opened === rid);
+  else render();
+}
+
+function conditionIndex(p) {
+  const index = {};
+  for (const g of Object.keys(p.conditions)) for (const c of p.conditions[g]) index[c.item_id] = { ...c, group: g };
+  return index;
+}
+
+function renderTabs() {
+  const tabs = el('div', { class: 'tabs', role: 'tablist', 'aria-label': '공고' });
+  for (const p of view.postings) tabs.append(el('button', { class: 'tab', role: 'tab', 'aria-selected': String(p.posting_id === view.current),
+    on: { click: () => selectPosting(p.posting_id) } }, p.title));
+  return tabs;
+}
+
+function renderHero(p) {
+  const header = el('header', { class: 'hero' }, el('h1', { class: 'display-2' }, p.job));
+  if (p.duties.length) {
+    const duties = el('ul', { class: 'duties', 'aria-label': '담당업무' }, el('li', { class: 'label-s tertiary' }, '담당업무'));
+    for (const d of p.duties) duties.append(el('li', { class: 'chip' }, d.text));
+    header.append(duties);
+  }
+  return header;
+}
+
+function conditionGroup(name, items, note, excluded) {
+  const list = el('ul');
+  if (!items.length) list.append(el('li', { class: 'plain tertiary' }, '공고에 없어요'));
+  for (const it of items) {
+    const text = el('span', it.in_reading === false ? { class: 'secondary' } : {}, it.text);
+    if (it.in_reading === false) text.append(el('span', { class: 'body-3 tertiary' }, '  공고에서 확인하지 못했어요'));
+    list.append(el('li', {}, el('span', { class: 'no' }, it.no), text));
+  }
+  return el('div', { class: 'condition-group' + (excluded ? ' excluded' : '') },
+    el('div', { class: 'head' }, el('h3', { class: 'title-2' }, name), el('span', { class: 'body-3 tertiary' }, note)), list);
+}
+
+function renderConditions(p) {
+  const required = p.conditions['자격요건'], preferred = p.conditions['우대사항'];
+  const share = (items, other, part) => items.length ? `${items.length}개, 점수의 ${other.length ? part : 100}%` : '점수에 들어가지 않아요';
+  return el('section', { class: 'section' },
+    el('div', { class: 'section-head' }, el('h2', { class: 'h4' }, '비교한 조건')),
+    el('div', { class: 'conditions' },
+      conditionGroup('자격요건', required, share(required, preferred, 70)),
+      conditionGroup('우대사항', preferred, share(preferred, required, 30)),
+      conditionGroup('참고사항', p.conditions['참고사항'], '보여 주기만 하고 점수에 넣지 않아요', true)),
+    el('p', { class: 'body-3 tertiary section-note' }, '점수는 이 공고가 적은 조건을 이력서에서 확인한 정도예요. 같은 공고의 지원자끼리만 비교해요.'));
+}
+
+function renderLegend() {
+  const list = el('ul');
+  for (const [mark, meaning] of LEGEND) list.append(el('li', {}, el('span', {}, badge(mark)), el('span', { class: 'body-3 secondary' }, meaning)));
+  return el('div', { class: 'card legend' }, list);
+}
+
+function renderVerdicts(p, r) {
+  const index = conditionIndex(p);
+  const box = el('div', { class: 'verdicts' });
+  for (const g of SCORED) {
+    const marks = r.verdicts.filter(v => index[v.item_id] && index[v.item_id].group === g);
+    if (!marks.length) continue;
+    const group = el('div', { class: 'verdict-group' }, el('span', { class: 'body-3 tertiary' }, g));
+    for (const v of marks) {
+      const c = index[v.item_id];
+      const b = badge(v.mark, '');
+      b.append(el('span', { class: 'no' }, c.no), SHORT[v.mark]);
+      b.title = `${c.text}: ${v.mark}`;
+      group.append(b);
+    }
+    box.append(group);
+  }
+  return box;
+}
+
+function renderRanking(p) {
+  const section = el('section', { class: 'section' },
+    el('div', { class: 'section-head' }, el('h2', { class: 'h4' }, p.ranking.length ? `지원자 ${p.ranking.length}명의 랭킹` : '랭킹'),
+      p.ranking.length ? toggle('showLegend', '판정 표시 설명 보기', '판정 표시 설명 접기') : null));
+  if (!p.ranking.length) { section.append(el('div', { class: 'card state' }, el('p', { class: 'title-2' }, '비교한 이력서가 아직 없어요'), el('p', { class: 'secondary' }, '이력서를 넣고 다시 실행하면 여기에 랭킹이 나와요.'))); return section; }
+  if (view.showLegend) section.append(renderLegend());
+  const board = el('ul', { class: 'board' });
+  for (const r of p.ranking) {
+    const open = view.opened === r.resume_id;
+    const head = el('div', { class: 'row-head', 'aria-expanded': String(open), 'aria-label': `${r.rank}위 ${r.resume_id}, ${r.score}점. 근거 ${open ? '접기' : '보기'}` },
+      el('span', { class: 'rank' + (r.rank === 1 ? ' first' : '') }, String(r.rank)),
+      el('span', { class: 'title-2' }, r.resume_id),
+      renderVerdicts(p, r),
+      el('div', { class: 'score-box' }, el('span', { class: 'score' }, String(r.score)), el('div', { class: 'progress', 'aria-hidden': 'true' }, el('span', { style: `width:${r.score}%` }))),
+      el('span', { class: 'button-secondary', 'aria-hidden': 'true' }, open ? '접기' : '근거 보기'));
+    const li = el('li', { class: 'board-row' + (open ? ' open' : '') }, pressable(head, () => toggleResume(r.resume_id)));
+    if (open) li.append(renderDetail(p));
+    board.append(li);
+  }
+  section.append(board);
+  return section;
+}
+
+function renderDetail(p) {
+  const m = view.match;
+  if (m === 'loading' || m === null) return loading();
+  if (m instanceof Error) return failed(() => { const rid = view.opened; view.opened = null; toggleResume(rid); });
+  return el('div', { class: 'detail' }, el('div', {}, renderCalc(m), ...renderEvidence(p, m)), renderResume(m));
+}
+
+function renderCalc(m) {
+  const r = m.required, q = m.preferred;
+  const part = (name, g) => g ? `${name} ${g.count}개 중 ${g.matched}개 일치` : null;
+  const frac = g => `(${g.points}/${g.full})`;
+  const formula = r && q ? `70 × ${frac(r)} + 30 × ${frac(q)} = ${m.score}` : `100 × ${frac(r || q)} = ${m.score}`;
+  const note = r && q ? '자격요건이 70, 우대사항이 30이에요. 판정마다 일치 2점, 비슷 1점, 다름 0점으로 세요.'
+    : `${r ? '우대사항' : '자격요건'}이 없는 공고라 ${r ? '자격요건' : '우대사항'}이 100이에요. 판정마다 일치 2점, 비슷 1점, 다름 0점으로 세요.`;
+  const box = el('div', { class: 'calc' }, el('span', { class: 'title-2' }, [part('자격요건', r), part('우대사항', q)].filter(Boolean).join(', ')),
+    toggle('showCalc', '점수 계산 보기', '점수 계산 접기'));
+  if (view.showCalc) box.append(el('div', { class: 'formula' }, el('p', { class: 'title-2 tnum' }, formula), el('p', { class: 'body-3 secondary' }, note)));
+  return box;
+}
+
+function renderEvidenceItem(index, j) {
+  const c = index[j.item_id] || { no: '', text: '' };
+  const body = el('div', { class: 'evidence-body' });
+  for (const q of j.quotes) {
+    if (j.quotes_in_resume) {
+      const pressed = view.picked === j.item_id;
+      body.append(el('button', { class: 'quote-block', 'aria-pressed': String(pressed), 'aria-label': `${c.no} 근거를 이력서에서 보기`,
+        on: { click: () => { view.picked = pressed ? null : j.item_id; render(); } } }, q,
+        el('span', { class: 'quote-hint label-s' }, pressed ? '이력서에 표시했어요' : '이력서에서 보기')));
+    } else body.append(el('div', { class: 'quote-block plain' }, q));
+  }
+  if (j.thinking) {
+    const shown = view.reasons.has(j.item_id);
+    body.append(el('button', { class: 'text-button', 'aria-expanded': String(shown), on: { click: () => { shown ? view.reasons.delete(j.item_id) : view.reasons.add(j.item_id); render(); } } },
+      shown ? '판정한 이유 접기' : '판정한 이유 보기'));
+    if (shown) body.append(el('p', { class: 'reason body-3' }, j.thinking));
+  }
+  return el('li', { class: 'evidence-item' },
+    el('div', { class: 'top' }, el('span', { class: 'no' }, c.no), el('span', { class: 'text' }, c.text), badge(j.mark)), body);
+}
+
+function renderEvidence(p, m) {
+  const index = conditionIndex(p);
+  const group = g => {
+    const rows = m.judgments.filter(j => j.group === g);
+    if (!rows.length) return null;
+    const list = el('ul');
+    for (const j of rows) list.append(renderEvidenceItem(index, j));
+    return el('div', { class: 'evidence-group' }, el('div', { class: 'head' }, el('h3', { class: 'label-s tertiary' }, g)), list);
+  };
+  const out = SCORED.map(group).filter(Boolean);
+  if (m.judgments.some(j => j.group === '참고사항')) {
+    out.push(el('div', { style: 'margin-top:24px' }, toggle('showReference', '참고사항의 판정 보기', '참고사항의 판정 접기')));
+    if (view.showReference) out.push(group('참고사항'));
+  }
+  return out;
+}
+
+function findRanges(text, quotes) {
+  const skip = /[\s#*`\-]/;
+  let squeezed = '';
+  const at = [];
+  for (let i = 0; i < text.length; i++) if (!skip.test(text[i])) { squeezed += text[i]; at.push(i); }
+  const ranges = [];
+  for (const q of quotes) {
+    const needle = [...q].filter(c => !skip.test(c)).join('');
+    const found = needle ? squeezed.indexOf(needle) : -1;
+    if (found >= 0) ranges.push([at[found], at[found + needle.length - 1] + 1]);
+  }
+  return ranges.sort((a, b) => a[0] - b[0]);
+}
+function renderResume(m) {
+  const pre = el('pre', { class: 'resume', tabindex: '0', 'aria-label': '이력서 원문' });
+  const j = m.judgments.find(x => x.item_id === view.picked);
+  let pos = 0;
+  for (const [start, end] of j ? findRanges(m.resume_text, j.quotes) : []) {
+    if (start < pos) continue;
+    pre.append(m.resume_text.slice(pos, start), el('mark', { class: 'quote-highlight ' + (HIGHLIGHT[j.mark] || 'hl-different') }, m.resume_text.slice(start, end)));
+    pos = end;
+  }
+  pre.append(m.resume_text.slice(pos));
+  const hint = j ? el('p', { class: 'body-3 secondary' }, badge(j.mark), ' 판정의 근거를 표시했어요.') : el('p', { class: 'body-3 tertiary' }, '왼쪽에서 근거를 누르면 여기에 표시해요.');
+  return el('div', { class: 'resume-pane' }, el('h3', { class: 'title-2' }, '이력서 원문'), hint, pre);
+}
+
+function render() {
+  const app = document.getElementById('app');
+  const focusKey = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('aria-label');
+  app.replaceChildren();
+  if (view.postings === 'loading' || view.postings === null) { app.append(loading()); return; }
+  if (view.postings instanceof Error) { app.append(failed(loadPostings)); return; }
+  if (!view.postings.length) {
+    app.append(el('div', { class: 'card state' }, el('p', { class: 'title-2' }, '넘겨받은 공고가 아직 없어요'), el('p', { class: 'secondary' }, '공고를 수집하는 프로그램의 실행 로그에서 이유를 볼 수 있어요.')));
+    return;
+  }
+  app.append(renderTabs());
+  const p = view.posting;
+  if (p === 'loading' || p === null) app.append(loading());
+  else if (p instanceof Error) app.append(failed(() => selectPosting(view.current)));
+  else app.append(renderHero(p), renderConditions(p), renderRanking(p));
+  if (focusKey) { const again = [...app.querySelectorAll('[aria-label]')].find(n => n.getAttribute('aria-label') === focusKey); if (again) again.focus({ preventScroll: true }); }
+  const hit = app.querySelector('.quote-highlight');
+  if (hit) { const box = hit.closest('.resume'); box.scrollTop = Math.max(0, hit.offsetTop - box.offsetTop - 48); }
+}
+loadPostings();
+</script>
+</body>
+</html>
