@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>브랜딩</title>
+<style>
+  :root {
+    --blue-500: #3182f6; --blue-600: #1b64da; --blue-50: #e8f3ff;
+    --grey-900: #191f28; --grey-800: #333d4b; --grey-700: #4e5968; --grey-600: #6b7684; --grey-500: #8b95a1; --grey-400: #b0b8c1;
+    --grey-300: #d1d6db; --grey-200: #e5e8eb; --grey-100: #f2f4f6; --grey-50: #f9fafb; --white: #ffffff;
+    --fill-brand: var(--blue-500); --fill-primary: var(--grey-900); --fill-secondary: var(--grey-100);
+    --text-primary: var(--grey-900); --text-secondary: var(--grey-700); --text-tertiary: var(--grey-600); --text-brand: var(--blue-600);
+    --border-secondary: var(--grey-200);
+    --verdict-match: #007738; --verdict-match-weak: #dcf9e4;
+    --verdict-similar: #9f5100; --verdict-similar-weak: #ffecd0;
+    --verdict-different: #c2152f; --verdict-different-weak: #ffe1e1;
+    --radius-m: 12px; --radius-xl: 16px; --radius-3xl: 24px; --radius-full: 999px;
+    --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 24px 96px; background: var(--fill-secondary); color: var(--text-primary); font: 400 15px/1.5 var(--font); letter-spacing: -0.005em; }
+  main { max-width: 1120px; margin: 0 auto; }
+  h1, h2, h3, p, ul { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; color: var(--text-secondary); }
+  .display-2 { font: 700 40px/1.2 var(--font); letter-spacing: -0.02em; }
+  .h4 { font: 700 20px/1.35 var(--font); letter-spacing: -0.015em; }
+  .title-2 { font: 600 17px/1.45 var(--font); letter-spacing: -0.01em; }
+  .body-1 { font: 400 17px/1.5 var(--font); }
+  .body-3 { font: 400 13px/1.5 var(--font); letter-spacing: 0; }
+  .label-m { font: 600 15px/1.25 var(--font); }
+  .label-s { font: 600 13px/1.25 var(--font); letter-spacing: 0; }
+  .caption { font: 500 12px/1.4 var(--font); letter-spacing: 0; }
+  .score { font: 700 28px/1.3 var(--font); letter-spacing: -0.02em; font-feature-settings: "tnum"; }
+  .secondary { color: var(--text-secondary); }
+  .tertiary { color: var(--text-tertiary); }
+
+  .hero { padding: 48px 0 0; }
+  .hero p { margin-top: 12px; max-width: 62ch; }
+  section { margin-top: 48px; }
+  section > h2 { margin-bottom: 16px; }
+  .card { background: var(--white); border-radius: var(--radius-3xl); padding: 32px; }
+  .card + .card { margin-top: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+  .swatch { height: 64px; border-radius: var(--radius-m); border: 1px solid var(--border-secondary); margin-bottom: 8px; }
+  .row { display: grid; grid-template-columns: 180px minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--border-secondary); }
+  .row:first-child { border-top: 0; padding-top: 0; }
+  .row:last-child { padding-bottom: 0; }
+  .bar { display: inline-block; height: 12px; border-radius: 2px; background: var(--fill-primary); vertical-align: middle; }
+  .shape { display: inline-block; width: 72px; height: 40px; background: var(--fill-secondary); border: 1px solid var(--border-secondary); vertical-align: middle; }
+
+  .tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--border-secondary); }
+  .tab { font: 600 17px/1.45 var(--font); color: var(--text-tertiary); padding: 12px 0; border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .tab.selected { color: var(--text-primary); border-bottom-color: var(--fill-brand); }
+  .chip { display: inline-flex; align-items: center; min-height: 34px; padding: 4px 16px; border-radius: var(--radius-full); background: var(--white); border: 1px solid var(--border-secondary); color: var(--text-secondary); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 6px; border-radius: 6px; font: 600 13px/1.25 var(--font); white-space: nowrap; }
+  .badge-match { color: var(--verdict-match); background: var(--verdict-match-weak); }
+  .badge-similar { color: var(--verdict-similar); background: var(--verdict-similar-weak); }
+  .badge-different { color: var(--verdict-different); background: var(--verdict-different-weak); }
+  .badge-neutral { color: var(--text-secondary); background: var(--fill-secondary); }
+  .badge-unverified { color: var(--text-secondary); border: 1px dashed var(--grey-400); }
+  .button-secondary { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 10px; background: var(--fill-secondary); font: 600 13px/1.25 var(--font); }
+  .text-button { font: 600 13px/1.25 var(--font); color: var(--text-brand); }
+  .board-row { display: grid; grid-template-columns: 32px 150px minmax(0, 1fr) 168px auto; align-items: center; gap: 16px; padding: 20px 24px; background: var(--white); border-radius: var(--radius-xl); border: 1.5px solid var(--border-secondary); }
+  .board-row.open { border-color: var(--fill-brand); }
+  .board-row + .board-row { margin-top: 12px; }
+  .rank { font: 700 20px/1.35 var(--font); color: var(--text-tertiary); }
+  .score-box { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .score-box .score { text-align: right; }
+  .progress { height: 6px; border-radius: var(--radius-full); background: var(--grey-200); overflow: hidden; }
+  .progress > span { display: block; height: 100%; border-radius: var(--radius-full); background: var(--fill-primary); }
+  .quote-block { padding: 12px 16px; border-radius: var(--radius-m); background: var(--fill-secondary); }
+  .resume { padding: 24px; border-radius: var(--radius-xl); background: var(--fill-secondary); white-space: pre-wrap; margin: 0; font: 400 15px/1.7 var(--font); }
+  .hl-match { background: var(--verdict-match-weak); border-radius: 4px; padding: 2px 0; }
+  .hl-similar { background: var(--verdict-similar-weak); border-radius: 4px; padding: 2px 0; }
+  .loader { display: inline-flex; gap: 6px; }
+  .loader > span { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--grey-400); }
+  .dont { text-decoration: line-through; color: var(--text-tertiary); }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .two .card + .card { margin-top: 0; }
+  @media (max-width: 800px) { .row, .two, .board-row { grid-template-columns: 1fr; } .display-2 { font-size: 28px; } .card { padding: 24px; } }
+</style>
+</head>
+<body>
+<main>
+
+<header class="hero">
+  <h1 class="display-2">브랜딩</h1>
+  <p class="body-1 secondary">토스의 design.md(TDS)의 시각 언어를 가져와 이 서비스에 맞춘 것이에요. 값의 기준은 <code>branding.md</code>이고, 이 문서는 그 값을 눈으로 보기 위한 것이에요.</p>
+  <p class="body-3 tertiary">가져온 것은 색, 글자, 여백, 모서리, 움직임, 말투예요. 토스의 금융 화면, 로고, 이름은 가져오지 않아요.</p>
+</header>
+
+<section>
+  <h2 class="h4">Overview</h2>
+  <div class="card">
+    <ul>
+      <li class="row"><span class="title-2">근거가 보이는 도구</span><span class="secondary" style="grid-column: span 2">화면에서 가장 먼저 눈에 들어오는 것이 점수가 아니라 판정과 근거예요.</span></li>
+      <li class="row"><span class="title-2">정하는 사람은 채용 담당자</span><span class="secondary" style="grid-column: span 2">서비스는 판정과 근거를 내놓고, 채용 담당자가 이력서 원문과 나란히 보고 판단해요.</span></li>
+      <li class="row"><span class="title-2">필요한 정보가 먼저</span><span class="secondary" style="grid-column: span 2">판단에 필요한 것을 먼저 보이고, 그렇지 않은 것은 눌러야 보이게 해요.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2 class="h4">Colors</h2>
+  <div class="card">
+    <p class="title-2">파랑은 하나뿐인 강조색이에요</p>
+    <p class="body-3 secondary" style="margin: 4px 0 20px">지금 고른 것과 누를 수 있는 것에만 써요. 글자로 쓸 때는 한 단계 어두운 값을 써요.</p>
+    <div class="grid">
+      <div><div class="swatch" style="background:#3182f6"></div><p class="label-s">fill-brand</p><code>#3182f6</code></div>
+      <div><div class="swatch" style="background:#1b64da"></div><p class="label-s">text-brand</p><code>#1b64da</code></div>
+      <div><div class="swatch" style="background:#e8f3ff"></div><p class="label-s">fill-brand-weak</p><code>#e8f3ff</code></div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="title-2">회색은 차가운 파랑 기운이 도는 중성색이에요</p>
+    <p class="body-3 secondary" style="margin: 4px 0 20px">글자는 순수한 검정이 아니라 grey-900이에요.</p>
+    <div class="grid">
+      <div><div class="swatch" style="background:#191f28"></div><p class="label-s">grey-900</p><code>#191f28</code><p class="caption tertiary">text-primary</p></div>
+      <div><div class="swatch" style="background:#4e5968"></div><p class="label-s">grey-700</p><code>#4e5968</code><p class="caption tertiary">text-secondary</p></div>
+      <div><div class="swatch" style="background:#6b7684"></div><p class="label-s">grey-600</p><code>#6b7684</code><p class="caption tertiary">text-tertiary</p></div>
+      <div><div class="swatch" style="background:#b0b8c1"></div><p class="label-s">grey-400</p><code>#b0b8c1</code></div>
+      <div><div class="swatch" style="background:#e5e8eb"></div><p class="label-s">grey-200</p><code>#e5e8eb</code><p class="caption tertiary">border-secondary</p></div>
+      <div><div class="swatch" style="background:#f2f4f6"></div><p class="label-s">grey-100</p><code>#f2f4f6</code><p class="caption tertiary">fill-secondary</p></div>
+      <div><div class="swatch" style="background:#ffffff"></div><p class="label-s">white</p><code>#ffffff</code></div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="title-2">판정의 색은 판정에만 써요</p>
+    <p class="body-3 secondary" style="margin: 4px 0 20px">이 서비스가 더한 것이에요. 옅은 바탕 위에서 글자의 대비가 4.5를 넘어요.</p>
+    <ul>
+      <li class="row"><span><span class="badge badge-match">일치</span></span><span><code>#007738</code> 글자, <code>#dcf9e4</code> 바탕</span><span class="body-3 secondary">대비 5.06. 토스의 green-500이에요.</span></li>
+      <li class="row"><span><span class="badge badge-similar">비슷</span></span><span><code>#9f5100</code> 글자, <code>#ffecd0</code> 바탕</span><span class="body-3 secondary">대비 4.97. 토스의 orange-500은 대비가 2.07이라 어둡게 했어요.</span></li>
+      <li class="row"><span><span class="badge badge-different">다름</span></span><span><code>#c2152f</code> 글자, <code>#ffe1e1</code> 바탕</span><span class="body-3 secondary">대비 4.97. 토스의 red-500은 대비가 3.03이라 어둡게 했어요.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2 class="h4">Typography</h2>
+  <div class="card">
+    <ul>
+      <li class="row"><code>display-2</code><span class="display-2">회계부문 경력사원</span><span class="body-3 secondary">40px, 700. 직무의 이름</span></li>
+      <li class="row"><code>h4</code><span class="h4">비교한 조건</span><span class="body-3 secondary">20px, 700. 구역의 이름</span></li>
+      <li class="row"><code>title-2</code><span class="title-2">자격요건</span><span class="body-3 secondary">17px, 600. 카드의 제목, 지원자, 탭</span></li>
+      <li class="row"><code>body-2</code><span>회계법인 감사부문 경력 3~5년</span><span class="body-3 secondary">15px, 400, 줄 높이 1.5. 본문</span></li>
+      <li class="row"><code>body-3</code><span class="body-3 secondary">점수는 이 공고가 적은 조건을 이력서에서 확인한 정도예요.</span><span class="body-3 secondary">13px, 400. 설명</span></li>
+      <li class="row"><code>label-s</code><span class="label-s">근거 보기</span><span class="body-3 secondary">13px, 600. 버튼과 판정 표시</span></li>
+      <li class="row"><code>score</code><span class="score">77</span><span class="body-3 secondary">28px, 700, 폭이 같은 숫자. 이 서비스가 더한 것이에요</span></li>
+    </ul>
+    <p class="body-3 tertiary" style="margin-top: 20px">글꼴은 Pretendard 하나예요. 글꼴 파일을 불러오지 않아서, 없는 컴퓨터에서는 시스템 글꼴로 보여요.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="h4">Layout, Shapes</h2>
+  <div class="two">
+    <div class="card">
+      <ul>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>space-2</code><span><span class="bar" style="width:8px"></span></span><span class="body-3 secondary">8px. 붙어 있는 요소 사이</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>space-4</code><span><span class="bar" style="width:16px"></span></span><span class="body-3 secondary">16px. 줄과 줄 사이</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>space-6</code><span><span class="bar" style="width:24px"></span></span><span class="body-3 secondary">24px. 화면의 바깥 여백</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>space-12</code><span><span class="bar" style="width:48px"></span></span><span class="body-3 secondary">48px. 구역 사이</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <ul>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>6px</code><span><span class="shape" style="border-radius:6px"></span></span><span class="body-3 secondary">판정 표시</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>radius-m</code><span><span class="shape" style="border-radius:12px"></span></span><span class="body-3 secondary">12px. 인용 상자</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>radius-xl</code><span><span class="shape" style="border-radius:16px"></span></span><span class="body-3 secondary">16px. 랭킹의 줄</span></li>
+        <li class="row" style="grid-template-columns: 90px 90px 1fr"><code>radius-3xl</code><span><span class="shape" style="border-radius:24px"></span></span><span class="body-3 secondary">24px. 큰 카드</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body-3 tertiary" style="margin-top: 12px">평면이 기본이에요. 카드는 그림자가 아니라 회색 바탕 위의 흰색으로 구분해요. 움직임은 120ms, 200ms, 320ms 안에서만 써요.</p>
+</section>
+
+<section>
+  <h2 class="h4">Components</h2>
+  <div class="card">
+    <ul>
+      <li class="row"><code>top-app-bar</code><span style="grid-column: span 2"><span style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 24px;border:1px solid var(--border-secondary);background:var(--white)"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#191f28"/><path d="M8 9.5h7M8 14h4.5M8 18.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M15.5 16.5l2.2 2.2 3.8-4.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label-m" style="display:flex;align-items:center;height:100%;border-bottom:2.5px solid var(--fill-brand);border-top:2.5px solid transparent">채용공고 매칭</span></span></span></li>
+      <li class="row"><code>tab, tab-selected</code><span style="grid-column: span 2; display:flex; flex-wrap:wrap; gap:8px"><span class="chip label-m" style="background:var(--fill-primary);border-color:var(--fill-primary);color:#fff">고른 공고</span><span class="chip label-m">다른 공고</span></span></li>
+      <li class="row"><code>chip</code><span style="grid-column: span 2"><span class="chip">별도 · 연결 재무제표 작성</span> <span class="chip">외부감사 대응</span></span></li>
+      <li class="row"><code>badge</code><span style="grid-column: span 2; display:flex; flex-wrap:wrap; gap:8px"><span class="badge badge-match">일치</span><span class="badge badge-similar">비슷</span><span class="badge badge-different">다름</span><span class="badge badge-neutral">이력서에 적혀 있지 않음</span><span class="badge badge-unverified">근거를 확인하지 못함</span></span></li>
+      <li class="row"><code>button-secondary, text-button</code><span style="grid-column: span 2; display:flex; align-items:center; gap:16px"><span class="button-secondary">근거 보기</span><span class="text-button">판정한 이유 보기</span></span></li>
+      <li class="row"><code>progress-bar</code><span style="grid-column: span 2; max-width: 240px"><span class="score-box"><span class="score">77</span><span class="progress"><span style="width:77%"></span></span></span></span></li>
+      <li class="row"><code>quote-block</code><span style="grid-column: span 2"><div class="quote-block">새한회계법인 · 감사부문 Senior · 2022.09 ~ 현재<br><span class="label-s" style="color: var(--text-brand)">이력서에서 보기</span></div></span></li>
+      <li class="row"><code>loader</code><span style="grid-column: span 2"><span class="loader"><span style="opacity:.3"></span><span style="opacity:1"></span><span style="opacity:.6"></span></span></span></li>
+    </ul>
+  </div>
+  <div class="card" style="background: transparent; padding: 0; margin-top: 12px">
+    <div class="board-row"><span class="rank" style="color: var(--text-primary)">1</span><span class="title-2">지원자 A</span><span style="display:flex;flex-wrap:wrap;gap:4px"><span class="badge badge-match">C1 일치</span><span class="badge badge-match">C2 일치</span><span class="badge badge-similar">C3 비슷</span></span><span class="score-box"><span class="score">88</span><span class="progress"><span style="width:88%"></span></span></span><span class="button-secondary">근거 보기</span></div>
+    <div class="board-row open"><span class="rank">2</span><span class="title-2">지원자 B</span><span style="display:flex;flex-wrap:wrap;gap:4px"><span class="badge badge-different">C1 다름</span><span class="badge badge-match">C2 일치</span><span class="badge badge-neutral">C3 없음</span></span><span class="score-box"><span class="score">70</span><span class="progress"><span style="width:70%"></span></span></span><span class="button-secondary">접기</span></div>
+  </div>
+  <div class="card">
+    <p class="title-2">이력서 원문과 고른 구절</p>
+    <p class="body-3 secondary" style="margin: 4px 0 16px">고른 구절은 그 조건의 판정의 색으로 칠해요.</p>
+<pre class="resume"># 이력서
+
+## 경력
+### 새한회계법인 · <span class="hl-match">감사부문 Senior · 2022.09 ~ 현재</span>
+- <span class="hl-similar">K-IFRS를 적용하는 상장사의 외부감사</span>를 수행했습니다.</pre>
+  </div>
+</section>
+
+<section>
+  <h2 class="h4">Do's and Don'ts</h2>
+  <div class="card">
+    <ul>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span class="label-s tertiary">이렇게 해요</span><span class="label-s tertiary">이렇게 하지 않아요</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span><span class="badge badge-match">일치</span> 색과 글자를 함께 써요</span><span><span class="swatch" style="display:inline-block;width:22px;height:22px;margin:0;vertical-align:middle;background:#dcf9e4;border-radius:6px"></span> 색만으로 구분해요</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span><span class="badge badge-neutral">이력서에 적혀 있지 않음</span></span><span><span class="badge badge-different">이력서에 적혀 있지 않음</span> 다름과 같은 색으로 칠해요</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span><span class="score">88</span> 점수는 색으로 칠하지 않아요</span><span><span class="score" style="color:#007738">88</span> 점수를 색으로 칠해요</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span>"자격요건 3개 중 2개가 일치해요"</span><span class="dont">"우수한 지원자예요"</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span>"비슷으로 판정했어요"</span><span class="dont">"합격권", "추천"</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span>"이 공고가 적은 조건을 이력서에서 확인한 정도예요"</span><span class="dont">"적합도", "매칭률"</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span>"근거 보기", "다시 불러오기"</span><span class="dont">"여기를 눌러주세요", "확인"</span></li>
+      <li class="row" style="grid-template-columns: 1fr 1fr"><span>"불러오지 못했어요. 잠시 뒤에 다시 불러올 수 있어요."</span><span class="dont">"오류가 발생했습니다"</span></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

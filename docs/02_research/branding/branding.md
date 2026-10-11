@@ -156,7 +156,36 @@ Ashby는 가장 많이 나온 색이 코드 강조 표시에 쓰는 색이어서
 - B2B 소프트웨어에서 색이 신뢰나 구매에 주는 효과를 잰 연구
 - 채용 담당자가 채용 도구의 색이나 말투를 어떻게 받아들이는지를 잰 자료
 
-## 6. 출처
+## 6. 브랜딩을 적는 형식: DESIGN.md
+
+확인한 날짜는 2026-10-11이다. 사용자가 구글 스티치가 도입한 `DESIGN.md` 방식으로 브랜딩을 표현하는 것이 좋겠다고 해서 조사했다.
+
+확인한 것
+
+- `DESIGN.md`는 구글 랩스가 공개한 형식이다. 코딩 에이전트에게 디자인 시스템을 알려 주는 파일이다. 라이선스는 Apache-2.0이고 버전은 `alpha`다. 형식이 아직 바뀔 수 있다.
+- 파일은 두 부분이다. 맨 위의 YAML(기계가 읽는 값, 토큰)과 그 아래의 마크다운(사람이 읽는 설명)이다. 값이 기준이고 글은 그 값을 어떻게 쓰는지를 설명한다.
+- YAML의 키는 `version`, `name`, `description`, `colors`, `typography`, `rounded`, `spacing`, `components`다. 값은 `{colors.primary}`처럼 다른 값을 가리킬 수 있다.
+- `typography`의 속성은 `fontFamily`, `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`, `fontFeature`, `fontVariation`이다. `components`의 속성은 `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`다.
+- 마크다운의 `##` 제목은 이름과 순서가 정해져 있다. Overview, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Do's and Don'ts다. 필요 없는 것은 뺄 수 있다. 같은 제목이 두 번 나오면 오류다.
+- 도구(`@google/design.md`)가 있다. 형식을 검사하고(색의 대비 포함) Tailwind 설정 등으로 내보낸다. 이 과제에서 돌려 보지는 않았다.
+
+확인하지 못한 것
+
+- 조사한 글마다 장의 수가 다르다(6개, 8개, 9개). 여기에는 레포의 명세(`docs/spec.md`)에 적힌 8개를 적었다.
+- 형식이 정하지 않은 `##` 제목을 더하면 도구가 어떻게 다루는지.
+- 테두리(색, 굵기, 모양)를 값으로 적는 방법. 명세의 `components` 속성에 없다.
+
+이 서비스에 주는 것
+
+- 브랜딩의 값(색, 글꼴, 여백)이 화면설계도와 프론트 코드까지 같은 이름으로 내려갈 수 있다.
+- 말투는 값으로 적을 수 없다. "Do's and Don'ts"에 글로 적는 자리가 있다.
+
+## 7. 출처
+
+- [google-labs-code/design.md (레포와 명세 `docs/spec.md`)](https://github.com/google-labs-code/design.md)
+- [DESIGN.md Specification (요약)](https://www.dsebastien.net/design-md-specification/)
+- [Google Stitch Open-Sources DESIGN.md](https://pasqualepillitteri.it/en/news/1251/google-stitch-design-md-open-source-spec-2026)
+- [DESIGN.md: Google's Open Format for AI Design Tokens](https://www.abduzeedo.com/design-md-google-ai-design-tokens)
 
 홈페이지는 모두 2026-10-11에 받았다.
 
