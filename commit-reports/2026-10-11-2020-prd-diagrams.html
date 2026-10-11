@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋 보고서: 핵심 알고리즘을 다이어그램으로 그리고 요구사항을 맞춤</title>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; line-height: 1.6; color: #1f2328; background: #fff; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .meta { color: #656d76; font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; }
+  code { background: #f6f8fa; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>핵심 알고리즘을 다이어그램으로 그리고 요구사항을 맞춤</h1>
+<div class="meta">보고서 작성: 2026-10-11 20:20 · 브랜치 <code>v1.0.0</code></div>
+
+<h2>무엇을</h2>
+<p><code>prd.md</code>의 핵심 알고리즘을 다이어그램으로 그렸다. 넘기는 것에 trace id를 더하고, 점수에 대한 사용자의 판단을 한 가지로 맞췄다.</p>
+
+<h2>왜</h2>
+<p>사용자가 핵심 알고리즘은 시퀀스 다이어그램(여러 시스템의 상호작용이 중요할 때)이나 액티비티 다이어그램(복잡도가 중요한 로직일 때)으로 그리라고 했다. 10.2와 11장이 사용자의 판단을 서로 다르게 적고 있었고, 사용자가 &quot;자격요건을 다 맞추는 것이 꼭 중요한 것은 아니다&quot;가 지금의 판단이라고 정했다.</p>
+
+<h2>어떻게</h2>
+<ul>
+  <li>전체 과정을 시퀀스 다이어그램으로, 로직 넷(자를 자리 찾기, 추출 뒤의 대조, 판정을 믿을지, 점수와 랭킹)을 액티비티 다이어그램으로 그렸다. 다섯 개 모두 렌더링해서 확인했다.</li>
+  <li>8.3에 trace id를 더했다. 로그를 두 프로그램 사이에서 잇기 위해서다.</li>
+  <li>11장의 가설을 지금의 판단으로 고쳤다. 식(7:3)은 그대로다.</li>
+  <li>10.2에 &quot;자격요건이 없는 공고는 100 × 우대 충족률&quot;을 더했다. 코드가 이미 그렇게 계산한다. 사용자가 확인하지 않은 것이다.</li>
+</ul>
+
+<h2>변경 파일</h2>
+<table>
+  <tr><th>파일</th><th>설명</th></tr>
+  <tr><td><code>docs/03_prd/prd.md</code></td><td>다이어그램 5개, 8.3, 10.2, 11장</td></tr>
+  <tr><td><code>docs/03_prd/AGENTS.md</code></td><td>다이어그램 규칙</td></tr>
+  <tr><td><code>docs/03_prd/DECISIONS.md</code></td><td>수정 기록</td></tr>
+</table>
+</body>
+</html>
