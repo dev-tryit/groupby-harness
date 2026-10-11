@@ -13,6 +13,9 @@
 | `2026-10-10-2242-rename-context.html` | 00_background를 00_context로 이름 변경 | 반영 | `1f9b351` |
 | `2026-10-10-2242-checklist.html` | 체크리스트 추가 | 반영 | `0a85730` |
 | `2026-10-10-2242-problem.html` | 문제 정의 작성 | 반영 | `b055c8b` |
-| `2026-10-10-2331-harness-roles.html` | AGENTS.md와 CHECKLIST.md의 역할 분리 | 미반영 | - |
-| `2026-10-10-2331-problem-service.html` | 문제 정의에 만들 서비스와 힘을 싣는 곳 추가 | 미반영 | - |
-| `2026-10-10-2331-research.html` | 조사 문서 작성 | 미반영 | - |
+| `2026-10-10-2331-harness-roles.html` | AGENTS.md와 CHECKLIST.md의 역할 분리 | 반영 | `cf2de7e` |
+| `2026-10-10-2331-problem-service.html` | 문제 정의에 만들 서비스와 힘을 싣는 곳 추가 | 반영 | `2795c4f` |
+| `2026-10-10-2331-research.html` | 조사 문서 작성 | 반영 | `34273b8` |
+| `2026-10-11-1346-harness-hypothesis.html` | 가설과 지시를 구분하는 원칙 추가 | 미반영 | - |
+| `2026-10-11-1346-research-screening.html` | 검토 방식 조사 문서 작성 | 미반영 | - |
+| `2026-10-11-1346-problem-hypothesis.html` | 문제 정의에 용어와 가설 추가 | 미반영 | - |
